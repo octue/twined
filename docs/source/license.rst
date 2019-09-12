@@ -33,5 +33,5 @@ SOFTWARE.
 Third Party Libraries
 =====================
 
-**twined** uses, includes or is linked against the following third party libraries:
+**twined** includes or is linked against the following third party libraries:
 
