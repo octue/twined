@@ -21,8 +21,8 @@ deploy:
   provider: pypi
   skip_cleanup: true
   skip_existing: true
-  user: thclark
+  user: octue
   password:
-    secure: something=
+    secure: "m8URYQxxMK+gRqkLvrYus9N/D2Nk69TBYGOivegAYd8gIDomwTUrejYkNHKmU0F6CyB1CqttBSREFabiF2Hjst/WHRyrGhI33vBiKINqc7mI6+wCay+HaCiMAouGp0W/D5FTrLuIcmBO1qeaHmky5zXNNLPGkKLJ+MjFCyfQXjlbvmhG+REo0X9EG4xgFnUKaaWfq4oqGTe6eZSRMbd9HSUgPuEedZHlxAindPaUvv8pZYGK7zZnLvSrFw9IcjdcPD/2U5aabPiwuPl8yRFMsu7j7ZxllvENTGIAZSoau9g8gOvJ7+q6DvcnlGtxyU5ghrLKHYCJP6g5BJMwMO1vuvjG0VGOTXpErvkab3fley5it+ETZTFPOUucRnHPvrVGU5/qxjW0381zSnzn/6yx8SEV//m3MJfumLJ8jGsPnTF4wW2ygS5oiptVYuwP5CFGCpY746Xx3SAjFIdV1JHKiUSy/wRtOFFEJuUyML2K0UlLi4rnejZpx1NRrvQ4pt7n+/G+cYXvSnqvkKztCkz1D5K5l/mI98VhVg21LreXbkEpknHupVmX9LCNOetlir0aYw3f8aP07OgYVa/+jlqla7xUGDSRA9WjBNSbmos8pVi22KNhdgk5VZccLwLGKz8wc+mqzBsmALr2L1u4AePWDMCl8SotjbSYs8O0V0YXjgU="
   on:
     branch: master
