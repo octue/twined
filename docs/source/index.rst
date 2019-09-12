@@ -1,8 +1,9 @@
 .. image:: https://codecov.io/gh/octue/twined/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/octue/twined
+  :alt: Code coverage
 .. image:: https://readthedocs.org/projects/twined/badge/?version=latest
-:target: https://twined.readthedocs.io/en/latest/?badge=latest
-:alt: Documentation Status
+  :target: https://twined.readthedocs.io/en/latest/?badge=latest
+  :alt: Documentation Status
 
 ======
 twined
