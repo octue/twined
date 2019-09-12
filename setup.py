@@ -13,7 +13,7 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     license_text = f.read()
 
-setup(name='octue',
+setup(name='twined',
       version='0.0.1',
       py_modules=[],
       install_requires=[],
