@@ -1,0 +1,17 @@
+dist: trusty
+language: python
+python:
+- '3.6'
+install:
+- pip install tox-travis
+script:
+- tox -r
+deploy:
+  provider: pypi
+  skip_cleanup: true
+  skip_existing: true
+  user: thclark
+  password:
+    secure: something=
+  on:
+    branch: master
