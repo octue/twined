@@ -1,59 +1,65 @@
-.. image:: https://codecov.io/gh/octue/twined/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/octue/twined
-  :alt: Code coverage
-.. image:: https://readthedocs.org/projects/twined/badge/?version=latest
-  :target: https://twined.readthedocs.io/en/latest/?badge=latest
-  :alt: Documentation Status
-
-======
-twined
-======
-
-**twined** is a library to help digital twins talk to one another.
-
-
 .. ATTENTION::
     This library is in very early stages. Like the idea of it? Please
     `star us on GitHub <https://github.com/octue/twined>`_ and contribute via the
     `issues board <https://github.com/octue/twined/issues>`_ and
     `roadmap <https://github.com/octue/twined/projects/1>`_.
 
+.. image:: https://codecov.io/gh/octue/twined/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/octue/twined
+  :alt: Code coverage
+  :align: right
+.. image:: https://readthedocs.org/projects/twined/badge/?version=latest
+  :target: https://twined.readthedocs.io/en/latest/?badge=latest
+  :alt: Documentation Status
+  :align: right
+
+======
+Twined
+======
+
+**twined** is a library to help :ref:`digital_twins` talk to one another.
+
+.. epigraph::
+   *"Twined" [t-why-nd] ~ encircled, twisted together, interwoven*
 
 A digital twin is a virtual representation of a real life being - a physical asset like a wind turbine or car - or even
-a human.
+a human. Like real things, digital twins need to interact, so can be connected together, but need a common communication
+framework to do so. This is what is provided by **twined**.
 
-There are three reasons why you might want to create a digital twin:
-    - Monitoring
-    - Prediction
-    - Optimisation
-
-On its own, a digital twin can be quite useful. For example, a twin might embody an AI-based analysis to predict power
-output of a turbine.
-
-Coupling digital twins is generally even more useful. You might wish to couple your turbine twin with a representation
-of the local power grid, and a representation of a factory building to determine power demand... enabling you to
-optimise your factory plant for lowest energy cost whilst intelligently selling surplus power to the grid.
-
-.. figure:: images/placeholder.png
-    :width: 500px
+.. figure:: images/digital_twin_hierarchy.svg
+    :width: 350px
     :align: center
     :figclass: align-center
-    :alt: Just a figure placeholder for the time being
+    :alt: Hierarchy of digital twins
 
-    A hierarchy of digital twins. Each circle represents a twin, coupled to its neighbours.
+    Digital twins connected in a hierarchy. Each blue circle represents a twin, coupled to its neighbours.
+    Yellow nodes are where schema are used to connect twins.
 
 
 .. _aims:
+
 Aims
 ====
 
-**twined** provides a toolkit to help create and validate "schema" - descriptions of a digital twin, what data it
+**twined** provides a toolkit to help create and validate ":ref:`schema`" - descriptions of a digital twin, what data it
 requires, what it does and how it works.
 
-You'll find an in depth description in the :ref:`schema` section.
+The goals of **twined** are as follows:
+    - Provide a clear framework for what a digital twin schema can and/or must contain
+    - Provide functions to validate incoming data against a known schema
+    - Provide functions to check that a schema itself is valid
+    - Provide (or direct you to) tools to create schema describing what you require
+
+Using :ref:`schema`, we can describe how digital twins connect and interact... building them together in hierarchies and
+networks.
+
+The scope of **twined** is not large. Many other libraries will deal with hosting and deploying digital twins, still
+more will deal with the actual analyses done within them. **twined** purely deals with parsing and checking the
+information exchanged.
 
 
 .. _reason_for_being:
+
 Raison d'etre
 =============
 
@@ -68,6 +74,7 @@ develop a wider ecosystem.
 
 
 .. _uses:
+
 Uses
 =====
 
@@ -86,6 +93,7 @@ building digital twins using **twined**.
 
 
 .. _life_choices:
+
 Life Choices
 ============
 
@@ -98,12 +106,13 @@ and are willing to consider sponsorship of development and maintenance of that l
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :hidden:
 
    self
-   installation
+   digital_twins
    schema
+   installation
    examples
    license
    version_history

@@ -105,3 +105,8 @@ venv.bak/
 
 # jetbrains ides
 .idea/
+
+# Sphinx related files
+docs/source/doxyoutput/
+docs/source/library_api/
+docs/build/

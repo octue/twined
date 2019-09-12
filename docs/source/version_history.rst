@@ -13,9 +13,9 @@ The twined library is presently being ported out of Octue's SDKs as it became cl
 open-source the framework we developed to connect applications and digital twins together.
 
 
-.. _version_0.0.1:
-0.0.1
-======
+.. _version_0.0.x:
+0.0.x
+=====
 
 Initial library framework - development version. Highly unstable! Let's see what happens...
 
