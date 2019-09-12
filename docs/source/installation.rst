@@ -4,16 +4,18 @@
 Installation
 ============
 
-**twined** is available on pypi, so installation into your python virtual environment is dead simple:
+**twined** is available on `pypi <https://pypi.org/>`_, so installation into your python virtual environment is dead
+simple:
 
-.. code-block::
+.. code-block:: py
 
     pip install twined
 
-Don't have a virtual environment with pip? You probably should! pyenv is your friend. Google it.
+Don't have a virtual environment with pip? You probably should! ``pyenv`` is your friend. Google it.
 
 
 .. _compilation:
+
 Compilation
 ============
 
@@ -21,6 +23,7 @@ There is presently no need to compile **twined**, as it's written entirely in py
 
 
 .. _third_party_library_installation:
+
 Third party library installation
 ================================
 
@@ -29,6 +32,7 @@ automatically installed during the installation above.
 
 
 .. _third_party_build_requirements:
+
 Third party build requirements
 ==============================
 
