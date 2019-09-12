@@ -1,15 +1,21 @@
 .. image:: https://codecov.io/gh/octue/twined/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/octue/twined
   :alt: Code coverage
+  :align: right
 .. image:: https://readthedocs.org/projects/twined/badge/?version=latest
   :target: https://twined.readthedocs.io/en/latest/?badge=latest
   :alt: Documentation Status
+  :align: right
 
 ======
 twined
 ======
 
 **twined** is a library to help digital twins talk to one another.
+
+
+.. epigraph::
+   "Twined" [t-why-nd] - encircled, twisted together, interwoven
 
 
 .. ATTENTION::
@@ -19,8 +25,21 @@ twined
     `roadmap <https://github.com/octue/twined/projects/1>`_.
 
 
+.. _digital_twins:
+Digital Twins
+=============
+
 A digital twin is a virtual representation of a real life being - a physical asset like a wind turbine or car - or even
 a human.
+
+.. figure:: images/digital_twin_hierarchy.png
+    :width: 500px
+    :align: center
+    :figclass: align-center
+    :alt: Hierarchy of digital twins
+
+    A hierarchy of digital twins. Each blue circle represents a twin, coupled to its neighbours. Yellow nodes are where
+    schema are used to connect twins.
 
 There are three reasons why you might want to create a digital twin:
     - Monitoring
@@ -34,14 +53,6 @@ Coupling digital twins is generally even more useful. You might wish to couple y
 of the local power grid, and a representation of a factory building to determine power demand... enabling you to
 optimise your factory plant for lowest energy cost whilst intelligently selling surplus power to the grid.
 
-.. figure:: images/placeholder.png
-    :width: 500px
-    :align: center
-    :figclass: align-center
-    :alt: Just a figure placeholder for the time being
-
-    A hierarchy of digital twins. Each circle represents a twin, coupled to its neighbours.
-
 
 .. _aims:
 Aims
@@ -50,7 +61,14 @@ Aims
 **twined** provides a toolkit to help create and validate "schema" - descriptions of a digital twin, what data it
 requires, what it does and how it works.
 
-You'll find an in depth description in the :ref:`schema` section.
+The goals of **twined** are as follows:
+    - Provide a clear framework for what a digital twin schema can and/or must contain
+    - Provide functions to validate incoming data against a known schema
+    - Provide tools to create schema describing what you require
+    - Provide a function to check that a schema itself is valid
+
+Using schema, we can describe how digital twins connect and interact... building them together in hierarchies and
+networks. You'll find an in depth description in the :ref:`schema` section.
 
 
 .. _reason_for_being:
