@@ -1,3 +1,9 @@
+.. image:: https://codecov.io/gh/octue/twined/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/octue/twined
+.. image:: https://readthedocs.org/projects/twined/badge/?version=latest
+:target: https://twined.readthedocs.io/en/latest/?badge=latest
+:alt: Documentation Status
+
 ======
 twined
 ======
@@ -7,8 +13,9 @@ twined
 
 .. ATTENTION::
     This library is in very early stages. Like the idea of it? Please
-    `star us on GitHub<https://github.com/octue/twined>`_ and contribute via the
-    `issues board<https://github.com/octue/twined/issues>`_ and `roadmap<https://github.com/octue/twined/projects/1>`_.
+    `star us on GitHub <https://github.com/octue/twined>`_ and contribute via the
+    `issues board <https://github.com/octue/twined/issues>`_ and
+    `roadmap <https://github.com/octue/twined/projects/1>`_.
 
 
 A digital twin is a virtual representation of a real life being - a physical asset like a wind turbine or car - or even
@@ -42,7 +49,7 @@ Aims
 **twined** provides a toolkit to help create and validate "schema" - descriptions of a digital twin, what data it
 requires, what it does and how it works.
 
-You'll find an in depth description in :ref:`schema`:
+You'll find an in depth description in the :ref:`schema` section.
 
 
 .. _reason_for_being:
@@ -54,7 +61,7 @@ chain and infrastructure plant to be connected together, enabling strong optimis
 systems.
 
 To enable engineers and scientists to build, connect and run digital twins in large networks (or even in small teams!)
-it is necessary for everyone to be on the same page - the :ref:`gemini_principles`: are a great way to start with that,
+it is necessary for everyone to be on the same page - the :ref:`gemini_principles` are a great way to start with that,
 which is why we've released this part of our technology stack as open source, to support those principles and help
 develop a wider ecosystem.
 
@@ -63,7 +70,7 @@ develop a wider ecosystem.
 Uses
 =====
 
-At `Octue <http://www.octue.com>`_, **twined** is used as a core part of our application creation process:
+At `Octue <https://www.octue.com>`_, **twined** is used as a core part of our application creation process:
 
   * As a tool to validate incoming data to digital twins
   * As a framework to help establish schema when designing digital twins
@@ -81,12 +88,12 @@ building digital twins using **twined**.
 Life Choices
 ============
 
-**twined is presently released in python only. It won't be too hard to replicate functionality in other languages, and
+**twined** is presently released in python only. It won't be too hard to replicate functionality in other languages, and
 we're considering other languages at present, so might be easily persuadable ;)
 
 If you require implementation of **twined** in a different language,
 and are willing to consider sponsorship of development and maintenance of that library, please
-`get in touch<https://octue.com/contact>`_.
+`get in touch <https://octue.com/contact>`_.
 
 
 .. toctree::
