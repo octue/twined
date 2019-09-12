@@ -13,20 +13,21 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     license_text = f.read()
 
-setup(name='twined',
-      version='0.0.1',
-      py_modules=[],
-      install_requires=[],
-      url='https://www.github.com/octue/twined',
-      license=license_text,
-      author='Octue (github: octue)',
-      description='A library to help digital twins talk to one another.',
-      long_description=readme_text,
-      packages=find_packages(exclude=('tests', 'docs')),
-      classifiers=[
-          "Programming Language :: Python :: 3",
-          "License :: OSI Approved :: MIT License",
-          "Operating System :: OS Independent",
-      ],
-      python_requires='>=3.6',
-      )
+setup(
+    name='twined',
+    version='0.0.1',
+    py_modules=[],
+    install_requires=[],
+    url='https://www.github.com/octue/twined',
+    license=license_text,
+    author='Octue (github: octue)',
+    description='A library to help digital twins talk to one another.',
+    long_description=readme_text,
+    packages=find_packages(exclude=('tests', 'docs')),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires='>=3.6',
+)
