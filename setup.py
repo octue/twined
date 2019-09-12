@@ -22,7 +22,13 @@ setup(name='twined',
       author='Octue (github: octue)',
       description='A library to help digital twins talk to one another.',
       long_description=readme_text,
-      packages=find_packages(exclude=('tests', 'docs'))
+      packages=find_packages(exclude=('tests', 'docs')),
+      classifiers=[
+          "Programming Language :: Python :: 3",
+          "License :: OSI Approved :: MIT License",
+          "Operating System :: OS Independent",
+      ],
+      python_requires='>=3.6',
       )
 
 
