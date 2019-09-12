@@ -30,14 +30,3 @@ setup(name='twined',
       ],
       python_requires='>=3.6',
       )
-
-
-# TODO move the following into octue example app template
-# setup(
-#     py_modules=['cli'],
-#     install_requires=['Click'],
-#     entry_points='''
-#     [console_scripts]
-#     octue=octue_app
-#     ''',
-# )
