@@ -15,7 +15,7 @@ with open('LICENSE') as f:
 
 setup(
     name='twined',
-    version='0.0.1',
+    version='0.0.2',
     py_modules=[],
     install_requires=[],
     url='https://www.github.com/octue/twined',
@@ -23,11 +23,17 @@ setup(
     author='Octue (github: octue)',
     description='A library to help digital twins talk to one another.',
     long_description=readme_text,
+    long_description_content_type="text/markdown",
     packages=find_packages(exclude=('tests', 'docs')),
     classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Operating System :: OS Independent'
     ],
     python_requires='>=3.6',
+    keywords=['digital', 'twins', 'python', 'schema']
 )
