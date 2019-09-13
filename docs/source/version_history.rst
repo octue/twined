@@ -14,6 +14,7 @@ open-source the framework we developed to connect applications and digital twins
 
 
 .. _version_0.0.x:
+
 0.0.x
 =====
 
