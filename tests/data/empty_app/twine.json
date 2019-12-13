@@ -1,0 +1,33 @@
+{
+	"children": [
+	],
+	"configuration_schema": {
+		"$schema": "http://json-schema.org/2019-09/schema#",
+		"title": "The example configuration form",
+		"description": "The configuration strand of an example twine",
+		"type": "object",
+		"properties": {
+		}
+	},
+	"credentials": [
+	],
+	"input_manifest": [
+	],
+	"input_values_schema": {
+		"$schema": "http://json-schema.org/2019-09/schema#",
+		"title": "Input Values",
+		"description": "The input values strand of an example twine",
+		"type": "object",
+		"properties": {
+		}
+	},
+	"output_manifest": [
+	],
+	"output_values_schema": {
+		"title": "Output Values",
+		"description": "The output values strand of an example twine",
+		"type": "object",
+		"properties": {
+		}
+	}
+}

@@ -1,0 +1,77 @@
+{
+	"children": [
+		{
+			"key": "turbines",
+			"purpose": "wind turbines in a farm"
+		}
+	],
+	"configuration_schema": {
+		"$schema": "http://json-schema.org/2019-09/schema#",
+		"title": "The example configuration form",
+		"description": "The configuration strand of an example twine",
+		"type": "object",
+		"properties": {
+			"n_iterations": {
+				"description": "An example of an integer configuration variable, called 'n_iterations'.",
+				"type": "integer",
+				"minimum": 1,
+				"maximum": 10,
+				"default": 5
+			}
+		}
+	},
+	"credentials": [
+		{
+			"name": "MYAPI_SECRET_KEY",
+			"purpose": "Token for accessing the MyApi service"
+		},
+		{
+			"name": "MY_DATABASE_URI",
+			"purpose": "A URI for accessing an external database from within a twin or analysis"
+		}
+	],
+	"input_manifest": [
+		{
+			"key": "met_mast_data",
+			"purpose": "A dataset containing meteorological mast data",
+			"filters": "tags:(met* AND mast AND location) files:(extension:csv AND sequence:>=0) location:10"
+		},
+		{
+			"key": "scada_data",
+			"purpose": "A dataset containing scada data",
+			"filters": "tags:(met* AND mast) files:(extension:csv AND sequence:>=0) location:10"
+		}
+	],
+	"input_values_schema": {
+		"$schema": "http://json-schema.org/2019-09/schema#",
+		"title": "Input Values",
+		"description": "The input values strand of an example twine",
+		"type": "object",
+		"properties": {
+			"width": {
+				"description": "An example of an integer value called 'width'",
+				"type": "integer",
+				"minimum": 2
+			}
+		}
+	},
+	"output_manifest": [
+		{
+			"key": "production_data",
+			"purpose": "A dataset containing production data",
+			"tags": "production, wind"
+		}
+	],
+	"output_values_schema": {
+		"title": "Output Values",
+		"description": "The output values strand of an example twine",
+		"type": "object",
+		"properties": {
+			"width": {
+				"description": "An example of an integer value called 'result'",
+				"type": "integer",
+				"minimum": 2
+			}
+		}
+	}
+}

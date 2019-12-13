@@ -1,0 +1,21 @@
+{"id": "8ead7669-8162-4f64-8cd5-4abe92509e17", 
+"type": "input", 
+"datasets": [
+  {
+    "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+    "tags": "met, mast, wind",
+    "files": [
+      {
+        "path": "input/datasets/7ead76/file_1.csv",
+        "extension": "csv",
+        "sequence": 0
+      },
+      {
+        "path": "input/datasets/7ead76/file_2.csv",
+        "extension": "csv",
+        "sequence": 1
+      }
+    ]
+  }
+]
+}

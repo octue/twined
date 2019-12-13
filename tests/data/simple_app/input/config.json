@@ -1,0 +1,9 @@
+{
+  "width": 600,
+  "height": 600,
+  "max_iterations": 16,
+  "color_scale": "YlGnBu",
+  "x_range": [-1.5, 0.6],
+  "y_range": [-1.26, 1.26],
+  "type": "png"
+}
