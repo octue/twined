@@ -1,1 +1,1 @@
-from .twine import Twine
+from .twine import Twine  # noqa: F401
