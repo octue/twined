@@ -7,6 +7,8 @@ A library to help digital twins talk to one another. Read more at [twined.readth
  
 ## Developer notes
 
+**You don't need to pay attention to this unless you plan to develop Twined.**
+
 ### Contributing
 
 - Please raise an issue on the board (or add your $0.02 to an existing issue) so the maintainers know
@@ -37,3 +39,19 @@ The process for creating a new release is as follows:
 9. Merge to master. Successful test, doc build, flake8 and a new version number will automatically create the release on pypi.
 10. Go to code > releases and create a new release on GitHub at the same SHA.
 
+
+### Building documents locally
+
+**You don't need to do this unless you plan to develop Twined.**
+
+- Install `doxgen`. On a mac, that's `brew install doxygen`; other systems may differ.
+
+- Install sphinx and other requirements for building the docs
+```
+pip install -r docs/requirements.txt
+```
+
+- Run the build process
+```
+sphinx-build -b html docs/source docs/build
+```
