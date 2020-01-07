@@ -24,7 +24,12 @@ Twined
 
 A digital twin is a virtual representation of a real life being - a physical asset like a wind turbine or car - or even
 a human. Like real things, digital twins need to interact, so can be connected together, but need a common communication
-framework to do so. This is what is provided by **twined**.
+framework to do so.
+
+**twined** helps you to define a single file, a "twine", that defines a digital twin, specifying its data
+interfaces, connections to other twins, and other requirements.
+
+Any person, or any computer, can read a twine and understand *what-goes-in* and *what-comes-out*.
 
 .. figure:: images/digital_twin_hierarchy.svg
     :width: 350px
@@ -41,7 +46,7 @@ framework to do so. This is what is provided by **twined**.
 Aims
 ====
 
-**twined** provides a toolkit to help create and validate ":ref:`schema`" - descriptions of a digital twin, what data it
+**twined** provides a toolkit to help create and validate "twines" - descriptions of a digital twin, what data it
 requires, what it does and how it works.
 
 The goals of **twined** are as follows:
@@ -50,8 +55,9 @@ The goals of **twined** are as follows:
     - Provide functions to check that a schema itself is valid
     - Provide (or direct you to) tools to create schema describing what you require
 
-Using :ref:`schema`, we can describe how digital twins connect and interact... building them together in hierarchies and
-networks.
+In :ref:`schema`, we describe the different parts of a twine (examining how digital twins connect and interact...
+building them together in hierarchies and networks). But you may prefer to dive straight in with the :ref:`quick_start`
+guide.
 
 The scope of **twined** is not large. Many other libraries will deal with hosting and deploying digital twins, still
 more will deal with the actual analyses done within them. **twined** purely deals with parsing and checking the
@@ -107,12 +113,12 @@ and are willing to consider sponsorship of development and maintenance of that l
 
 .. toctree::
    :maxdepth: 2
-   :hidden:
 
    self
+   installation
+   quick_start
+   examples
    digital_twins
    schema
-   installation
-   examples
    license
    version_history

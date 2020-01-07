@@ -1,0 +1,72 @@
+{
+	"configuration_schema": {
+		"$schema": "http://json-schema.org/2019-09/schema#",
+		"title": "Configuration for a simple app",
+		"description": "The app creates a mandelbrot plot",
+		"type": "object",
+		"properties": {
+			"width": {
+				"description": "Number of pixels the image contains in the x direction",
+				"type": "integer",
+				"minimum": 2,
+				"default": 600
+			},
+			"height": {
+				"description": "Number of pixels the image contains in the y direction",
+				"type": "integer",
+				"minimum": 2,
+				"default": 600
+			},
+			"max_iterations": {
+				"description": "Maximum number of iterations used to render each pixel",
+				"type": "integer",
+				"minimum": 2,
+				"default": 64
+			},
+			"color_scale": {
+				"description": "The colour scale string to use when mapping colours. See https://plot.ly/ipython-notebooks/color-scales/ for valid scales",
+				"type": "string",
+				"enum": ["PuBu", "YlGnBu"],
+				"default": "YlGnBu"
+			},
+			"type": {
+				"description": "Type (jpeg or png) of the image that will be produced as a results file",
+				"type": "string",
+				"enum": ["jpg", "png"],
+				"default": "png"
+			},
+			"x_range": {
+				"description": "The x_min to x_max range of space in which to render the fractal",
+				"type": "array",
+				"items": [{
+					"type": "number"
+				},
+					{
+						"type": "number"
+					},
+					{
+						"type": "number"
+					}],
+				"additionalItems": false,
+				"default": [-1.5, 0.6]
+			},
+			"y_range": {
+				"description": "The y_min to y_max range of space in which to render the fractal",
+				"type": "array",
+				"items": [{
+					"type": "number"
+				},
+					{
+						"type": "number"
+					},
+					{
+						"type": "number"
+					}],
+				"additionalItems": false,
+				"default": [-1.26, 1.26]
+			}
+		}
+	},
+	"output_manifest": [
+	]
+}
