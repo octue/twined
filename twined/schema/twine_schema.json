@@ -1,0 +1,109 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/2019-09/schema#",
+  "properties": {
+    "children": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "description": "A textual key identifying a group of child twins",
+            "type": "string"
+          },
+          "purpose": {
+            "description": "What this group of child twins are used for",
+            "type": "string",
+            "default": ""
+          },
+          "filters": {
+            "description": "A search term, using the Lucene Query Language, which can be used to automatically refine the list of available child twins down to ones suitable for use here.",
+            "type": "string",
+            "default": ""
+          }
+        },
+        "required": [
+          "key"
+        ]
+      }
+    },
+    "configuration_schema": {
+      "type": "object",
+      "required": ["properties"]
+    },
+    "credentials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The credential name, in upper snake case, eg 'MYAPI_SECRET_KEY'",
+            "type": "string",
+            "pattern": "^[A-Z]+(?:_[A-Z]+)*$"
+          },
+          "purpose": {
+            "description": "What this credential is used for, eg 'Token for accessing the MyApi service'",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    "input_manifest": {
+      "type": "array",
+      "description": "A list of entries, each describing a dataset that should be attached to / made available to the digital twin",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "description": "A textual key identifying this dataset within the application/twin",
+            "type": "string"
+          },
+          "purpose": {
+            "description": "What data this dataset contains, eg 'the set of data files from the energy production calculation process'",
+            "type": "string",
+            "default": ""
+          },
+          "filters": {
+            "description": "A search term, using the Lucene Query Language, which can be used to automatically refine the list of available datasets down to ones suitable for use with this twin",
+            "type": "string",
+            "default": ""
+          }
+        },
+        "required": ["key"]
+      }
+    },
+    "input_values_schema": {
+      "type": "object"
+    },
+    "output_manifest": {
+      "type": "array",
+      "description": "A list of entries, each describing a dataset that may be created/updated when the twin is run",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "description": "A textual key identifying this dataset within the application/twin",
+            "type": "string"
+          },
+          "purpose": {
+            "description": "What data this dataset contains, eg 'the set of data files from the energy production calculation process'",
+            "type": "string",
+            "default": ""
+          },
+          "tags": {
+            "description": "Comma separated tags that will be applied to the dataset when created",
+            "type": "string",
+            "default": ""
+          }
+        },
+        "required": ["key"]
+      }
+    },
+    "output_values_schema": {
+      "type": "object"
+    }
+  }
+}
