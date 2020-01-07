@@ -63,13 +63,13 @@ class TestTwine(unittest.TestCase):
         """ Ensures that the example (full) twine can be loaded and validated
         """
         twine_file = 'data/example_app/twine.json'
-        twine = Twine(file=twine_file)
+        Twine(file=twine_file)
 
     def test_simple_twine(self):
         """ Ensures that the simple app schema can be loaded and used to parse some basic config and values data
         """
         twine_file = 'data/simple_app/twine.json'
-        twine = Twine(file=twine_file)
+        Twine(file=twine_file)
 
     def test_broken_json_twine(self):
         """ Ensures that an invalid json file raises an InvalidTwine exception

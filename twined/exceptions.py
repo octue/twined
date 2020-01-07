@@ -28,6 +28,7 @@ class ManifestNotFound(InvalidInput):
     """ Raised when a multi manifest can not be refined to a single manifest in a search
     """
 
+
 class InvalidManifest(InvalidInput):
     """ Raised when a manifest loaded from JSON does not pass validation
     """
