@@ -2,7 +2,7 @@ import unittest
 from twined import Twine
 
 
-class TestSchema(unittest.TestCase):
+class TestTwineSchema(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -35,8 +35,33 @@ class TestSchema(unittest.TestCase):
         twine_file = 'data/simple_app/twine.json'
         twine = Twine(twine_file)
 
-        input_config_file = 'data/simple_app/input/config.json'
-        input_manifest_file = 'data/simple_app/input/manifest.json'
+
+class TestConfiguration(unittest.TestCase):
+
+    def test_configuration(self):
+        """
+        """
+        twine_file = 'data/simple_app/twine.json'
+        twine = Twine(twine_file)
+
+
+class TestCredentials(unittest.TestCase):
+
+    def test_empty_credentials(self):
+        """ Test that a twine with no credentials will end up with empty credentials object
+        """
+
+    def test_valid_credentials_in_twine(self):
+        """ Test that where credentials in environment and twine match, that they import successfully and that no extra
+        credentials are imported
+        """
+
+    def test_exception_on_invalid_credentials(self):
+        """ Test that where a credential is specified in the twine that does not appear in the environment,
+        an exception is raised
+        """
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
