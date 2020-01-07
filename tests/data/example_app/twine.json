@@ -2,7 +2,8 @@
 	"children": [
 		{
 			"key": "turbines",
-			"purpose": "wind turbines in a farm"
+			"purpose": "wind turbines in a farm",
+			"filters": "tags:(met* AND mast AND location) files:(extension:csv AND sequence:>=0) location:10"
 		}
 	],
 	"configuration_schema": {
