@@ -38,25 +38,25 @@ class TestCredentialsTwine(BaseTestCase):
             Twine(file=twine_file)
 
 
-class TestCredentialsValidation(unittest.TestCase):
-    """ Tests related to whether validation of children occurs successfully (given a valid twine)
-    """
-
-    def test_no_credentials(self):
-        """ Test that a twine with no credentials will validate straightforwardly
-        """
-        raise exceptions.NotImplementedYet()
-
-    def test_missing_credentials(self):
-        """ Test that a twine with credentials will not validate where they are missing from the environment
-        """
-        raise exceptions.NotImplementedYet()
-
-    def test_matched_credentials(self):
-        """ Test that a twine with credentials required will validate when the credentials are available in the
-        environment
-        """
-        raise exceptions.NotImplementedYet()
+# class TestCredentialsValidation(unittest.TestCase):
+#     """ Tests related to whether validation of children occurs successfully (given a valid twine)
+#     """
+#
+#     def test_no_credentials(self):
+#         """ Test that a twine with no credentials will validate straightforwardly
+#         """
+#         raise exceptions.NotImplementedYet()
+#
+#     def test_missing_credentials(self):
+#         """ Test that a twine with credentials will not validate where they are missing from the environment
+#         """
+#         raise exceptions.NotImplementedYet()
+#
+#     def test_matched_credentials(self):
+#         """ Test that a twine with credentials required will validate when the credentials are available in the
+#         environment
+#         """
+#         raise exceptions.NotImplementedYet()
 
 
 if __name__ == '__main__':

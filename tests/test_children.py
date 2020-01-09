@@ -32,29 +32,29 @@ class TestChildrenTwine(BaseTestCase):
         self.assertEqual(len(twine._raw['children']), 1)
 
 
-class TestChildrenValidation(unittest.TestCase):
-    """ Tests related to whether validation of children occurs successfully (given a valid twine)
-    """
-
-    def test_no_children(self):
-        """ Test that a twine with no children will validate on an empty children input
-        """
-        raise exceptions.NotImplementedYet()
-
-    def test_missing_children(self):
-        """ Test that a twine with children will not validate on an empty children input
-        """
-        raise exceptions.NotImplementedYet()
-
-    def test_extra_children(self):
-        """ Test that a twine with no children will not validate a non-empty children input
-        """
-        raise exceptions.NotImplementedYet()
-
-    def test_matched_children(self):
-        """ Test that a twine with children required will validate when the children input matches
-        """
-        raise exceptions.NotImplementedYet()
+# class TestChildrenValidation(unittest.TestCase):
+#     """ Tests related to whether validation of children occurs successfully (given a valid twine)
+#     """
+#
+#     def test_no_children(self):
+#         """ Test that a twine with no children will validate on an empty children input
+#         """
+#         raise exceptions.NotImplementedYet()
+#
+#     def test_missing_children(self):
+#         """ Test that a twine with children will not validate on an empty children input
+#         """
+#         raise exceptions.NotImplementedYet()
+#
+#     def test_extra_children(self):
+#         """ Test that a twine with no children will not validate a non-empty children input
+#         """
+#         raise exceptions.NotImplementedYet()
+#
+#     def test_matched_children(self):
+#         """ Test that a twine with children required will validate when the children input matches
+#         """
+#         raise exceptions.NotImplementedYet()
 
 
 if __name__ == '__main__':
