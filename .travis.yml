@@ -14,7 +14,7 @@ script:
 
 # Push the results back to codecov
 after_success:
-  - coverage xml && codecov -f coverage.xml --commit=$TRAVIS_COMMIT"
+  - coverage xml && codecov -f coverage.xml --commit=$TRAVIS_COMMIT
 
 # Deploy updates on master to pypi, which will only succeed if there's been a version bump
 deploy:
