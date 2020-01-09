@@ -1,8 +1,9 @@
 import unittest
 from twined import Twine, exceptions
+from .base import BaseTestCase
 
 
-class TestCredentialsTwine(unittest.TestCase):
+class TestCredentialsTwine(BaseTestCase):
     """ Tests related to the twine itself - ensuring that valid and invalid
      `credentials` entries in a twine file work as expected
      """
@@ -11,7 +12,7 @@ class TestCredentialsTwine(unittest.TestCase):
         """ Ensures InvalidTwine exceptions are raised when instantiating twines
         with a missing `name` field in a credential
         """
-        twine_file = 'data/twines/invalid_credentials_no_name_twine.json'
+        twine_file = self.path + 'twines/invalid_credentials_no_name_twine.json'
         with self.assertRaises(exceptions.InvalidTwine):
             Twine(file=twine_file)
 
@@ -19,7 +20,7 @@ class TestCredentialsTwine(unittest.TestCase):
         """ Ensures InvalidTwine exceptions are raised when instantiating twines
         with lowercase letters in the `name` field
         """
-        twine_file = 'data/twines/invalid_credentials_lowercase_name_twine.json'
+        twine_file = self.path + 'twines/invalid_credentials_lowercase_name_twine.json'
         with self.assertRaises(exceptions.InvalidTwine):
             Twine(file=twine_file)
 
@@ -27,12 +28,12 @@ class TestCredentialsTwine(unittest.TestCase):
         """ Ensures InvalidTwine exceptions are raised when instantiating twines
         with invalid `credentials` entries (given as a dict, not an array)
         """
-        twine_file = 'data/twines/invalid_credentials_dict_not_array_twine.json'
+        twine_file = self.path + 'twines/invalid_credentials_dict_not_array_twine.json'
         with self.assertRaises(exceptions.InvalidTwine):
             Twine(file=twine_file)
 
     def test_fails_on_name_whitespace(self):
-        twine_file = 'data/twines/invalid_credentials_space_in_name_twine.json'
+        twine_file = self.path + 'twines/invalid_credentials_space_in_name_twine.json'
         with self.assertRaises(exceptions.InvalidTwine):
             Twine(file=twine_file)
 
