@@ -1,4 +1,5 @@
-import unittest, os
+import os
+import unittest
 
 
 class BaseTestCase(unittest.TestCase):
