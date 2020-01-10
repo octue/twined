@@ -15,7 +15,7 @@ with open('LICENSE') as f:
 
 setup(
     name='twined',
-    version='0.0.6',
+    version='0.0.7',
     py_modules=[],
     install_requires=['jsonschema ~= 3.2.0'],
     url='https://www.github.com/octue/twined',
