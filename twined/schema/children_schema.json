@@ -1,0 +1,22 @@
+{
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "key": {
+                "description": "A textual key identifying a group of child twins",
+                "type": "string"
+            },
+            "id": {
+                "description": "The universally unique ID of the running child twin",
+                "type": "string"
+            },
+            "uri_env_name": {
+                "description": "Name of the environment variable containing the URI of the twin (which may contain credentials)",
+                "type": "string",
+                "pattern": "^[A-Z]+(?:_[A-Z]+)*$"
+            }
+        },
+        "required": ["key", "id", "uri_env_name"]
+    }
+}
