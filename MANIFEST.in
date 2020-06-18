@@ -1,5 +1,5 @@
 include LICENSE
-include README.rst
+include README.md
 include twined/schema/children_schema.json
 include twined/schema/manifest_schema.json
 include twined/schema/twine_schema.json
