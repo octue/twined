@@ -4,7 +4,7 @@ A library to help digital twins talk to one another. Read more at [twined.readth
 
 [![codecov](https://codecov.io/gh/octue/twined/branch/master/graph/badge.svg)](https://codecov.io/gh/octue/twined)
 [![Documentation Status](https://readthedocs.org/projects/twined/badge/?version=latest)](https://twined.readthedocs.io/en/latest/?badge=latest)
- 
+
 ## Developer notes
 
 **You don't need to pay attention to this unless you plan to develop Twined.**
@@ -20,7 +20,7 @@ you'll need to do something like:
 git clone <your_forked_repo_address>    # fetches the repo to your local machine
 cd twined                               # move into the repo directory
 pyenv virtualenv 3.6.9 twinedenv        # Makes a virtual environment for you to install the dev tools into. Use any python >= 3.6
-pyend activate twinedenv                # Activates the virtual environment so you don't screw up other installations 
+pyend activate twinedenv                # Activates the virtual environment so you don't screw up other installations
 pip install -r requirements-dev.txt     # Installs the testing and code formatting utilities
 pre-commit install                      # Installs the pre-commit code formatting hooks in the git repo
 tox                                     # Runs the tests with coverage. NB you can also just set up pycharm or vscode to run these.
@@ -28,12 +28,12 @@ tox                                     # Runs the tests with coverage. NB you c
 
 - If you don't know what TDD is, go away and find out. We practice TDD here and it'll be glaringly obvious if you don't.
 
-- Ask the `twined` maintainers *where* to make your pull request. We'll create a version branch, according to the 
+- Ask the `twined` maintainers *where* to make your pull request. We'll create a version branch, according to the
 roadmap, into which you can make your PR. We'll help review the changes and improve the PR.
 
 - Once checks have passed, test coverage of the new code is >=95%, documentation is updated and the Review is passed, we'll merge into the version branch.
 
-- Once all the roadmapped features for that version are done, we'll release. 
+- Once all the roadmapped features for that version are done, we'll release.
 
 
 ### Release process
