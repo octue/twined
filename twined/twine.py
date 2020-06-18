@@ -19,13 +19,9 @@ MANIFEST_STRANDS = (
     'output_manifest',
 )
 
-CREDENTIAL_STRANDS = (
-    'credentials',
-)
+CREDENTIAL_STRANDS = ('credentials',)
 
-CHILDREN_STRANDS = (
-    'children',
-)
+CHILDREN_STRANDS = ('children',)
 
 ALL_STRANDS = (
     *SCHEMA_STRANDS,
@@ -36,7 +32,6 @@ ALL_STRANDS = (
 
 
 class Twine:
-
     def __init__(self, **kwargs):
         """ Instantiate a twine class, providing a file name or a utf-8 encoded string containing valid json.
         The twine is itself validated to be correct against the twine schema.
@@ -121,9 +116,13 @@ class Twine:
         """
         installed_twined_version = pkg_resources.get_distribution("twined").version
         twine_file_twined_version = self._raw.get('twined_version', None)
-        logger.debug('Twine versions... %s installed, %s specified in twine', installed_twined_version, twine_file_twined_version)
+        logger.debug(
+            'Twine versions... %s installed, %s specified in twine', installed_twined_version, twine_file_twined_version
+        )
         if (twine_file_twined_version is not None) and (installed_twined_version != twine_file_twined_version):
-            raise exceptions.TwineVersionConflict(f'Twined library version conflict. Twine file requires {twine_file_twined_version} but you have {installed_twined_version} installed')
+            raise exceptions.TwineVersionConflict(
+                f'Twined library version conflict. Twine file requires {twine_file_twined_version} but you have {installed_twined_version} installed'
+            )
 
     def validate_configuration(self, **kwargs):
         """ Validates that the configuration values, passed as either a file or a json string, are correct

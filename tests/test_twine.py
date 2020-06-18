@@ -30,10 +30,7 @@ class TestTwine(BaseTestCase):
         """ Ensures that error is raised when attempting to instantiate with both file and json inputs
         """
         with self.assertRaises(exceptions.TwineTypeException):
-            Twine(
-                file=self.path + 'apps/simple_app/twine.json',
-                json='{"input_values": "something"}'
-            )
+            Twine(file=self.path + 'apps/simple_app/twine.json', json='{"input_values": "something"}')
 
     def test_missing_twine_file(self):
         """ Ensures that an absent file raises a MissingTwine exception

@@ -23,6 +23,7 @@ class TwineVersionConflict(TwineException):
 
 # --------------------- Exceptions relating to the twine itself ------------------------
 
+
 class InvalidTwine(TwineException):
     """ Raised when the specified twine is invalid for some reason
     """
@@ -39,6 +40,7 @@ class InvalidTwineContents(InvalidTwine, ValidationError):
 
 
 # --------------------- Exceptions relating to missing files/folders ------------------------
+
 
 class FolderNotFound(TwineException):
     """ Raised when a required folder (e.g. <data_dir>/input) cannot be found
@@ -76,6 +78,7 @@ class OutputValuesFileNotFound(TwineException, FileNotFoundError):
 
 
 # --------------------- Exceptions relating to validation of JSON data (input, output, config values) ------------------
+
 
 class InvalidValues(TwineException):
     """ Raised when JSON data (like Config data, Input Values or Output Values) is invalid
@@ -125,6 +128,7 @@ class UnexpectedNumberOfResults(TwineException):
 
 
 # --------------------- Maps allowing customised exceptions per-strand (simplifies code elsewhere) ------------------
+
 
 file_not_found_map = {
     'twine': TwineFileNotFound,
