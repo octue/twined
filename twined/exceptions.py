@@ -131,28 +131,28 @@ class UnexpectedNumberOfResults(TwineException):
 
 
 file_not_found_map = {
-    'twine': TwineFileNotFound,
-    'configuration': ConfigFileNotFound,
-    'input_values': InputValuesFileNotFound,
-    'output_values': OutputValuesFileNotFound,
+    "twine": TwineFileNotFound,
+    "configuration": ConfigFileNotFound,
+    "input_values": InputValuesFileNotFound,
+    "output_values": OutputValuesFileNotFound,
 }
 
 # TODO Specialised per-strand exceptions to help drill to the root of the issues
 invalid_json_map = {
-    'twine': InvalidTwineJson,
-    'configuration': InvalidValuesJson,
-    'input_values': InvalidValuesJson,
-    'output_values': InvalidValuesJson,
-    'input_manifest': InvalidManifestJson,
-    'output_manifest': InvalidManifestJson,
+    "twine": InvalidTwineJson,
+    "configuration": InvalidValuesJson,
+    "input_values": InvalidValuesJson,
+    "output_values": InvalidValuesJson,
+    "input_manifest": InvalidManifestJson,
+    "output_manifest": InvalidManifestJson,
 }
 
 # TODO Specialised per-strand exceptions to help drill to the root of the issues
 invalid_contents_map = {
-    'twine': InvalidTwineContents,
-    'configuration': InvalidValuesContents,
-    'input_values': InvalidValuesContents,
-    'output_values': InvalidValuesContents,
-    'input_manifest': InvalidManifestContents,
-    'output_manifest': InvalidManifestContents,
+    "twine": InvalidTwineContents,
+    "configuration": InvalidValuesContents,
+    "input_values": InvalidValuesContents,
+    "output_values": InvalidValuesContents,
+    "input_manifest": InvalidManifestContents,
+    "output_manifest": InvalidManifestContents,
 }

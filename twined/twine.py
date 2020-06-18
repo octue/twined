@@ -9,19 +9,19 @@ logger = logging.getLogger(__name__)
 
 
 SCHEMA_STRANDS = (
-    'input_values',
-    'configuration',
-    'output_values',
+    "input_values",
+    "configuration",
+    "output_values",
 )
 
 MANIFEST_STRANDS = (
-    'input_manifest',
-    'output_manifest',
+    "input_manifest",
+    "output_manifest",
 )
 
-CREDENTIAL_STRANDS = ('credentials',)
+CREDENTIAL_STRANDS = ("credentials",)
 
-CHILDREN_STRANDS = ('children',)
+CHILDREN_STRANDS = ("children",)
 
 ALL_STRANDS = (
     *SCHEMA_STRANDS,
@@ -49,11 +49,11 @@ class Twine:
         if (file is None) and (json is None):
             # If loading an unspecified twine, return an empty one rather than raising error (like in _load_data())
             self._raw = {}
-            logger.warning('No twine file specified. Loading empty twine.')
+            logger.warning("No twine file specified. Loading empty twine.")
         else:
-            self._raw = self._load_json('twine', file=file, json=json)
+            self._raw = self._load_json("twine", file=file, json=json)
 
-        self._validate_against_schema('twine', self._raw)
+        self._validate_against_schema("twine", self._raw)
         self._validate_twine_version()
 
     def _load_json(self, kind, file=None, json=None):
@@ -61,26 +61,26 @@ class Twine:
         """
 
         if (file is None) and (json is None):
-            raise exceptions.TwineTypeException(f'Cannot load {kind} - no file name or json string specified')
+            raise exceptions.TwineTypeException(f"Cannot load {kind} - no file name or json string specified")
 
         # Decode the json string and deserialize to objects
         try:
             # From the file...
             if file is not None:
                 if json is not None:
-                    raise exceptions.TwineTypeException('You cannot specify both file and json inputs')
+                    raise exceptions.TwineTypeException("You cannot specify both file and json inputs")
 
                 try:
                     with open(file) as f:
                         data = jsonlib.load(f)
-                        logger.debug('Loaded %s from file %s', kind, file)
+                        logger.debug("Loaded %s from file %s", kind, file)
                 except FileNotFoundError as e:
                     raise exceptions.file_not_found_map[kind](e)
 
             # Directly from the string...
             else:
                 data = jsonlib.loads(json)
-                logger.debug('Loaded %s from input json string', kind)
+                logger.debug("Loaded %s from input json string", kind)
 
         except jsonlib.decoder.JSONDecodeError as e:
             raise exceptions.invalid_json_map[kind](e)
@@ -97,16 +97,16 @@ class Twine:
         if strand == "twine":
             # A twine *contains* schema, but we also need to verify that it matches a certain schema itself
             # The twine schema is distributed with this packaged to ensure version consistency...
-            schema = jsonlib.loads(pkg_resources.resource_string('twined', 'schema/twine_schema.json'))
+            schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/twine_schema.json"))
         else:
             if strand not in SCHEMA_STRANDS:
-                raise exceptions.TwineTypeException(f'Unknown strand {strand}. Try one of {SCHEMA_STRANDS}.')
-            schema_key = strand + '_schema'
+                raise exceptions.TwineTypeException(f"Unknown strand {strand}. Try one of {SCHEMA_STRANDS}.")
+            schema_key = strand + "_schema"
             schema = self._raw[schema_key]
 
         try:
             jsonschema_validate(instance=data, schema=schema)
-            logger.debug('Validated %s against schema', strand)
+            logger.debug("Validated %s against schema", strand)
 
         except ValidationError as e:
             raise exceptions.invalid_contents_map[strand](e.message)
@@ -115,34 +115,34 @@ class Twine:
         """ Validates that the installed version is consistent with an optional version specification in the twine file
         """
         installed_twined_version = pkg_resources.get_distribution("twined").version
-        twine_file_twined_version = self._raw.get('twined_version', None)
+        twine_file_twined_version = self._raw.get("twined_version", None)
         logger.debug(
-            'Twine versions... %s installed, %s specified in twine', installed_twined_version, twine_file_twined_version
+            "Twine versions... %s installed, %s specified in twine", installed_twined_version, twine_file_twined_version
         )
         if (twine_file_twined_version is not None) and (installed_twined_version != twine_file_twined_version):
             raise exceptions.TwineVersionConflict(
-                f'Twined library version conflict. Twine file requires {twine_file_twined_version} but you have {installed_twined_version} installed'
+                f"Twined library version conflict. Twine file requires {twine_file_twined_version} but you have {installed_twined_version} installed"
             )
 
     def validate_configuration(self, **kwargs):
         """ Validates that the configuration values, passed as either a file or a json string, are correct
         """
-        config = self._load_json('configuration', **kwargs)
-        self._validate_against_schema('configuration', config)
+        config = self._load_json("configuration", **kwargs)
+        self._validate_against_schema("configuration", config)
         return config
 
     def validate_input_values(self, **kwargs):
         """ Validates that the input values, passed as either a file or a json string, are correct
         """
-        data = self._load_json('input_values', **kwargs)
-        self._validate_against_schema('input_values', data)
+        data = self._load_json("input_values", **kwargs)
+        self._validate_against_schema("input_values", data)
         return data
 
     def validate_output_values(self, **kwargs):
         """ Validates that the output values, passed as either a file or a json string, are correct
         """
-        data = self._load_json('output_values', **kwargs)
-        self._validate_against_schema('output_values', data)
+        data = self._load_json("output_values", **kwargs)
+        self._validate_against_schema("output_values", data)
         return data
 
     # def validate(
