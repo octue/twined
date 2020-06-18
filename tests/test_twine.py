@@ -10,13 +10,13 @@ class TestTwine(BaseTestCase):
     def test_init_twine_with_filename(self):
         """ Ensures that the twine class can be instantiated with a file
         """
-        twine_file = self.path + 'simple_app/twine.json'
+        twine_file = self.path + 'apps/simple_app/twine.json'
         Twine(file=twine_file)
 
     def test_init_twine_with_json(self):
         """ Ensures that a twine can be instantiated with a json string
         """
-        with open(self.path + 'simple_app/twine.json', 'r', encoding='utf-8') as f:
+        with open(self.path + 'apps/simple_app/twine.json', 'r', encoding='utf-8') as f:
             json_string = f.read()
         Twine(json=json_string)
 
@@ -31,7 +31,7 @@ class TestTwine(BaseTestCase):
         """
         with self.assertRaises(exceptions.InvalidInput):
             Twine(
-                file=self.path + 'simple_app/twine.json',
+                file=self.path + 'apps/simple_app/twine.json',
                 json='{"input_values": "something"}'
             )
 
@@ -54,7 +54,7 @@ class TestTwine(BaseTestCase):
     def test_empty_twine(self):
         """ Ensures that an empty twine file can be loaded
         """
-        twine_file = self.path + 'empty_app/twine.json'
+        twine_file = self.path + 'apps/empty_app/twine.json'
         with self.assertLogs(level='DEBUG') as log:
             Twine(file=twine_file)
             self.assertEqual(len(log.output), 2)
@@ -65,13 +65,13 @@ class TestTwine(BaseTestCase):
     def test_example_twine(self):
         """ Ensures that the example (full) twine can be loaded and validated
         """
-        twine_file = self.path + 'example_app/twine.json'
+        twine_file = self.path + 'apps/example_app/twine.json'
         Twine(file=twine_file)
 
     def test_simple_twine(self):
         """ Ensures that the simple app schema can be loaded and used to parse some basic config and values data
         """
-        twine_file = self.path + 'simple_app/twine.json'
+        twine_file = self.path + 'apps/simple_app/twine.json'
         Twine(file=twine_file)
 
     def test_broken_json_twine(self):
