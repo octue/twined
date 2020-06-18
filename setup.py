@@ -21,7 +21,7 @@ setup(
     url="https://www.github.com/octue/twined",
     license=license_text,
     author="Octue (github: octue)",
-    description="A library to help digital twins talk to one another.",
+    description="A library to help digital twins and data services talk to one another",
     long_description=readme_text,
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=("tests", "docs")),
@@ -36,5 +36,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.6",
-    keywords=["digital", "twins", "python", "schema"],
+    keywords=["digital", "twins", "data", "services", "python", "schema"],
 )
