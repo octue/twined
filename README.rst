@@ -1,4 +1,8 @@
 
+======
+Twined
+======
+
 .. image:: https://travis-ci.com/octue/twined.svg?branch=master
   :target: https://travis-ci.com/octue/twined
   :alt: Build status
@@ -19,9 +23,6 @@
   :target: https://github.com/ambv/black
   :alt: Code style
   
-======
-Twined
-======
 
 **twined** is a library to help digital twins and data services talk to one another. Read more at `twined.readthedocs.io <https://twined.readthedocs.io>`_.
 
