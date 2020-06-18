@@ -23,13 +23,13 @@ class TestTwine(BaseTestCase):
     def test_init_twine_with_incorrect_file_string(self):
         """ Ensures that error is raised instantiating with a non-filename
         """
-        with self.assertRaises(exceptions.MissingTwine):
+        with self.assertRaises(exceptions.TwineFileNotFound):
             Twine(file='{"mistakenly_passed": "json instead of filename"}')
 
     def test_init_twine_with_both_inputs(self):
         """ Ensures that error is raised when attempting to instantiate with both file and json inputs
         """
-        with self.assertRaises(exceptions.InvalidInput):
+        with self.assertRaises(exceptions.TwineTypeException):
             Twine(
                 file=self.path + 'apps/simple_app/twine.json',
                 json='{"input_values": "something"}'
@@ -39,7 +39,7 @@ class TestTwine(BaseTestCase):
         """ Ensures that an absent file raises a MissingTwine exception
         """
         twine_file = 'file_is_missing.json'
-        with self.assertRaises(exceptions.MissingTwine):
+        with self.assertRaises(exceptions.TwineFileNotFound):
             Twine(file=twine_file)
 
     def test_no_twine(self):
@@ -51,14 +51,21 @@ class TestTwine(BaseTestCase):
             self.assertEqual(len(log.records), 1)
             self.assertIn('No twine file specified', log.output[0])
 
+    def test_incorrect_version_twine(self):
+        """ Ensures exception is thrown on mismatch between installed and specified versions of twined
+        """
+        twine_file = self.path + 'twines/incorrect_version_twine.json'
+        with self.assertRaises(exceptions.TwineVersionConflict):
+            Twine(file=twine_file)
+
     def test_empty_twine(self):
         """ Ensures that an empty twine file can be loaded
         """
         twine_file = self.path + 'apps/empty_app/twine.json'
         with self.assertLogs(level='DEBUG') as log:
             Twine(file=twine_file)
-            self.assertEqual(len(log.output), 2)
-            self.assertEqual(len(log.records), 2)
+            self.assertEqual(len(log.output), 3)
+            self.assertEqual(len(log.records), 3)
             self.assertIn('Loaded', log.output[0])
             self.assertIn('Validated', log.output[1])
 
@@ -78,7 +85,7 @@ class TestTwine(BaseTestCase):
         """ Ensures that an invalid json file raises an InvalidTwine exception
         """
         twine_file = self.path + 'twines/invalid_json_twine.json'
-        with self.assertRaises(exceptions.InvalidTwine):
+        with self.assertRaises(exceptions.InvalidTwineJson):
             Twine(file=twine_file)
 
 
