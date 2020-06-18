@@ -7,7 +7,7 @@ from setuptools import find_packages, setup
 #   To deploy on PYPI follow the instructions at the bottom of:
 #       https://packaging.python.org/tutorials/distributing-packages/#uploading-your-project-to-pypi
 
-with open("README.rst") as f:
+with open("README.md") as f:
     readme_text = f.read()
 
 with open("LICENSE") as f:
@@ -23,7 +23,7 @@ setup(
     author="Octue (github: octue)",
     description="A library to help digital twins and data services talk to one another",
     long_description=readme_text,
-    long_description_content_type="text/x-rst",
+    long_description_content_type="text/markdown",
     packages=find_packages(exclude=("tests", "docs")),
     include_package_data=True,
     classifiers=[
