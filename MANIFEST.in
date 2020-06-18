@@ -4,4 +4,3 @@ include twined/schema/children_schema.json
 include twined/schema/manifest_schema.json
 include twined/schema/twine_schema.json
 recursive-include twined *
-recursive-include docs *
