@@ -7,7 +7,7 @@ About Twines (Schema)
 The core of **twined** is to provide and use schemas for digital twins.
 
 Below, we set out requirements and a framework for creating a *schema* to represent a digital twin.
-We call these schema "twines". To just get started building a **twine**, check out the :ref:`_quick_start`.
+We call these schema "twines". To just get started building a **twine**, check out the :ref:`quick_start`.
 
 
 .. _requirements:
