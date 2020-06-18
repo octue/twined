@@ -14,7 +14,19 @@ A library to help digital twins talk to one another. Read more at [twined.readth
 - Please raise an issue on the board (or add your $0.02 to an existing issue) so the maintainers know
 what's happening and can advise / steer you.
 
-- Create a fork of twined, undertake your changes on a new branch (call it whatever you want).
+- Create a fork of twined, undertake your changes on a new branch (call it whatever you want). To run tests and make commits,
+you'll need to do something like:
+```
+git clone <your_forked_repo_address>    # fetches the repo to your local machine
+cd twined                               # move into the repo directory
+pyenv virtualenv 3.6.9 twinedenv        # Makes a virtual environment for you to install the dev tools into. Use any python >= 3.6
+pyend activate twinedenv                # Activates the virtual environment so you don't screw up other installations 
+pip install -r requirements-dev.txt     # Installs the testing and code formatting utilities
+pre-commit install                      # Installs the pre-commit code formatting hooks in the git repo
+tox                                     # Runs the tests with coverage. NB you can also just set up pycharm or vscode to run these.
+```
+
+- If you don't know what TDD is, go away and find out. We practice TDD here and it'll be glaringly obvious if you don't.
 
 - Ask the `twined` maintainers *where* to make your pull request. We'll create a version branch, according to the 
 roadmap, into which you can make your PR. We'll help review the changes and improve the PR.
@@ -33,7 +45,7 @@ The process for creating a new release is as follows:
 3. Undertake your changes, committing and pushing to branch `vX.Y.Z`
 4. Ensure that documentation is updated to match changes, and increment the changelog. **Pull requests which do not update documentation will be refused.**
 5. Ensure that test coverage is sufficient. **Pull requests that decrease test coverage will be refused.**
-6. Ensure code meets style guidelines (flake8 tests will fail otherwise)
+6. Ensure code meets style guidelines (pre-commit scripts and flake8 tests will fail otherwise)
 7. Address Review Comments on the PR
 8. Ensure the version in `setup.py` is correct and matches the branch version.
 9. Merge to master. Successful test, doc build, flake8 and a new version number will automatically create the release on pypi.
