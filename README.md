@@ -57,8 +57,6 @@ The process for creating a new release is as follows:
 
 ### Building documents locally
 
-**You don't need to do this unless you plan to develop Twined.**
-
 Install `doxgen`. On a mac, that's `brew install doxygen`; other systems may differ.
 
 Install sphinx and other requirements for building the docs:
