@@ -1,9 +1,12 @@
 # twined
 
-A library to help digital twins talk to one another. Read more at [twined.readthedocs.io](https://twined.readthedocs.io)
+A library to help digital twins and data services talk to one another. Read more at [twined.readthedocs.io](https://twined.readthedocs.io)
 
+[![Build Status](https://travis-ci.com/octue/twined.svg?branch=master)](https://travis-ci.com/octue/twined)
 [![codecov](https://codecov.io/gh/octue/twined/branch/master/graph/badge.svg)](https://codecov.io/gh/octue/twined)
 [![Documentation Status](https://readthedocs.org/projects/twined/badge/?version=latest)](https://twined.readthedocs.io/en/latest/?badge=latest)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 ## Developer notes
 
