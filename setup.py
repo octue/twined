@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 # Note:
 #   The Hitchiker's guide to python provides an excellent, standard, method for creating python packages:

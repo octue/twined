@@ -1,9 +1,11 @@
 import json as jsonlib
 import logging
 import pkg_resources
-from . import exceptions
-from jsonschema import validate as jsonschema_validate, ValidationError
 
+from jsonschema import ValidationError
+from jsonschema import validate as jsonschema_validate
+
+from . import exceptions
 
 logger = logging.getLogger(__name__)
 
