@@ -8,5 +8,5 @@ pluggy
 # ------------------------------------------------------------------------------
 flake8==3.8.3  # https://github.com/PyCQA/flake8
 flake8-isort==3.0.0  # https://github.com/gforcada/flake8-isort
-black  # https://github.com/ambv/black
+black==19.10.b0  # https://github.com/ambv/black
 pre-commit  # https://github.com/pre-commit/pre-commit

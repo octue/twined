@@ -1,5 +1,5 @@
-exclude: 'build|docs|node_modules|.git|.tox|amy/static|((?:[^/]*/)*)(.svg)|((?:[^/]*/)*)(.xml)'
-include: 'backend'
+exclude: 'build|docs|node_modules|.git|.tox|dist|docs|*.egg-info'
+include: 'twined'
 default_stages: [commit]
 fail_fast: true
 default_language_version:
