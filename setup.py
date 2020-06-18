@@ -23,6 +23,7 @@ setup(
     author="Octue (github: octue)",
     description="A library to help digital twins and data services talk to one another",
     long_description=readme_text,
+    long_description_content_type="text/x-rst",
     packages=find_packages(exclude=("tests", "docs")),
     include_package_data=True,
     classifiers=[
