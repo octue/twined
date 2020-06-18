@@ -1,4 +1,4 @@
-exclude: 'build|docs|node_modules|.git|.tox|dist|docs|*.egg-info'
+exclude: 'build|docs|node_modules|.git|.tox|dist|docs|octue.egg-info|twined.egg-info'
 include: 'twined'
 default_stages: [commit]
 fail_fast: true
