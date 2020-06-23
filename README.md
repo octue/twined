@@ -10,14 +10,14 @@ A library to help digital twins and data services talk to one another. Read more
 
 ## Developer notes
 
-**You don't need to pay attention to this unless you plan to develop Twined.**
+**Documentation for use of the library is [here](https://twined.readthedocs.io). You don't need to pay attention to the following unless you plan to develop Twined itself.**
 
 ### Contributing
 
 - Please raise an issue on the board (or add your $0.02 to an existing issue) so the maintainers know
 what's happening and can advise / steer you.
 
-- Create a fork of twined, undertake your changes on a new branch (call it whatever you want). To run tests and make commits,
+- Create a fork of twined, undertake your changes on a new branch, named like *issue-84* or similar. To run tests and make commits,
 you'll need to do something like:
 ```
 git clone <your_forked_repo_address>    # fetches the repo to your local machine
@@ -29,7 +29,7 @@ pre-commit install                      # Installs the pre-commit code formattin
 tox                                     # Runs the tests with coverage. NB you can also just set up pycharm or vscode to run these.
 ```
 
-- If you don't know what TDD is, go away and find out. We practice TDD here and it'll be glaringly obvious if you don't.
+- Adopt a Test Driven Development approach to implementing new features or fixing bugs.
 
 - Ask the `twined` maintainers *where* to make your pull request. We'll create a version branch, according to the
 roadmap, into which you can make your PR. We'll help review the changes and improve the PR.
