@@ -2,8 +2,18 @@
   "type": "object",
   "properties": {
     "kind": {
-      "description": "The kind of the manifest, eg 'multidataset'",
-      "type": "string"
+      "description": "The kind of the manifest, (only 'multi-dataset' available, reserved for future use)",
+      "type": "string",
+      "default": "multi-dataset",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "multi-dataset"
+          ],
+          "title": "Multi Dataset"
+        }
+      ]
     },
     "id": {
       "description": "ID of the manifest, typically a uuid",
@@ -76,5 +86,5 @@
       }
     }
   },
-  "required": ["id", "kind", "datasets"]
+  "required": ["id", "datasets"]
 }

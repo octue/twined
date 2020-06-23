@@ -278,8 +278,15 @@ Here, we describe how each of these data classes is described by **twined**.
 
          SERVICE_API_KEY=someLongTokenTHatYouProbablyHaveToPayTheThirdPartyProviderLoadsOfMoneyFor
 
-      **twined** helps by providing a small shim to check for their presence and bring these environment variables
-      into your configuration.
+      Credentials may also reside in a ``.env`` file in the current directory, either in the format above
+      (with a new line for each variable) or, for convenience, as bash exports like:
+
+      .. code-block:: javascript
+
+         export SERVICE_API_KEY=someLongTokenTHatYouProbablyHaveToPayTheThirdPartyProviderLoadsOfMoneyFor
+
+      The ``validate_credentials()`` method of the ``Twine class checks for their presence and, where contained in a
+      ``.env`` file, ensures they are loaded into the environment.
 
       .. ATTENTION::
 

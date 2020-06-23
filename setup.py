@@ -15,11 +15,11 @@ with open("LICENSE") as f:
 
 setup(
     name="twined",
-    version="0.0.9",
+    version="0.0.10",
     py_modules=[],
-    install_requires=["jsonschema ~= 3.2.0"],
+    install_requires=["jsonschema ~= 3.2.0", "python-dotenv"],
     url="https://www.github.com/octue/twined",
-    license='MIT',
+    license=license_text,
     author="Octue (github: octue)",
     description="A library to help digital twins and data services talk to one another",
     long_description=readme_text,

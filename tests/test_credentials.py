@@ -1,4 +1,6 @@
+import os
 import unittest
+from unittest import mock
 
 from twined import Twine, exceptions
 
@@ -40,25 +42,46 @@ class TestCredentialsTwine(BaseTestCase):
             Twine(file=twine_file)
 
 
-# class TestCredentialsValidation(unittest.TestCase):
-#     """ Tests related to whether validation of children occurs successfully (given a valid twine)
-#     """
-#
-#     def test_no_credentials(self):
-#         """ Test that a twine with no credentials will validate straightforwardly
-#         """
-#         raise exceptions.NotImplementedYet()
-#
-#     def test_missing_credentials(self):
-#         """ Test that a twine with credentials will not validate where they are missing from the environment
-#         """
-#         raise exceptions.NotImplementedYet()
-#
-#     def test_matched_credentials(self):
-#         """ Test that a twine with credentials required will validate when the credentials are available in the
-#         environment
-#         """
-#         raise exceptions.NotImplementedYet()
+class TestCredentialsValidation(BaseTestCase):
+    """ Tests related to whether validation of children occurs successfully (given a valid twine)
+    """
+
+    def test_no_credentials(self):
+        """ Test that a twine with no credentials will validate straightforwardly
+        """
+        twine = Twine(file=self.path + "twines/valid_schema_twine.json")
+        twine.validate_credentials()
+
+    def test_missing_credentials(self):
+        """ Test that a twine with credentials will not validate where they are missing from the environment
+        """
+        twine = Twine(file=self.path + "twines/valid_credentials_twine.json")
+        with self.assertRaises(exceptions.CredentialNotFound):
+            twine.validate_credentials()
+
+    def test_default_credentials(self):
+        """ Test that a twine with credentials will validate where ones with defaults are missing from the environment
+        """
+        twine = Twine(file=self.path + "twines/valid_credentials_twine.json")
+        with mock.patch.dict(os.environ, {"SECRET_THE_FIRST": "a value", "SECRET_THE_SECOND": "another value"}):
+            credentials = twine.validate_credentials()
+
+        self.assertIn("SECRET_THE_FIRST", credentials.keys())
+        self.assertIn("SECRET_THE_SECOND", credentials.keys())
+        self.assertIn("SECRET_THE_THIRD", credentials.keys())
+        self.assertEqual(credentials["SECRET_THE_THIRD"], "postgres://pguser:pgpassword@localhost:5432/pgdb")
+
+    def test_nondefault_credentials(self):
+        """ Test that the environment will override a default value for a credential
+        """
+        twine = Twine(file=self.path + "twines/valid_credentials_twine.json")
+        with mock.patch.dict(
+            os.environ,
+            {"SECRET_THE_FIRST": "a value", "SECRET_THE_SECOND": "another value", "SECRET_THE_THIRD": "nondefault"},
+        ):
+            credentials = twine.validate_credentials()
+
+        self.assertEqual(credentials["SECRET_THE_THIRD"], "nondefault")
 
 
 if __name__ == "__main__":
