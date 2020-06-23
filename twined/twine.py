@@ -128,7 +128,7 @@ class Twine:
             logger.debug("Validated %s against schema", strand)
 
         except ValidationError as e:
-            raise exceptions.invalid_contents_map[strand](e.message)
+            raise exceptions.invalid_contents_map[strand](str(e))
 
     def _validate_twine_version(self):
         """ Validates that the installed version is consistent with an optional version specification in the twine file
@@ -242,6 +242,20 @@ class Twine:
         """
         data = self._load_json("output_values", **kwargs)
         self._validate_against_schema("output_values", data)
+        return data
+
+    def validate_input_manifest(self, **kwargs):
+        """ Validates the input manifest, passed as either a file or a json string
+        """
+        data = self._load_json("input_manifest", **kwargs)
+        self._validate_against_schema("input_manifest", data)
+        return data
+
+    def validate_output_manifest(self, **kwargs):
+        """ Validates the output manifest, passed as either a file or a json string
+        """
+        data = self._load_json("output_manifest", **kwargs)
+        self._validate_against_schema("output_manifest", data)
         return data
 
     # def validate(
