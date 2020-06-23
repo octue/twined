@@ -77,7 +77,7 @@ Load the twine
 ==============
 
 **twined** provides a `Twine()` class to load a twine (from a file or a json string).
-The loading process checks the twine is valid. It's as simple as:
+The loading process checks the twine itself is valid. It's as simple as:
 
 .. code-block:: py
 
@@ -91,5 +91,27 @@ The loading process checks the twine is valid. It's as simple as:
 Validate some inputs
 ====================
 
+Say we have some json that we want to parse and validate, to make sure it matches what's required for input values.
+
+.. code-block:: py
+
+    my_input_values = my_twine.validate_input_values(json='{"foo": 30, "baz": 500}')
+
+You can read the values from a file too. Paste the following into a file named ``input_values.json``:
+
+.. code-block:: javascript
+
+    {
+      "foo": 30,
+      "baz": 500
+    }
+
+Then parse and validate directly from the file:
+
+.. code-block:: py
+
+    my_input_values = my_twine.validate_input_values(file="input_values.json")
+
+
 .. ATTENTION::
-    LIBRARY IS UNDER CONSTRUCTION! WATCH THIS SPACE!
+    LIBRARY IS UNDER CONSTRUCTION! WATCH THIS SPACE FOR MORE!
