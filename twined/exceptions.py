@@ -47,6 +47,11 @@ class FolderNotFound(TwineException):
     """
 
 
+class CredentialNotFound(TwineException):
+    """ Raised when a credential specified in the twine file is not present in either the environment or a .env file
+    """
+
+
 class TwineFileNotFound(TwineException, FileNotFoundError):
     """ Raised when the specified twine file is not present
     """
@@ -140,6 +145,7 @@ file_not_found_map = {
 # TODO Specialised per-strand exceptions to help drill to the root of the issues
 invalid_json_map = {
     "twine": InvalidTwineJson,
+    "children": InvalidValuesJson,
     "configuration": InvalidValuesJson,
     "input_values": InvalidValuesJson,
     "output_values": InvalidValuesJson,
@@ -150,6 +156,7 @@ invalid_json_map = {
 # TODO Specialised per-strand exceptions to help drill to the root of the issues
 invalid_contents_map = {
     "twine": InvalidTwineContents,
+    "children": InvalidValuesContents,
     "configuration": InvalidValuesContents,
     "input_values": InvalidValuesContents,
     "output_values": InvalidValuesContents,
