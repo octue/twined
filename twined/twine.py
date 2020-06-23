@@ -1,9 +1,12 @@
 import json as jsonlib
 import logging
+import os
 import pkg_resources
 
 from jsonschema import ValidationError
 from jsonschema import validate as jsonschema_validate
+
+from dotenv import load_dotenv
 
 from . import exceptions
 
@@ -93,16 +96,30 @@ class Twine:
         """ Validates data against a schema, raises exceptions of type Invalid<strand>Json if not compliant.
 
         Can be used to validate:
-            - values data for compliance with schema (for schema based strands) or
             - the twine file contents itself against the present version twine spec
+            - children data against the required schema for the present version twine spec
+            - values data for compliance with schema written in the twine (for strands like input_values_schema)
         """
         if strand == "twine":
-            # A twine *contains* schema, but we also need to verify that it matches a certain schema itself
-            # The twine schema is distributed with this packaged to ensure version consistency...
+            # The data is a twine. A twine *contains* schema, but we also need to verify that it matches a certain
+            # schema itself. The twine schema is distributed with this packaged to ensure version consistency...
             schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/twine_schema.json"))
+
+        elif strand in CHILDREN_STRANDS:
+            # The data is a list of children. The "children" strand of the twine describes matching criteria for
+            # the children, not the schema of the "children" data, which is distributed with this package to ensure
+            # version consistency...
+            schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/children_schema.json"))
+
+        elif strand in MANIFEST_STRANDS:
+            # The data is a manifest of files. The "*_manifest" strands of the twine describe matching criteria used to
+            # filter files appropriate for consumption by the digital twin, not the schema of the manifest data, which
+            # is distributed with thie package to ensure version consistency...
+            schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/manifest_schema.json"))
+
         else:
             if strand not in SCHEMA_STRANDS:
-                raise exceptions.TwineTypeException(f"Unknown strand {strand}. Try one of {SCHEMA_STRANDS}.")
+                raise exceptions.TwineTypeException(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
             schema_key = strand + "_schema"
             schema = self._raw[schema_key]
 
@@ -125,6 +142,86 @@ class Twine:
             raise exceptions.TwineVersionConflict(
                 f"Twined library version conflict. Twine file requires {twine_file_twined_version} but you have {installed_twined_version} installed"
             )
+
+    def validate_children(self, **kwargs):
+        """ Validates that the children values, passed as either a file or a json string, are correct
+        """
+        # TODO cache this loaded data keyed on a hashed version of kwargs
+        children = self._load_json("children", **kwargs)
+        self._validate_against_schema("children", children)
+
+        strand = self._raw.get("children", [])
+
+        # Loop the children and accumulate values so we have an O(1) check
+        children_keys = {}
+        for child in children:
+            children_keys[child["key"]] = children_keys.get(child["key"], 0) + 1
+
+        # Check there is at least one child for each item described in the strand
+        # TODO add max, min num specs to the strand schema and check here
+        for item in strand:
+            strand_key = item["key"]
+            if children_keys.get(strand_key, 0) <= 0:
+                raise exceptions.InvalidValuesContents(f"No children found matching the key {strand_key}")
+
+        # Loop the strand and add unique keys to dict so we have an O(1) check
+        strand_keys = {}
+        for item in strand:
+            strand_keys[item["key"]] = True
+
+        # Check that each child has a key which is described in the strand
+        for child in children:
+            child_key = child["key"]
+            if not strand_keys.get(child_key, False):
+                raise exceptions.InvalidValuesContents(
+                    f"Child with key '{child_key}' found but no such key exists in the 'children' strand of the twine."
+                )
+
+        # TODO Additional validation that the children match what is set as required in the Twine
+        return children
+
+    def validate_credentials(self, dotenv_path=None):
+        """ Validates that all credentials required by the twine are present
+
+        Credentials may either be set as environment variables or defined in a '.env' file. If not present in the
+        environment, validate_credentials will check for variables in a .env file (if present) and populate the
+        environment with them. If not present in either the environment or the .env file, default values are used
+        (if defined) or an error is thrown.
+
+        Typically a .env file resides at the root of your application (the working directory) although a specific path
+        may be set using the `dotenv_path` argument.
+
+        .env files should never be committed to git or any other version control system.
+
+        A .env file can look like this:
+        ```
+        # a comment that will be ignored.
+        YOUR_SECRET_VALUE=itsasecret
+        MEANING_OF_LIFE=42
+        MULTILINE_VAR="hello\nworld"
+        ```
+        Or like this (also useful for bash users):
+        ```
+        export YOUR_SECRET_VALUE=itsasecret
+        export MEANING_OF_LIFE=42
+        export MULTILINE_VAR="hello\nworld"
+        ```
+        """
+
+        # Load any variables from the .env file into the environment
+        dotenv_path = dotenv_path or os.path.join(".", ".env")
+        load_dotenv(dotenv_path)
+
+        # Loop through the required credentials to check for presence of each
+        credentials = {}
+        for credential in self._raw.get("credentials", []):
+            name = credential["name"]
+            default = credential.get("default", None)
+            credentials[name] = os.environ.get(name, default)
+            if credentials[name] is None:
+                raise exceptions.CredentialNotFound(f"Credential '{name}' missing from environment or .env file")
+
+        return credentials
 
     def validate_configuration(self, **kwargs):
         """ Validates that the configuration values, passed as either a file or a json string, are correct
