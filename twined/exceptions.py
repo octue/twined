@@ -140,6 +140,8 @@ file_not_found_map = {
     "configuration": ConfigFileNotFound,
     "input_values": InputValuesFileNotFound,
     "output_values": OutputValuesFileNotFound,
+    "input_manifest": InputManifestFileNotFound,
+    "output_manifest": OutputManifestFileNotFound,
 }
 
 # TODO Specialised per-strand exceptions to help drill to the root of the issues
