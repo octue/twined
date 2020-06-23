@@ -21,9 +21,4 @@ twine  # <---- nothing to do with the twined library!
 
 # Building documentation
 # ------------------------------------------------------------------------------
-Sphinx==1.8.3
-sphinx-rtd-theme==0.4.2
-sphinx-tabs==1.1.10
-breathe==4.11.1
-exhale==0.2.1
-pre-commit try-repo ../hook-repo foo --verbose --all-files
+include docs/requirements.txt
