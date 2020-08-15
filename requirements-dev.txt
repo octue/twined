@@ -21,4 +21,4 @@ twine  # <---- nothing to do with the twined library!
 
 # Building documentation
 # ------------------------------------------------------------------------------
-include docs/requirements.txt
+-r docs/requirements.txt
