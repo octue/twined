@@ -142,7 +142,6 @@ highlight_language = 'python'
 # to avoid clicks from development pages adding to analytics
 googleanalytics_id = "UA-43965341-6"
 googleanalytics_enabled = True
-# str2bool(os.getenv("READTHEDOCS", 'False'))
 
 # -- Options for HTML output ---------------------------------------------------
 
