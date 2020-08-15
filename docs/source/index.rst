@@ -4,20 +4,11 @@
     `issues board <https://github.com/octue/twined/issues>`_ and
     `roadmap <https://github.com/octue/twined/projects/1>`_.
 
-.. image:: https://codecov.io/gh/octue/twined/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/octue/twined
-  :alt: Code coverage
-  :align: right
-.. image:: https://readthedocs.org/projects/twined/badge/?version=latest
-  :target: https://twined.readthedocs.io/en/latest/?badge=latest
-  :alt: Documentation Status
-  :align: right
-
 ======
 Twined
 ======
 
-**twined** is a library to help :ref:`digital_twins` talk to one another.
+**twined** is a library to help create and connect :ref:`digital_twins` and data services.
 
 .. epigraph::
    *"Twined" [t-why-nd] ~ encircled, twisted together, interwoven*
@@ -26,10 +17,11 @@ A digital twin is a virtual representation of a real life being - a physical ass
 a human. Like real things, digital twins need to interact, so can be connected together, but need a common communication
 framework to do so.
 
-**twined** helps you to define a single file, a "twine", that defines a digital twin, specifying its data
-interfaces, connections to other twins, and other requirements.
+**twined** helps you to define a single file, a "twine", that defines a digital twin / data service. It specifies
+specifying its data interfaces, connections to other twins, and other requirements.
 
-Any person, or any computer, can read a twine and understand *what-goes-in* and *what-comes-out*.
+Any person, or any computer, can read a twine and understand *what-goes-in* and *what-comes-out*. That makes it easy to
+collaborate with other teams, since everybody is crystal clear about what's needed.
 
 .. figure:: images/digital_twin_hierarchy.svg
     :width: 350px
@@ -37,7 +29,7 @@ Any person, or any computer, can read a twine and understand *what-goes-in* and 
     :figclass: align-center
     :alt: Hierarchy of digital twins
 
-    Digital twins connected in a hierarchy. Each blue circle represents a twin, coupled to its neighbours.
+    Digital twins / data services connected in a hierarchy. Each blue circle represents a twin, coupled to its neighbours.
     Yellow nodes are where schema are used to connect twins.
 
 
@@ -49,13 +41,13 @@ Aims
 **twined** provides a toolkit to help create and validate "twines" - descriptions of a digital twin, what data it
 requires, what it does and how it works.
 
-The goals of **twined** are as follows:
-    - Provide a clear framework for what a digital twin schema can and/or must contain
-    - Provide functions to validate incoming data against a known schema
-    - Provide functions to check that a schema itself is valid
-    - Provide (or direct you to) tools to create schema describing what you require
+The goals of this **twined** library are as follows:
+    - Provide a clear framework for what a *twine* can and/or must contain
+    - Provide functions to validate incoming data against a known *twine*
+    - Provide functions to check that a *twine* itself is valid
+    - Provide (or direct you to) tools to create *twines* describing what you require
 
-In :ref:`schema`, we describe the different parts of a twine (examining how digital twins connect and interact...
+In :ref:`anatomy`, we describe the different parts of a twine (examining how digital twins connect and interact...
 building them together in hierarchies and networks). But you may prefer to dive straight in with the :ref:`quick_start`
 guide.
 
@@ -78,6 +70,10 @@ it is necessary for everyone to be on the same page - the :ref:`gemini_principle
 which is why we've released this part of our technology stack as open source, to support those principles and help
 develop a wider ecosystem.
 
+The main goal is to **help engineers and scientists focus on doing engineering and science** - instead of apis, data
+cleaning/management, and all this cloud-pipeline-devops-test-ci-ml BS that takes up 90% of a scientist's time, when they
+should be spending their valuable time researching migratory patterns of birds, or cell structures, or wind turbine
+performance, or whatever excites them.
 
 .. _uses:
 
@@ -86,6 +82,7 @@ Uses
 
 At `Octue <https://www.octue.com>`_, **twined** is used as a core part of our application creation process:
 
+  * As a format to communicate requirements to our partners in research projects
   * As a tool to validate incoming data to digital twins
   * As a framework to help establish schema when designing digital twins
   * As a source of information on digital twins in our network, to help map and connect twins together
@@ -97,28 +94,13 @@ Please note, this is not a "general help" forum; we recommend Stack Overflow for
 issues or for help designing digital twin schema, Octue is able to provide application support services for those
 building digital twins using **twined**.
 
-
-.. _life_choices:
-
-Life Choices
-============
-
-**twined** is presently released in python only. It won't be too hard to replicate functionality in other languages, and
-we're considering other languages at present, so might be easily persuadable ;)
-
-If you require implementation of **twined** in a different language,
-and are willing to consider sponsorship of development and maintenance of that library, please
-`get in touch <https://octue.com/contact>`_.
-
-
 .. toctree::
    :maxdepth: 2
 
    self
-   installation
    quick_start
-   examples
-   digital_twins
-   schema
+   anatomy
+   about
+   deployment
    license
    version_history
