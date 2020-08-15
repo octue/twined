@@ -10,6 +10,7 @@ from pygments.lexers import get_all_lexers
 from sphinx.util.osutil import copyfile
 from sphinx.util import logging
 
+
 FILES = [
     'semantic-ui-2.4.2/accordion.css',
     'semantic-ui-2.4.2/accordion.js',
