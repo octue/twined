@@ -1,0 +1,11 @@
+.sphinx-accordion.accordion {
+    margin-bottom: 1.75em;
+}
+
+.sphinx-accordion.title p {
+    display: inline-block;
+    margin-top: 8px;
+    margin-right: 0px;
+    margin-bottom: 8px;
+    margin-left: 0px;
+}
