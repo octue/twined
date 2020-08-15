@@ -43,7 +43,8 @@ extensions = [
     'sphinx.ext.ifconfig',
     'breathe',
     'exhale',
-    'googleanalytics'
+    'googleanalytics',
+    'sphinx_accordion.accordion'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
