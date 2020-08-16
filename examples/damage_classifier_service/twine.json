@@ -1,0 +1,14 @@
+{
+  // Manifest strands contain lists, with one entry for each required dataset
+  "configuration_manifest_filters": [
+    {
+      // Once the inputs are validated, your analysis program can use this key to access the dataset
+      "key": "trained_model",
+      // General notes, which are helpful as a reminder to users of the service
+      "purpose": "The trained classifier",
+      // Issues a strict search for data provided by megacorp, containing *.mdl files tagged as
+      // classifiers for blade damage on system abc123
+      "filters": "organisation: megacorp AND tags:(classifier AND damage AND system:abc123) AND files:(extension:mdl)"
+    }
+  ],
+}

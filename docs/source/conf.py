@@ -11,12 +11,21 @@
 # serve to show the default.
 
 import os
+import sys
 import sphinx_rtd_theme
+from distutils.util import strtobool
+
+
+def str2bool(value):
+    """ Allows for parsing boolean environment variables like 'True' and 'False' correctly
+    """
+    return bool(strtobool(value))
+
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-# sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath("./_ext"))
 
 # -- General configuration -----------------------------------------------------
 
@@ -33,7 +42,9 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'breathe',
-    'exhale'
+    'exhale',
+    'googleanalytics',
+    'sphinx_accordion.accordion'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -125,6 +136,12 @@ primary_domain = 'python'
 # Tell sphinx what the pygments highlight language should be
 highlight_language = 'python'
 
+# -- Google Analytics Configuration --------------------------------------------
+
+# Only add google analytics when building on ReadTheDocs,
+# to avoid clicks from development pages adding to analytics
+googleanalytics_id = "UA-43965341-6"
+googleanalytics_enabled = True
 
 # -- Options for HTML output ---------------------------------------------------
 
