@@ -3,22 +3,67 @@
   "datasets": [
     {
       "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
-      "name": "training data for system abc123",
-      "organisation": "megacorp",
-      "tags": "classifier, damage, system:abc123",
+      "name": "meteorological mast dataset",
+      "tags": "met, mast, wind, location:108346",
       "files": [
         {
-          "path": "datasets/7ead7669/blade_damage.mdl",
+          "path": "input/datasets/7ead7669/mast_1.csv",
           "cluster": 0,
           "sequence": 0,
           "extension": "csv",
           "tags": "",
-          "posix_timestamp": 0,
+          "posix_timestamp": 1551393630,
           "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
           "last_modified": "2019-02-28T22:40:30.533005Z",
-          "name": "blade_damage.mdl",
+          "name": "mast_1.csv",
           "size_bytes": 59684813,
           "sha-512/256": "somesha"
+        },
+        {
+          "path": "input/datasets/7ead7669/mast_2.csv",
+          "cluster": 0,
+          "sequence": 1,
+          "extension": "csv",
+          "tags": "",
+          "posix_timestamp": 1551394230,
+          "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
+          "last_modified": "2019-02-28T22:50:40.633001Z",
+          "name": "mast_2.csv",
+          "size_bytes": 59684813,
+          "sha-512/256": "someothersha"
+        }
+      ]
+    },
+    {
+      "id": "5cf9e445-c288-4567-9072-edc31003b022",
+      "name": "scada data exports",
+      "tags": "wind, turbine, scada, system:ab32, location:108346",
+      "files": [
+        {
+          "path": "input/datasets/7ead7669/export_1.csv",
+          "cluster": 0,
+          "sequence": 0,
+          "extension": "csv",
+          "tags": "",
+          "posix_timestamp": 1551393600,
+          "id": "78fa511f-3e28-4bc2-aa28-7b6a2e8e6ef9",
+          "last_modified": "2019-02-28T22:40:00.000000Z",
+          "name": "export_1.csv",
+          "size_bytes": 88684813,
+          "sha-512/256": "somesha"
+        },
+        {
+          "path": "input/datasets/7ead7669/export_2.csv",
+          "cluster": 0,
+          "sequence": 1,
+          "extension": "csv",
+          "tags": "",
+          "posix_timestamp": 1551394200,
+          "id": "204d7316-7ae6-45e3-8f90-443225b21226",
+          "last_modified": "2019-02-28T22:50:00.000000Z",
+          "name": "export_2.csv",
+          "size_bytes": 88684813,
+          "sha-512/256": "someothersha"
         }
       ]
     }
