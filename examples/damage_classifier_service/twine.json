@@ -10,5 +10,5 @@
       // classifiers for blade damage on system abc123
       "filters": "organisation: megacorp AND tags:(classifier AND damage AND system:abc123) AND files:(extension:mdl)"
     }
-  ],
+  ]
 }
