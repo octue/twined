@@ -2,21 +2,21 @@
   "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
   "datasets": [
     {
-      "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
-      "name": "training data for system abc123",
+      "id": "4564deca-5654-42e8-aadf-70690b393a30",
+      "name": "visual cross check data",
       "organisation": "megacorp",
-      "tags": "classifier, damage, system:abc123",
+      "tags": "figure, met, mast, scada, check, location:108346",
       "files": [
         {
-          "path": "datasets/7ead7669/blade_damage.mdl",
+          "path": "datasets/7ead7669/cross_check.fig",
           "cluster": 0,
           "sequence": 0,
-          "extension": "csv",
+          "extension": "fig",
           "tags": "",
-          "posix_timestamp": 0,
-          "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-          "last_modified": "2019-02-28T22:40:30.533005Z",
-          "name": "blade_damage.mdl",
+          "posix_timestamp": 1551394800,
+          "id": "38f77fe2-c8c0-49d1-a08c-0928d53a742f",
+          "last_modified": "2019-02-28T23:00:00.000000Z",
+          "name": "cross_check.fig",
           "size_bytes": 59684813,
           "sha-512/256": "somesha"
         }
