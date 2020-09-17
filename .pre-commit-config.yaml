@@ -5,12 +5,14 @@ default_language_version:
   python: python3  # force all unspecified python hooks to run python3
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: master
+    rev: v3.1.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
-        language_version: python3
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=10240']
 
   - repo: https://github.com/pre-commit/mirrors-isort
     rev: v4.3.21
@@ -28,14 +30,20 @@ repos:
     rev: 3.8.1
     hooks:
       - id: flake8
-        additional_dependencies: [flake8-isort]
         language_version: python3
 
   - repo: https://github.com/thclark/pre-commit-sphinx
-    rev: master
+    rev: 0.0.1
     hooks:
       - id: build-docs
         language_version: python3
+        additional_dependencies:
+          - 'Sphinx>=2,<3'
+          - 'sphinx-rtd-theme==0.5.0'
+          - 'sphinx-tabs==1.2.1'
+          - 'sphinx-charts==0.0.4'
+          - 'scipy~=1.5.2'
+          - 'jsonschema~=3.2.0'
 
   - repo: https://github.com/windpioneers/pre-commit-hooks
     rev: 0.0.5
@@ -46,7 +54,6 @@ repos:
           - '^development$'
           - '^devops/([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
           - '^doc/([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
-          - '^experiment/([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
           - '^feature/([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
           - '^fix/([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
           - '^hotfix/([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
