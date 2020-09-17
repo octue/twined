@@ -6,6 +6,3 @@ sphinx-tabs==1.2.1
 sphinx-charts==0.0.4
 scipy~=1.5.2
 jsonschema~=3.2.0
-rstcloth>=0.3.1
-tabulate
-python-slugify
