@@ -84,6 +84,10 @@ class OutputValuesFileNotFound(TwineException, FileNotFoundError):
 
 # --------------------- Exceptions relating to validation of JSON data (input, output, config values) ------------------
 
+class InvalidSourceKindException(TwineException):
+    """ Raised when attempting to use the json loader for a disallowed kind
+    """
+
 
 class InvalidValues(TwineException):
     """ Raised when JSON data (like Config data, Input Values or Output Values) is invalid
@@ -137,9 +141,10 @@ class UnexpectedNumberOfResults(TwineException):
 
 file_not_found_map = {
     "twine": TwineFileNotFound,
-    "configuration": ConfigFileNotFound,
+    "configuration_values": ConfigFileNotFound,
     "input_values": InputValuesFileNotFound,
     "output_values": OutputValuesFileNotFound,
+    "configuration_manifest": InputManifestFileNotFound,
     "input_manifest": InputManifestFileNotFound,
     "output_manifest": OutputManifestFileNotFound,
 }
@@ -148,9 +153,10 @@ file_not_found_map = {
 invalid_json_map = {
     "twine": InvalidTwineJson,
     "children": InvalidValuesJson,
-    "configuration": InvalidValuesJson,
+    "configuration_values": InvalidValuesJson,
     "input_values": InvalidValuesJson,
     "output_values": InvalidValuesJson,
+    "configuration_manifest": InvalidManifestJson,
     "input_manifest": InvalidManifestJson,
     "output_manifest": InvalidManifestJson,
 }
@@ -159,9 +165,10 @@ invalid_json_map = {
 invalid_contents_map = {
     "twine": InvalidTwineContents,
     "children": InvalidValuesContents,
-    "configuration": InvalidValuesContents,
+    "configuration_values": InvalidValuesContents,
     "input_values": InvalidValuesContents,
     "output_values": InvalidValuesContents,
+    "configuration_manifest": InvalidManifestContents,
     "input_manifest": InvalidManifestContents,
     "output_manifest": InvalidManifestContents,
 }
