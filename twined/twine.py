@@ -7,7 +7,7 @@ from jsonschema import ValidationError
 from jsonschema import validate as jsonschema_validate
 
 from dotenv import load_dotenv
-
+from .utils import load_json
 from . import exceptions
 
 logger = logging.getLogger(__name__)
@@ -15,11 +15,12 @@ logger = logging.getLogger(__name__)
 
 SCHEMA_STRANDS = (
     "input_values",
-    "configuration",
+    "configuration_values",
     "output_values",
 )
 
 MANIFEST_STRANDS = (
+    "configuration_manifest",
     "input_manifest",
     "output_manifest",
 )
@@ -47,45 +48,32 @@ class Twine:
         """
         self._load_twine(**kwargs)
 
-    def _load_twine(self, file=None, json=None):
-        """ Load twine from a *.json file or a json string and validates twine contents
+    def _load_twine(self, source=None):
+        """ Load twine from a *.json filename, file-like or a json string and validates twine contents
         """
 
-        if (file is None) and (json is None):
+        if source is None:
             # If loading an unspecified twine, return an empty one rather than raising error (like in _load_data())
             self._raw = {}
-            logger.warning("No twine file specified. Loading empty twine.")
+            logger.warning("No twine source specified. Loading empty twine.")
         else:
-            self._raw = self._load_json("twine", file=file, json=json)
+            self._raw = self._load_json("twine", source, allowed_kinds=('file-like', 'filename', 'string'))
 
         self._validate_against_schema("twine", self._raw)
         self._validate_twine_version()
 
-    def _load_json(self, kind, file=None, json=None):
-        """ Loads data from either a *.json file or a json string
+    def _load_json(self, kind, source, **kwargs):
+        """ Loads data from either a *.json file, an open file pointer or a json string. Directly returns any other data
         """
 
-        if (file is None) and (json is None):
-            raise exceptions.TwineTypeException(f"Cannot load {kind} - no file name or json string specified")
+        if source is None:
+            raise exceptions.TwineTypeException(f"Cannot load {kind} - no data source specified")
 
         # Decode the json string and deserialize to objects
         try:
-            # From the file...
-            if file is not None:
-                if json is not None:
-                    raise exceptions.TwineTypeException("You cannot specify both file and json inputs")
-
-                try:
-                    with open(file) as f:
-                        data = jsonlib.load(f)
-                        logger.debug("Loaded %s from file %s", kind, file)
-                except FileNotFoundError as e:
-                    raise exceptions.file_not_found_map[kind](e)
-
-            # Directly from the string...
-            else:
-                data = jsonlib.loads(json)
-                logger.debug("Loaded %s from input json string", kind)
+            data = load_json(source, **kwargs)
+        except FileNotFoundError as e:
+            raise exceptions.file_not_found_map[kind](e)
 
         except jsonlib.decoder.JSONDecodeError as e:
             raise exceptions.invalid_json_map[kind](e)
@@ -142,6 +130,26 @@ class Twine:
             raise exceptions.TwineVersionConflict(
                 f"Twined library version conflict. Twine file requires {twine_file_twined_version} but you have {installed_twined_version} installed"
             )
+
+    def _validate_values(self, kind, source, values_class=None, **kwargs):
+        """ Common values validator method
+        """
+        data = self._load_json(kind, source, **kwargs)
+        self._validate_against_schema(kind, data)
+        if values_class:
+            # TODO create a values object from the data
+            pass
+        return data
+
+    def _validate_manifest(self, kind, source, manifest_class=None, **kwargs):
+        """ Common manifest validator method
+        """
+        data = self._load_json(kind, source, **kwargs)
+        self._validate_against_schema(kind, data)
+        if manifest_class:
+            # TODO create a manifest object and verify that all the required keys etc are there
+            pass
+        return data
 
     def validate_children(self, **kwargs):
         """ Validates that the children values, passed as either a file or a json string, are correct
@@ -223,49 +231,32 @@ class Twine:
 
         return credentials
 
-    def validate_configuration(self, **kwargs):
+    def validate_configuration_values(self, source, **kwargs):
         """ Validates that the configuration values, passed as either a file or a json string, are correct
         """
-        config = self._load_json("configuration", **kwargs)
-        self._validate_against_schema("configuration", config)
-        return config
+        return self._validate_values("configuration_values", source, **kwargs)
 
-    def validate_input_values(self, **kwargs):
+    def validate_input_values(self, source, **kwargs):
         """ Validates that the input values, passed as either a file or a json string, are correct
         """
-        data = self._load_json("input_values", **kwargs)
-        self._validate_against_schema("input_values", data)
-        return data
+        return self._validate_values("input_values", source, **kwargs)
 
-    def validate_output_values(self, **kwargs):
+    def validate_output_values(self, source, **kwargs):
         """ Validates that the output values, passed as either a file or a json string, are correct
         """
-        data = self._load_json("output_values", **kwargs)
-        self._validate_against_schema("output_values", data)
-        return data
+        return self._validate_values("output_values", source, **kwargs)
 
-    def validate_input_manifest(self, **kwargs):
+    def validate_configuration_manifest(self, source, **kwargs):
         """ Validates the input manifest, passed as either a file or a json string
         """
-        data = self._load_json("input_manifest", **kwargs)
-        self._validate_against_schema("input_manifest", data)
-        return data
+        return self._validate_manifest("configuration_manifest", source, **kwargs)
 
-    def validate_output_manifest(self, **kwargs):
+    def validate_input_manifest(self, source, **kwargs):
+        """ Validates the input manifest, passed as either a file or a json string
+        """
+        return self._validate_manifest("input_manifest", source, **kwargs)
+
+    def validate_output_manifest(self, source, **kwargs):
         """ Validates the output manifest, passed as either a file or a json string
         """
-        data = self._load_json("output_manifest", **kwargs)
-        self._validate_against_schema("output_manifest", data)
-        return data
-
-    # def validate(
-    #     self,
-    #     configuration=None,
-    #     manifest=None,
-    #     credentials=None,
-    #     monitors=None,
-    #     logs=None,
-    # ):
-    #     """ Validates that inputs to an application are correct
-    #     """
-    #     pass
+        return self._validate_manifest("output_manifest", source, **kwargs)
