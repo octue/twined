@@ -3,7 +3,6 @@ import unittest
 from unittest import mock
 
 from twined import Twine, exceptions
-
 from .base import BaseTestCase
 
 

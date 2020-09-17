@@ -2,13 +2,12 @@ import json as jsonlib
 import logging
 import os
 import pkg_resources
-
-from jsonschema import ValidationError
-from jsonschema import validate as jsonschema_validate
-
 from dotenv import load_dotenv
-from .utils import load_json
+from jsonschema import ValidationError, validate as jsonschema_validate
+
 from . import exceptions
+from .utils import load_json
+
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +56,7 @@ class Twine:
             self._raw = {}
             logger.warning("No twine source specified. Loading empty twine.")
         else:
-            self._raw = self._load_json("twine", source, allowed_kinds=('file-like', 'filename', 'string'))
+            self._raw = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string"))
 
         self._validate_against_schema("twine", self._raw)
         self._validate_twine_version()

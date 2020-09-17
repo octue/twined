@@ -84,6 +84,7 @@ class OutputValuesFileNotFound(TwineException, FileNotFoundError):
 
 # --------------------- Exceptions relating to validation of JSON data (input, output, config values) ------------------
 
+
 class InvalidSourceKindException(TwineException):
     """ Raised when attempting to use the json loader for a disallowed kind
     """
