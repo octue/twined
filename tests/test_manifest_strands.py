@@ -8,39 +8,27 @@ class TestManifestStrands(BaseTestCase):
     """ Testing operation of the Twine class for validation of data using strands which require manifests
      """
 
-    def test_cannot_load_with_no_file_or_json(self):
-        """ Ensures the correct exception is thrown when manifest is unspecified
-        """
-
-        twine_file = self.path + "twines/valid_manifest_twine.json"
-        twine = Twine(file=twine_file)
-        with self.assertRaises(exceptions.TwineTypeException):
-            twine.validate_input_manifest()
-
-        with self.assertRaises(exceptions.TwineTypeException):
-            twine.validate_output_manifest()
-
     def test_missing_manifest_files(self):
         """ Ensures that if you try to read values from missing files, the right exceptions get raised
         """
         twine_file = self.path + "twines/valid_manifest_twine.json"
-        twine = Twine(file=twine_file)
+        twine = Twine(source=twine_file)
         file = self.path + "not_a_file.json"
         with self.assertRaises(exceptions.InputManifestFileNotFound):
-            twine.validate_input_manifest(file=file)
+            twine.validate_input_manifest(source=file)
 
         with self.assertRaises(exceptions.OutputManifestFileNotFound):
-            twine.validate_output_manifest(file=file)
+            twine.validate_output_manifest(source=file)
 
     def test_valid_manifest_files(self):
         """ Ensures that a manifest file will validate
         """
         twine_file = self.path + "twines/valid_manifest_twine.json"
-        twine = Twine(file=twine_file)
+        twine = Twine(source=twine_file)
         file = self.path + "manifests/inputs/input_valid.json"
-        twine.validate_input_manifest(file=file)
+        twine.validate_input_manifest(source=file)
         file = self.path + "manifests/outputs/output_valid.json"
-        twine.validate_output_manifest(file=file)
+        twine.validate_output_manifest(source=file)
 
     # def test_empty_values(self):
     #     """ Ensures that appropriate errors are generated for invalid values
