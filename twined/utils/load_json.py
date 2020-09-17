@@ -1,6 +1,6 @@
-import logging
-import json
 import io
+import json
+import logging
 
 from twined.exceptions import InvalidSourceKindException
 
@@ -8,12 +8,7 @@ from twined.exceptions import InvalidSourceKindException
 logger = logging.getLogger(__file__)
 
 
-ALLOWED_KINDS = (
-    'file-like',
-    'filename',
-    'string',
-    'object'
-)
+ALLOWED_KINDS = ("file-like", "filename", "string", "object")
 
 
 def load_json(source, *args, **kwargs):
@@ -29,29 +24,29 @@ def load_json(source, *args, **kwargs):
 
     :parameter args, kwargs: Arguments passed through to json.load or json.loads, enabling use of custom encoders etc.
     """
-    allowed_kinds = kwargs.pop('allowed_kinds', ALLOWED_KINDS)
+    allowed_kinds = kwargs.pop("allowed_kinds", ALLOWED_KINDS)
 
     def check(kind):
         if kind not in allowed_kinds:
-            raise InvalidSourceKindException(f'Attempted to load json from a {kind} data source')
+            raise InvalidSourceKindException(f"Attempted to load json from a {kind} data source")
 
     if isinstance(source, io.IOBase):
-        logger.debug('Detected source is a file-like object, loading contents...')
-        check('file-like')
+        logger.debug("Detected source is a file-like object, loading contents...")
+        check("file-like")
         return json.load(source, *args, **kwargs)
 
     elif not isinstance(source, str):
         logger.debug("Source is not a string, bypassing (returning raw data)")
-        check('object')
+        check("object")
         return source
 
     elif source.endswith(".json"):
         logger.debug("Detected source is name of a *.json file, loading from %s", source)
-        check('filename')
+        check("filename")
         with open(source) as f:
             return json.load(f, *args, **kwargs)
 
     else:
         logger.debug("Detected source is string containing json data, parsing...")
-        check('string')
+        check("string")
         return json.loads(source, *args, **kwargs)

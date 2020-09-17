@@ -1,5 +1,6 @@
 from setuptools import find_packages, setup
 
+
 # Note:
 #   The Hitchiker's guide to python provides an excellent, standard, method for creating python packages:
 #       http://docs.python-guide.org/en/latest/writing/structure/
@@ -19,7 +20,7 @@ setup(
     py_modules=[],
     install_requires=["jsonschema ~= 3.2.0", "python-dotenv"],
     url="https://www.github.com/octue/twined",
-    license='MIT',
+    license="MIT",
     author="Octue (github: octue)",
     description="A library to help digital twins and data services talk to one another",
     long_description=readme_text,
