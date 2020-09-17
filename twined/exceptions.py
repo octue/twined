@@ -57,8 +57,13 @@ class TwineFileNotFound(TwineException, FileNotFoundError):
     """
 
 
-class ConfigFileNotFound(TwineException, FileNotFoundError):
-    """ Raised when the config.json file is not present in the input directory
+class ConfigurationValuesFileNotFound(TwineException, FileNotFoundError):
+    """ Raised when attempting to read configuration values from a file that is missing
+    """
+
+
+class ConfigurationManifestFileNotFound(TwineException, FileNotFoundError):
+    """ Raised when a configuration manifest file is required by a twine, but is not present in the input directory
     """
 
 
@@ -142,10 +147,10 @@ class UnexpectedNumberOfResults(TwineException):
 
 file_not_found_map = {
     "twine": TwineFileNotFound,
-    "configuration_values": ConfigFileNotFound,
+    "configuration_values": ConfigurationValuesFileNotFound,
     "input_values": InputValuesFileNotFound,
     "output_values": OutputValuesFileNotFound,
-    "configuration_manifest": InputManifestFileNotFound,
+    "configuration_manifest": ConfigurationManifestFileNotFound,
     "input_manifest": InputManifestFileNotFound,
     "output_manifest": OutputManifestFileNotFound,
 }

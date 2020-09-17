@@ -14,6 +14,9 @@ class TestManifestStrands(BaseTestCase):
         twine_file = self.path + "twines/valid_manifest_twine.json"
         twine = Twine(source=twine_file)
         file = self.path + "not_a_file.json"
+        with self.assertRaises(exceptions.ConfigurationManifestFileNotFound):
+            twine.validate_configuration_manifest(source=file)
+
         with self.assertRaises(exceptions.InputManifestFileNotFound):
             twine.validate_input_manifest(source=file)
 

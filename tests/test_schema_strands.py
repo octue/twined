@@ -26,7 +26,7 @@ class TestSchemaStrands(BaseTestCase):
         twine_file = self.path + "twines/valid_schema_twine.json"
         twine = Twine(source=twine_file)
         values_file = self.path + "not_a_file.json"
-        with self.assertRaises(exceptions.ConfigFileNotFound):
+        with self.assertRaises(exceptions.ConfigurationValuesFileNotFound):
             twine.validate_configuration_values(source=values_file)
 
         with self.assertRaises(exceptions.InputValuesFileNotFound):
