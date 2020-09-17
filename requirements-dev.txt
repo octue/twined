@@ -22,3 +22,6 @@ twine  # <---- nothing to do with the twined library!
 # Building documentation
 # ------------------------------------------------------------------------------
 -r docs/requirements.txt
+
+# Required for testing only (to ensure the encoder works with numpy arrays), not as a dependency of the library
+numpy
