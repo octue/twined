@@ -37,12 +37,15 @@ sys.path.insert(0, os.path.abspath("./_ext"))
 # Breate and exhale are added as recommended by:
 #   https://exhale.readthedocs.io/en/latest/usage.html#usage-quickstart-guide
 extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
     'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.viewcode',
     'sphinx_tabs.tabs',
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
-    'breathe',
-    'exhale',
+    'sphinx_charts.charts',
     'googleanalytics',
     'sphinx_accordion.accordion'
 ]
@@ -102,39 +105,10 @@ exclude_patterns = []
 # show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = None
 
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
-
-# -- Breathe and Exhale Configuration ------------------------------------------
-
-# Setup the breathe extension
-breathe_projects = {
-    "My Project": "./doxyoutput/xml"
-}
-breathe_default_project = "My Project"
-
-# Setup the exhale extension
-exhale_args = {
-    # These arguments are required
-    "containmentFolder":     "./library_api",
-    "rootFileName":          "library_root.rst",
-    "rootFileTitle":         "Library API",
-    "doxygenStripFromPath":  "../../",
-    # Suggested optional arguments
-    "createTreeView":        True,
-    # TIP: if using the sphinx-bootstrap-theme, you need
-    # "treeViewIsBootstrap": True,
-    "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    "INPUT = ../../source"
-}
-
-# Tell sphinx what the primary language being documented is
-primary_domain = 'python'
-
-# Tell sphinx what the pygments highlight language should be
-highlight_language = 'python'
 
 # -- Google Analytics Configuration --------------------------------------------
 
@@ -240,7 +214,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'twined.tex', u'Twined',
-   u'Tom Clark', 'manual'),
+   u'Octue Ltd', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -270,7 +244,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'twined', u'Twined',
-     [u'Tom Clark'], 1)
+     [u'Octue Ltd'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -284,7 +258,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'twined', u'Twined',
-   u'Tom Clark', 'Twined', 'Twined is a library to help digital twins talk to one another.',
+   u'Octue Ltd', 'Twined', 'Twined is a library to help digital twins talk to one another.',
    'Miscellaneous'),
 ]
 
