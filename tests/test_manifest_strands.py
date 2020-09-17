@@ -25,6 +25,8 @@ class TestManifestStrands(BaseTestCase):
         """
         twine_file = self.path + "twines/valid_manifest_twine.json"
         twine = Twine(source=twine_file)
+        file = self.path + "manifests/configuration/configuration_valid.json"
+        twine.validate_input_manifest(source=file)
         file = self.path + "manifests/inputs/input_valid.json"
         twine.validate_input_manifest(source=file)
         file = self.path + "manifests/outputs/output_valid.json"
