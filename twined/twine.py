@@ -108,7 +108,10 @@ class Twine:
             if strand not in SCHEMA_STRANDS:
                 raise exceptions.TwineTypeException(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
             schema_key = strand + "_schema"
-            schema = self._raw[schema_key]
+            try:
+                schema = self._raw[schema_key]
+            except KeyError:
+                raise exceptions.InvalidValuesContents(f"Cannot validate - no {schema_key} in the twine")
 
         try:
             jsonschema_validate(instance=data, schema=schema)
