@@ -35,6 +35,14 @@ class TestSchemaStrands(BaseTestCase):
         with self.assertRaises(exceptions.OutputValuesFileNotFound):
             twine.validate_output_values(source=values_file)
 
+    def test_no_values(self):
+        """ Ensures that giving no data source raises an invalidJson error
+        """
+        twine_file = self.path + "twines/valid_schema_twine.json"
+        twine = Twine(source=twine_file)
+        with self.assertRaises(exceptions.InvalidValuesJson):
+            twine.validate_configuration_values(source=None)
+
     def test_empty_values(self):
         """ Ensures that appropriate errors are generated for invalid values
         """

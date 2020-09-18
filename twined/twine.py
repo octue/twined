@@ -66,7 +66,7 @@ class Twine:
         """
 
         if source is None:
-            raise exceptions.TwineTypeException(f"Cannot load {kind} - no data source specified")
+            raise exceptions.invalid_json_map[kind](f"Cannot load {kind} - no data source specified")
 
         # Decode the json string and deserialize to objects
         try:
