@@ -3,13 +3,21 @@ import unittest
 from unittest import mock
 import numpy as np
 
-from twined.utils import TwinedEncoder
+from twined import exceptions
+from twined.utils import TwinedEncoder, load_json
 from .base import BaseTestCase
 
 
 class TestUtils(BaseTestCase):
     """ Testing operation of the Twine class
      """
+
+    def test_load_json_with_diaallowed_kind(self):
+        """ Ensures that when attempting to load json with a kind which is diallowed, the correct exception is raised
+        """
+        custom_allowed_kinds = ("file-like", "filename", "object")  # Removed  "string"
+        with self.assertRaises(exceptions.InvalidSourceKindException):
+            load_json("{}", allowed_kinds=custom_allowed_kinds)
 
     def test_encoder_without_numpy(self):
         """ Ensures that the json encoder can work without numpy being installed
