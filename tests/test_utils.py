@@ -15,9 +15,19 @@ class TestUtils(BaseTestCase):
     def test_load_json_with_file_like(self):
         """ Ensures that json can be loaded from a file-like object
         """
-        file_name = self.path + "apps/simple_app/twine.json"
+        file_name = self.path + "twines/valid_schema_twine.json"
         with open(file_name, "r") as file_like:
-            load_json(file_like)
+            data = load_json(file_like)
+            for key in data.keys():
+                self.assertIn(key, ("configuration_values_schema", "input_values_schema", "output_values_schema"))
+
+    def test_load_json_with_object(self):
+        """ Ensures if load_json is called on an already loaded object, it'll pass-through successfully
+        """
+        already_loaded_data = {"a": 1, "b": 2}
+        data = load_json(already_loaded_data)
+        for key in data.keys():
+            self.assertIn(key, ("a", "b"))
 
     def test_load_json_with_disallowed_kind(self):
         """ Ensures that when attempting to load json with a kind which is diallowed, the correct exception is raised
