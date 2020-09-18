@@ -12,7 +12,14 @@ class TestUtils(BaseTestCase):
     """ Testing operation of the Twine class
      """
 
-    def test_load_json_with_diaallowed_kind(self):
+    def test_load_json_with_file_like(self):
+        """ Ensures that json can be loaded from a file-like object
+        """
+        file_name = self.path + "apps/simple_app/twine.json"
+        with open(file_name, "r") as file_like:
+            load_json(file_like)
+
+    def test_load_json_with_disallowed_kind(self):
         """ Ensures that when attempting to load json with a kind which is diallowed, the correct exception is raised
         """
         custom_allowed_kinds = ("file-like", "filename", "object")  # Removed  "string"
