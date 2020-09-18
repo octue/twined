@@ -52,6 +52,14 @@ class TestSchemaStrands(BaseTestCase):
         with self.assertRaises(exceptions.InvalidValuesJson):
             twine.validate_configuration_values(source=values_file)
 
+    def test_strand_not_found(self):
+        """ Ensures that if a twine doesn't have a strand, you can't validate against it
+        """
+        twine_file = self.path + "twines/valid_no_output_schema_twine.json"
+        twine = Twine(source=twine_file)
+        with self.assertRaises(exceptions.StrandNotFound):
+            twine.validate_output_values(source="{}")
+
     def test_incorrect_values(self):
         """ Ensures that appropriate errors are generated for invalid values
         """

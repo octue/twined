@@ -111,7 +111,7 @@ class Twine:
             try:
                 schema = self._raw[schema_key]
             except KeyError:
-                raise exceptions.InvalidValuesContents(f"Cannot validate - no {schema_key} in the twine")
+                raise exceptions.StrandNotFound(f"Cannot validate - no {schema_key} strand in the twine")
 
         try:
             jsonschema_validate(instance=data, schema=schema)

@@ -39,6 +39,14 @@ class InvalidTwineContents(InvalidTwine, ValidationError):
     """
 
 
+# --------------------- Exceptions relating to accessing/setting strands ------------------------
+
+
+class StrandNotFound(TwineException, KeyError):
+    """ Raised when the attempting to access a strand not present in the twine
+    """
+
+
 # --------------------- Exceptions relating to missing files/folders ------------------------
 
 
