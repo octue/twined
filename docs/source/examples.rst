@@ -97,3 +97,91 @@ copied straight from the unit test cases, so you can always check there to see h
              }
          }
 
+
+.. _example_site_weather_conditions:
+
+[Simple] Site weather conditions
+================================
+
+.. tabs::
+
+   .. group-tab:: Scenario
+
+      You need to be able to get characteristic weather conditions at a specific location, for a range of reasons
+      including assessing extreme design loads. The values you need are computed in a script, which calls a Weather
+      API (provided by a third party), but also needs a dataset of "Wind Resource" files.
+
+   .. group-tab:: Twine
+
+      .. code-block:: javascript
+
+         {
+         	"title": "Weather Service Digital Twin",
+         	"description": "Provides a model for design extreme weather conditions given a location",
+         	"notes": "Easily extendable with children to add forecast and historical data of different types.",
+         	"credentials": [
+         		{
+         			"name": "WEATHER_API_SECRET_KEY",
+         			"purpose": "Token for accessing a 3rd party weather API service"
+         		}
+         	],
+         	"input_manifest": [
+         		{
+         			"key": "wind_resource_data",
+         			"purpose": "A dataset containing Wind Resource Grid files",
+         			"filters": "tags:(wind AND resource) files:(extension:wrg)"
+         		}
+         	],
+         	"input_values_schema": {
+         		"$schema": "http://json-schema.org/2019-09/schema#",
+         		"title": "Input Values for the weather service twin",
+         		"description": "This is a simple example for getting metocean conditions at a single location",
+         		"type": "object",
+         		"properties": {
+         			"location": {
+         				"description": "Location",
+         				"type": "object",
+         				"properties": {
+         					"latitude": {
+         						"type": "number",
+         						"minimum": -90,
+         						"maximum": 90
+         					},
+         					"longitude": {
+         						"type": "number",
+         						"minimum": -180,
+         						"maximum": 180
+         					},
+         					"srid": {
+         						"description": "The Spatial Reference System ID for the coordinate. Default is 4326 (WGS84)",
+         						"type": "integer",
+         						"default": 4326
+         					}
+         				}
+         			}
+         		}
+         	},
+         	"output_manifest": [
+         		{
+         			"key": "production_data",
+         			"purpose": "A dataset containing production data",
+         			"tags": "production, wind"
+         		}
+         	],
+         	"output_values_schema": {
+         		"$schema": "http://json-schema.org/2019-09/schema#",
+         		"title": "Output Values for the metocean service twin",
+         		"description": "The output values strand of an example twine",
+         		"type": "object",
+         		"properties": {
+         			"water_depth": {
+         				"description": "Design water depth for use in concept calculations",
+         				"type": "number"
+         			},
+         			"extreme_wind_speed": {
+         				"description": "Extreme wind speed value for use in concept calculations",
+         				"type": "number"
+         			}
+         		}
+         	}
+         }

@@ -78,8 +78,8 @@ for examples.
 
    .. group-tab:: Configuration Manifest Strand
 
-      Here we construct an extremely tight filter, which connects this digital twin to a specific
-      system.
+      Here we construct an extremely tight filter, which connects this digital twin to
+      datasets from a specific system.
 
       .. accordion::
 
@@ -113,8 +113,8 @@ for examples.
 
    .. group-tab:: Output Manifest Strand
 
-      Here we specify that two datasets (and all or some of the files associated with them) are
-      required, for a service that cross-checks meteorological mast data and power output data for a wind farm.
+      Output figure files (with *.fig extension) containing figures enabling a visual check
+      of correlation between met mast and scada data.
 
       .. accordion::
 

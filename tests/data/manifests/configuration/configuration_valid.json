@@ -1,13 +1,13 @@
 {
-  "id": "2ead7669-8162-4f64-8cd5-4abe92509e17",
+  "id": "3ead7669-8162-4f64-8cd5-4abe92509e17",
   "datasets": [
     {
-      "id": "1ead7669-8162-4f64-8cd5-4abe92509e17",
-      "name": "my output dataset",
-      "tags": "the, output, tags",
+      "id": "34ad7669-8162-4f64-8cd5-4abe92509e17",
+      "name": "my configuration dataset",
+      "tags": "the, config, tags",
       "files": [
         {
-          "path": "input/datasets/7ead7669/file_1.csv",
+          "path": "configuration/datasets/7ead7669/file_1.csv",
           "cluster": 0,
           "sequence": 0,
           "extension": "csv",
@@ -20,7 +20,7 @@
           "sha-512/256": "somesha"
         },
         {
-          "path": "input/datasets/7ead7669/file_2.csv",
+          "path": "configuration/datasets/7ead7669/file_2.csv",
           "cluster": 0,
           "sequence": 1,
           "extension": "csv",

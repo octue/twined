@@ -1,0 +1,118 @@
+{
+  "id": "e13f3499-7162-4218-bc56-6a59b1ad3310",
+  "datasets": [
+    {
+      "id": "1eba4346-daff-421b-921c-8f1c05d6997d",
+      "name": "Test results from naca0012 section",
+      "organisation": "megacorp",
+      "tags": "section:naca0012",
+      "files": [
+        {
+          "path": "datasets/7ead7669/sys_temp.json",
+          "cluster": 0,
+          "sequence": 0,
+          "extension": "json",
+          "tags": "system, temperature",
+          "posix_timestamp": 1551394800,
+          "id": "afcdef45-da6b-4805-95d6-7a889d81f5b9",
+          "last_modified": "2020-02-28T13:12:42.000000Z",
+          "name": "sys_temp.json",
+          "size_bytes": 20486,
+          "sha-512/256": "somesha"
+        },
+        {
+          "path": "datasets/7ead7669/tunnel_profile.json",
+          "cluster": 1,
+          "sequence": 0,
+          "extension": "json",
+          "tags": "wind, tunnel, velocity, profile, background, turbulence",
+          "posix_timestamp": 1551394800,
+          "id": "3667aa6d-ee64-4cd4-a2fd-e72bcdc65791",
+          "last_modified": "2020-02-28T13:24:43.000000Z",
+          "name": "tunnel_profile.json",
+          "size_bytes": 678486,
+          "sha-512/256": "somesha"
+        },
+        {
+          "path": "datasets/7ead7669/cp_reference.dat",
+          "cluster": 2,
+          "sequence": 0,
+          "extension": "dat",
+          "tags": "pressure, coefficient, cp, profile, reference",
+          "posix_timestamp": 1551394800,
+          "id": "310bc665-fe8c-4948-b821-0ad43fcd480d",
+          "last_modified": "2020-02-28T13:47:23.000000Z",
+          "name": "cp_reference.dat",
+          "size_bytes": 59684813,
+          "sha-512/256": "somesha"
+        },
+        {
+          "path": "datasets/7ead7669/cp_00001.dat",
+          "cluster": 3,
+          "sequence": 0,
+          "extension": "dat",
+          "tags": "pressure, coefficient, cp, profile, reference, alpha:0",
+          "posix_timestamp": 1551394800,
+          "id": "c3a6c14d-19d8-44da-9aa5-119798f53d15",
+          "last_modified": "2020-02-28T13:54:24.000000Z",
+          "name": "cp_00001.dat",
+          "size_bytes": 59684813,
+          "sha-512/256": "somesha"
+        },
+        {
+          "path": "datasets/7ead7669/cp_00002.dat",
+          "cluster": 3,
+          "sequence": 1,
+          "extension": "dat",
+          "tags": "pressure, coefficient, cp, profile, reference, alpha:1",
+          "posix_timestamp": 1551394800,
+          "id": "fac62036-722c-481a-9daf-87897c4872ec",
+          "last_modified": "2020-02-28T13:56:21.000000Z",
+          "name": "cp_00002.dat",
+          "size_bytes": 59684813,
+          "sha-512/256": "somesha"
+        },
+        {
+          "path": "datasets/7ead7669/cp_00003.dat",
+          "cluster": 3,
+          "sequence": 2,
+          "extension": "dat",
+          "tags": "pressure, coefficient, cp, profile, reference, alpha:2",
+          "posix_timestamp": 1551394800,
+          "id": "70cda7f6-c97d-4b99-9156-2ff6f5947b7e",
+          "last_modified": "2020-02-28T13:57:03.000000Z",
+          "name": "cp_00003.dat",
+          "size_bytes": 59684813,
+          "sha-512/256": "somesha"
+        },
+        {
+          "path": "datasets/7ead7669/cp_00004.dat",
+          "cluster": 3,
+          "sequence": 3,
+          "extension": "dat",
+          "tags": "pressure, coefficient, cp, profile, reference, alpha:3",
+          "posix_timestamp": 1551394800,
+          "id": "5ab4015a-608a-4ecd-9e30-95aee82d86d9",
+          "last_modified": "2020-02-28T13:58:46.000000Z",
+          "name": "cp_00004.dat",
+          "size_bytes": 59684813,
+          "sha-512/256": "somesha"
+        },
+        {
+          "path": "datasets/7ead7669/cp_00005.dat",
+          "cluster": 3,
+          "sequence": 4,
+          "extension": "dat",
+          "tags": "pressure, coefficient, cp, profile, reference, alpha:4",
+          "posix_timestamp": 1551394800,
+          "id": "3ba97d4b-002d-4ca3-a6b0-54573a5eefde",
+          "last_modified": "2020-02-28T13:59:32.000000Z",
+          "name": "cp_00005.dat",
+          "size_bytes": 59684813,
+          "sha-512/256": "somesha"
+        }
+      ]
+    }
+    // { ... additional datasets for different foils tested ... }
+  ]
+}

@@ -39,6 +39,14 @@ class InvalidTwineContents(InvalidTwine, ValidationError):
     """
 
 
+# --------------------- Exceptions relating to accessing/setting strands ------------------------
+
+
+class StrandNotFound(TwineException, KeyError):
+    """ Raised when the attempting to access a strand not present in the twine
+    """
+
+
 # --------------------- Exceptions relating to missing files/folders ------------------------
 
 
@@ -57,8 +65,13 @@ class TwineFileNotFound(TwineException, FileNotFoundError):
     """
 
 
-class ConfigFileNotFound(TwineException, FileNotFoundError):
-    """ Raised when the config.json file is not present in the input directory
+class ConfigurationValuesFileNotFound(TwineException, FileNotFoundError):
+    """ Raised when attempting to read configuration values from a file that is missing
+    """
+
+
+class ConfigurationManifestFileNotFound(TwineException, FileNotFoundError):
+    """ Raised when a configuration manifest file is required by a twine, but is not present in the input directory
     """
 
 
@@ -83,6 +96,11 @@ class OutputValuesFileNotFound(TwineException, FileNotFoundError):
 
 
 # --------------------- Exceptions relating to validation of JSON data (input, output, config values) ------------------
+
+
+class InvalidSourceKindException(TwineException):
+    """ Raised when attempting to use the json loader for a disallowed kind
+    """
 
 
 class InvalidValues(TwineException):
@@ -137,9 +155,10 @@ class UnexpectedNumberOfResults(TwineException):
 
 file_not_found_map = {
     "twine": TwineFileNotFound,
-    "configuration": ConfigFileNotFound,
+    "configuration_values": ConfigurationValuesFileNotFound,
     "input_values": InputValuesFileNotFound,
     "output_values": OutputValuesFileNotFound,
+    "configuration_manifest": ConfigurationManifestFileNotFound,
     "input_manifest": InputManifestFileNotFound,
     "output_manifest": OutputManifestFileNotFound,
 }
@@ -148,9 +167,10 @@ file_not_found_map = {
 invalid_json_map = {
     "twine": InvalidTwineJson,
     "children": InvalidValuesJson,
-    "configuration": InvalidValuesJson,
+    "configuration_values": InvalidValuesJson,
     "input_values": InvalidValuesJson,
     "output_values": InvalidValuesJson,
+    "configuration_manifest": InvalidManifestJson,
     "input_manifest": InvalidManifestJson,
     "output_manifest": InvalidManifestJson,
 }
@@ -159,9 +179,10 @@ invalid_json_map = {
 invalid_contents_map = {
     "twine": InvalidTwineContents,
     "children": InvalidValuesContents,
-    "configuration": InvalidValuesContents,
+    "configuration_values": InvalidValuesContents,
     "input_values": InvalidValuesContents,
     "output_values": InvalidValuesContents,
+    "configuration_manifest": InvalidManifestContents,
     "input_manifest": InvalidManifestContents,
     "output_manifest": InvalidManifestContents,
 }

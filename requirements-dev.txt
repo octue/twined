@@ -7,9 +7,9 @@ pluggy
 # Code quality
 # ------------------------------------------------------------------------------
 flake8==3.8.3  # https://github.com/PyCQA/flake8
-flake8-isort==3.0.0  # https://github.com/gforcada/flake8-isort
 black==19.10.b0  # https://github.com/ambv/black
-pre-commit  # https://github.com/pre-commit/pre-commit
+pre-commit>=2.6.0  # https://github.com/pre-commit/pre-commit
+coverage>=5.2.1
 
 
 # Pre-deploy checks
@@ -22,3 +22,6 @@ twine  # <---- nothing to do with the twined library!
 # Building documentation
 # ------------------------------------------------------------------------------
 -r docs/requirements.txt
+
+# Required for testing only (to ensure the encoder works with numpy arrays), not as a dependency of the library
+numpy
