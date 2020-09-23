@@ -11,6 +11,11 @@ class NotImplementedYet(TwineException):
     """
 
 
+class TwineValueException(TwineException, ValueError):
+    """ Raised when a python ValueError is appropriate to ensure all errors still also inherit from TwineException
+    """
+
+
 class TwineTypeException(TwineException, TypeError):
     """ Raised when a python TypeError is appropriate to ensure all errors still also inherit from TwineException
     """
