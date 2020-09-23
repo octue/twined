@@ -133,24 +133,23 @@ class Twine:
                 f"Twined library version conflict. Twine file requires {twine_file_twined_version} but you have {installed_twined_version} installed"
             )
 
-    def _validate_values(self, kind, source, values_class=None, **kwargs):
+    def _validate_values(self, kind, source, cls=None, **kwargs):
         """ Common values validator method
         """
         data = self._load_json(kind, source, **kwargs)
         self._validate_against_schema(kind, data)
-        if values_class:
-            # TODO create a values object from the data
-            pass
+        if cls:
+            return cls(**data)
         return data
 
-    def _validate_manifest(self, kind, source, manifest_class=None, **kwargs):
+    def _validate_manifest(self, kind, source, cls=None, **kwargs):
         """ Common manifest validator method
         """
         data = self._load_json(kind, source, **kwargs)
         self._validate_against_schema(kind, data)
-        if manifest_class:
-            # TODO create a manifest object and verify that all the required keys etc are there
-            pass
+        if cls:
+            # TODO verify that all the required keys etc are there
+            return cls(**data)
         return data
 
     def validate_children(self, **kwargs):
@@ -262,3 +261,9 @@ class Twine:
         """ Validates the output manifest, passed as either a file or a json string
         """
         return self._validate_manifest("output_manifest", source, **kwargs)
+
+    def validate(self, name, source, **kwargs):
+        """ Validates a strand by name
+        """
+        method = getattr(self, f"validate_{name}")
+        return method(source, **kwargs)
