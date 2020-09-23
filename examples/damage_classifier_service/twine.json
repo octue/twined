@@ -1,6 +1,6 @@
 {
   // Manifest strands contain lists, with one entry for each required dataset
-  "configuration_manifest_filters": [
+  "configuration_manifest": [
     {
       // Once the inputs are validated, your analysis program can use this key to access the dataset
       "key": "trained_model",
