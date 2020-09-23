@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from jsonschema import ValidationError, validate as jsonschema_validate
 
 from . import exceptions
-from .utils import load_json
+from .utils import load_json, trim_suffix
 
 
 logger = logging.getLogger(__name__)
@@ -46,6 +46,7 @@ class Twine:
 
         """
         self._load_twine(**kwargs)
+        self._available_strands = tuple(trim_suffix(k, "_schema") for k in self._raw.keys())
 
     def _load_twine(self, source=None):
         """ Load twine from a *.json filename, file-like or a json string and validates twine contents
@@ -151,6 +152,18 @@ class Twine:
             # TODO verify that all the required keys etc are there
             return cls(**data)
         return data
+
+    @property
+    def available_strands(self):
+        """ Tuple of strand names that are found in this twine
+        """
+        return self._available_strands
+
+    @available_strands.setter
+    def available_strands(self, value):
+        """ Ensures available_strands is a read-only attribute
+        """
+        raise exceptions.TwineValueException("Attribute available_strands is read only.")
 
     def validate_children(self, **kwargs):
         """ Validates that the children values, passed as either a file or a json string, are correct
