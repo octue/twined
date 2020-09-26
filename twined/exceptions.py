@@ -47,6 +47,11 @@ class InvalidTwineContents(InvalidTwine, ValidationError):
 # --------------------- Exceptions relating to accessing/setting strands ------------------------
 
 
+class UnknownStrand(TwineException, ValueError):
+    """ Raised when referencing a strand which is not defined in ALL_STRANDS
+    """
+
+
 class StrandNotFound(TwineException, KeyError):
     """ Raised when the attempting to access a strand not present in the twine
     """
