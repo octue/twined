@@ -28,24 +28,33 @@ CREDENTIAL_STRANDS = ("credentials",)
 
 CHILDREN_STRANDS = ("children",)
 
+MONITOR_STRANDS = ("monitors",)
+
 ALL_STRANDS = (
     *SCHEMA_STRANDS,
     *MANIFEST_STRANDS,
     *CREDENTIAL_STRANDS,
     *CHILDREN_STRANDS,
+    *MONITOR_STRANDS,
 )
 
 
 class Twine:
+    """ Twine class manages validation of inputs and outputs to/from a data service, based on spec in a 'twine' file.
+
+    Instantiate a Twine by providing a file name or a utf-8 encoded string containing valid json.
+    The twine is itself validated to be correct on instantiation of Twine().
+
+    Note: Instantiating the twine does not validate that any inputs to an application are correct - it merely
+    checks that the twine itself is correct.
+
+    """
+
     def __init__(self, **kwargs):
-        """ Instantiate a twine class, providing a file name or a utf-8 encoded string containing valid json.
-        The twine is itself validated to be correct against the twine schema.
-
-        Note: Instantiating the twine does not validate that any inputs to an application are correct - it merely
-        checks that the twine itself is correct.
-
+        """ Constructor for the twine class
         """
         self._load_twine(**kwargs)
+
         self._available_strands = tuple(trim_suffix(k, "_schema") for k in self._raw.keys())
 
     def _load_twine(self, source=None):
@@ -107,7 +116,7 @@ class Twine:
 
         else:
             if strand not in SCHEMA_STRANDS:
-                raise exceptions.TwineTypeException(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
+                raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
             schema_key = strand + "_schema"
             try:
                 schema = self._raw[schema_key]
@@ -275,8 +284,98 @@ class Twine:
         """
         return self._validate_manifest("output_manifest", source, **kwargs)
 
-    def validate(self, name, source, **kwargs):
-        """ Validates a strand by name
+    @staticmethod
+    def _get_cls(name, cls):
+        """ Getter that will return cls[name] if cls is a dict or cls otherwise
         """
-        method = getattr(self, f"validate_{name}")
-        return method(source, **kwargs)
+        return cls.get(name, None) if isinstance(cls, dict) else cls
+
+    def validate(self, allow_missing=False, allow_extra=False, cls=None, **kwargs):
+        """ Validate strands from sources provided as keyword arguments
+
+        Usage:
+        ```
+            self.twine.validate(
+                input_values=input_values,
+                input_manifest=input_manifest,
+                credentials=credentials,
+                children=children,
+                cls=CLASS_MAP,
+                allow_missing=False,
+                allow_extra=False,
+            )
+        ```
+
+        :parameter allow_missing: If strand is present in the twine, but the source is equal to None, allow validation
+        to continue.
+        :type allow_missing: bool
+
+        :parameter allow_extra: If strand is present in the sources, but not in the twine, allow validation to continue
+        (only strands in the twine will be validated and converted, others will be returned as-is)
+        :type allow_extra: bool
+
+        :parameter cls: optional dict of classes keyed on strand name (alternatively, one single class which will be
+        applied to strands) which will be instantiated with the validated source data.
+        :type cls: dict or any
+
+        :return: dict of validated and initialised sources
+        :rtype: dict
+        """
+
+        # pop any strand name:data pairs out of kwargs and into their own dict
+        source_kwargs = tuple(name for name in kwargs.keys() if name in ALL_STRANDS)
+        sources = dict((name, kwargs.pop(name)) for name in source_kwargs)
+
+        for strand_name, strand_data in sources.items():
+
+            if not allow_extra:
+                if (strand_data is not None) and (strand_name not in self.available_strands):
+                    raise exceptions.StrandNotFound(
+                        f"Source data is provided for '{strand_name}' but no such strand is defined in the twine"
+                    )
+
+            if not allow_missing:
+                if (strand_name in self.available_strands) and (strand_data is None):
+                    raise exceptions.TwineValueException(
+                        f"The '{strand_name}' strand is defined in the twine, but no data is provided in sources"
+                    )
+
+            if strand_data is not None:
+                # TODO Consider reintroducing a skip based on whether cls is already instantiated. For now, leave it the
+                #  responsibility of the caller to determine what has already been validated and what hasn't.
+                #     # Use the twine to validate and instantiate as the desired class
+                #     if not isinstance(value, type(cls)):
+                #         self.logger.debug(
+                #             "Instantiating %s as %s and validating against twine", name, cls.__name__ if cls else "default_class"
+                #         )
+                #         return self.twine.validate(name, source=value, cls=cls)
+                method = getattr(self, f"validate_{strand_name}")
+                klass = self._get_cls(strand_name, cls)
+                sources[strand_name] = method(strand_data, cls=klass, **kwargs)
+
+        return sources
+
+    def validate_strand(self, name, source, **kwargs):
+        """ Validates a single strand by name
+        """
+        return self.validate({name: source}, **kwargs)[name]
+
+    def prepare(self, *args, cls=None, **kwargs):
+        """ Prepares instance for strand data using a class map
+        """
+        prepared = {}
+        for arg in args:
+            print("ARG", arg)
+            if arg not in ALL_STRANDS:
+                raise exceptions.UnknownStrand(f"Unknown strand '{arg}'")
+
+            elif arg not in self.available_strands:
+                prepared[arg] = None
+
+            else:
+                klass = self._get_cls(arg, cls)
+                prepared[arg] = klass(**kwargs) if klass else dict(**kwargs)
+                if hasattr(prepared[arg], "prepare"):
+                    prepared[arg] = prepared[arg].prepare(self._raw[arg])
+        print("PPOHI", prepared)
+        return prepared
