@@ -156,10 +156,19 @@ class Twine:
         """ Common manifest validator method
         """
         data = self._load_json(kind, source, **kwargs)
+
+        # TODO elegant way of cleaning up this nasty serialisation hack to manage conversion of outbound manifests to primitive
+        inbound = True
+        if hasattr(data, "serialise"):
+            inbound = False
+            data = data.serialise()
+
         self._validate_against_schema(kind, data)
-        if cls:
+
+        if cls and inbound:
             # TODO verify that all the required keys etc are there
             return cls(**data)
+
         return data
 
     @property
@@ -365,7 +374,6 @@ class Twine:
         """
         prepared = {}
         for arg in args:
-            print("ARG", arg)
             if arg not in ALL_STRANDS:
                 raise exceptions.UnknownStrand(f"Unknown strand '{arg}'")
 
@@ -377,5 +385,5 @@ class Twine:
                 prepared[arg] = klass(**kwargs) if klass else dict(**kwargs)
                 if hasattr(prepared[arg], "prepare"):
                     prepared[arg] = prepared[arg].prepare(self._raw[arg])
-        print("PPOHI", prepared)
+
         return prepared
