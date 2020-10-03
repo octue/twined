@@ -17,7 +17,7 @@ class TestSchemaStrands(BaseTestCase):
         twine = Twine(source=twine_file)
         values_file = self.path + "values/configurations/configuration_valid.json"
         data = twine._load_json("configuration", source=values_file)
-        with self.assertRaises(exceptions.TwineTypeException):
+        with self.assertRaises(exceptions.UnknownStrand):
             twine._validate_against_schema("not_a_strand_name", data)
 
     def test_missing_values_files(self):
