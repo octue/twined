@@ -11,6 +11,11 @@ class NotImplementedYet(TwineException):
     """
 
 
+class TwineValueException(TwineException, ValueError):
+    """ Raised when a python ValueError is appropriate to ensure all errors still also inherit from TwineException
+    """
+
+
 class TwineTypeException(TwineException, TypeError):
     """ Raised when a python TypeError is appropriate to ensure all errors still also inherit from TwineException
     """
@@ -40,6 +45,11 @@ class InvalidTwineContents(InvalidTwine, ValidationError):
 
 
 # --------------------- Exceptions relating to accessing/setting strands ------------------------
+
+
+class UnknownStrand(TwineException, ValueError):
+    """ Raised when referencing a strand which is not defined in ALL_STRANDS
+    """
 
 
 class StrandNotFound(TwineException, KeyError):
