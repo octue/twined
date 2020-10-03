@@ -44,7 +44,10 @@ class TestUtils(BaseTestCase):
             with self.assertRaises(TypeError) as e:
                 json.dumps(some_json, cls=TwinedEncoder)
 
-        self.assertEqual("Object of type 'ndarray' is not JSON serializable", e.exception.args[0])
+        # Very annoying behaviour change between python 3.6 and 3.8
+        py38 = "Object of type 'ndarray' is not JSON serializable" in e.exception.args[0]
+        py36 = "Object of type ndarray is not JSON serializable" in e.exception.args[0]
+        self.assertTrue(py36 or py38)
 
     def test_encoder_with_numpy(self):
         """ Ensures that the json encoder can work with numpy installed
