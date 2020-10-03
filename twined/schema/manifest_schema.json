@@ -56,7 +56,7 @@
                 },
                 "sequence": {
                   "description": "The ordering on the file, if any, within its group/cluster",
-                  "type": "integer"
+                  "type": ["integer", "null"]
                 },
                 "cluster": {
                   "description": "The group, or cluster, to which the file belongs",
