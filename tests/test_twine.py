@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from twined import Twine, exceptions
@@ -11,13 +12,13 @@ class TestTwine(BaseTestCase):
     def test_init_twine_with_filename(self):
         """ Ensures that the twine class can be instantiated with a file
         """
-        twine_file = self.path + "apps/simple_app/twine.json"
+        twine_file = os.path.join(self.path, "apps/simple_app/twine.json")
         Twine(source=twine_file)
 
     def test_init_twine_with_json(self):
         """ Ensures that a twine can be instantiated with a json string
         """
-        with open(self.path + "apps/simple_app/twine.json", "r", encoding="utf-8") as f:
+        with open(os.path.join(self.path, "apps/simple_app/twine.json"), "r", encoding="utf-8") as f:
             json_string = f.read()
         Twine(source=json_string)
 
@@ -29,7 +30,7 @@ class TestTwine(BaseTestCase):
     def test_incorrect_version_twine(self):
         """ Ensures exception is thrown on mismatch between installed and specified versions of twined
         """
-        twine_file = self.path + "twines/incorrect_version_twine.json"
+        twine_file = os.path.join(self.path, "twines/incorrect_version_twine.json")
         with self.assertRaises(exceptions.TwineVersionConflict):
             Twine(source=twine_file)
 
@@ -46,19 +47,19 @@ class TestTwine(BaseTestCase):
     def test_example_twine(self):
         """ Ensures that the example (full) twine can be loaded and validated
         """
-        twine_file = self.path + "apps/example_app/twine.json"
+        twine_file = os.path.join(self.path, "apps/example_app/twine.json")
         Twine(source=twine_file)
 
     def test_simple_twine(self):
         """ Ensures that the simple app schema can be loaded and used to parse some basic config and values data
         """
-        twine_file = self.path + "apps/simple_app/twine.json"
+        twine_file = os.path.join(self.path, "apps/simple_app/twine.json")
         Twine(source=twine_file)
 
     def test_broken_json_twine(self):
         """ Ensures that an invalid json file raises an InvalidTwine exception
         """
-        twine_file = self.path + "twines/invalid_json_twine.json"
+        twine_file = os.path.join(self.path, "twines/invalid_json_twine.json")
         with self.assertRaises(exceptions.InvalidTwineJson):
             Twine(source=twine_file)
 
