@@ -72,8 +72,8 @@ class TestChildrenValidation(BaseTestCase):
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine().validate_children(source=self.VALID_CHILDREN_VALUE)
 
-    def test_extra_key(self):
-        """ Test that children with extra data will not raise validation error
+    def test_extra_key_validation_on_empty_twine(self):
+        """ Test that children with extra data will not raise a validation error on an empty twine.
         """
         children_values_with_extra_data = [
             {"key": "gis", "id": "id", "uri_env_name": "VAR_NAME", "an_extra_key": "shouldn't be a problem if present"},
@@ -83,8 +83,8 @@ class TestChildrenValidation(BaseTestCase):
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine().validate_children(source=children_values_with_extra_data)
 
-    def test_extra_property(self):
-        """ Test that children with extra data will not raise validation error
+    def test_extra_key_validation_on_valid_twine(self):
+        """ Test that children with extra data will not raise a validation error on a non-empty valid twine.
         # TODO review this behaviour - possibly should raise an error but allow for a user specified extra_data property
         """
         single_child_with_extra_data = [
