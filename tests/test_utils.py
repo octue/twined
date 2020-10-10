@@ -1,4 +1,5 @@
 import json
+import os
 import unittest
 from unittest import mock
 import numpy as np
@@ -15,7 +16,7 @@ class TestUtils(BaseTestCase):
     def test_load_json_with_file_like(self):
         """ Ensures that json can be loaded from a file-like object
         """
-        file_name = self.path + "twines/valid_schema_twine.json"
+        file_name = os.path.join(self.path, "twines/valid_schema_twine.json")
         with open(file_name, "r") as file_like:
             data = load_json(file_like)
             for key in data.keys():
