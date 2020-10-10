@@ -6,7 +6,4 @@ class BaseTestCase(unittest.TestCase):
     """ Base test case for twined:
         - sets a path to the test data directory
     """
-
-    def setUp(self):
-        self.path = str(os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", ""))
-        super().setUp()
+    path = os.path.join(os.path.dirname(__file__), "data", "")
