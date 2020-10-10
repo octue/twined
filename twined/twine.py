@@ -66,7 +66,7 @@ class Twine:
             self._raw = {}
             logger.warning("No twine source specified. Loading empty twine.")
         else:
-            self._raw = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string"))
+            self._raw = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string", "object"))
 
         self._validate_against_schema("twine", self._raw)
         self._validate_twine_version()
