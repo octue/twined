@@ -48,8 +48,7 @@ class TestChildrenValidation(BaseTestCase):
     def test_no_children(self):
         """ Test that a twine with no children will validate on an empty children input
         """
-        twine = Twine()  # Creates empty twine
-        twine.validate_children(source="[]")
+        Twine().validate_children(source="[]")
 
     def test_missing_children(self):
         """ Test that a twine with children will not validate on an empty children input
@@ -61,16 +60,14 @@ class TestChildrenValidation(BaseTestCase):
     def test_extra_children(self):
         """ Test that a twine with no children will not validate a non-empty children input
         """
-        twine = Twine()  # Creates empty twine
         with self.assertRaises(exceptions.InvalidValuesContents):
-            twine.validate_children(source=os.path.join(self.path, "children", "valid.json"))
+            Twine().validate_children(source=os.path.join(self.path, "children", "valid.json"))
 
     def test_extra_key(self):
         """ Test that children with extra data will not raise validation error
         """
-        twine = Twine()  # Creates empty twine
         with self.assertRaises(exceptions.InvalidValuesContents):
-            twine.validate_children(source=os.path.join(self.path, "children", "extra_key.json"))
+            Twine().validate_children(source=os.path.join(self.path, "children", "extra_key.json"))
 
     def test_extra_property(self):
         """ Test that children with extra data will not raise validation error
@@ -82,9 +79,8 @@ class TestChildrenValidation(BaseTestCase):
     def test_invalid_env_name(self):
         """ Test that a child uri env name not in ALL_CAPS_SNAKE_CASE doesn't validate
         """
-        twine = Twine()  # Creates empty twine
         with self.assertRaises(exceptions.InvalidValuesContents):
-            twine.validate_children(source=os.path.join(self.path, "children", "invalid_env_name.json"))
+            Twine().validate_children(source=os.path.join(self.path, "children", "invalid_env_name.json"))
 
     def test_invalid_json(self):
         """ Tests that a children entry with invalid json will raise an error
