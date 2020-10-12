@@ -14,15 +14,17 @@ class TestChildrenTwine(BaseTestCase):
         specified as a dict, not an array
         """
         with self.assertRaises(exceptions.InvalidTwine):
-            Twine(source={"children": {}})
+            Twine(source="""{"children": {}}""")
 
     def test_invalid_children_no_key(self):
         """ Ensures InvalidTwine exceptions are raised when instantiating twines where a child
         is specified without the required `key` field
         """
-        source = {
-            "children": [{"purpose": "The purpose.", "notes": "Here are some notes.", "filters": "tags:gis"}]
-        }
+        source = """
+            {
+                "children": [{"purpose": "The purpose.", "notes": "Here are some notes.", "filters": "tags:gis"}]
+            }
+        """
 
         with self.assertRaises(exceptions.InvalidTwine):
             Twine(source=source)
@@ -30,16 +32,18 @@ class TestChildrenTwine(BaseTestCase):
     def test_valid_children(self):
         """ Ensures that a twine with one child can be instantiated correctly.
         """
-        source = {
-            "children": [{"key": "gis", "purpose": "The purpose.", "notes": "Some notes.", "filters": "tags:gis"}]
-        }
+        source = """
+            {
+                "children": [{"key": "gis", "purpose": "The purpose.", "notes": "Some notes.", "filters": "tags:gis"}]
+            }
+        """
 
         self.assertEqual(len(Twine(source=source)._raw["children"]), 1)
 
     def test_empty_children(self):
         """ Ensures that a twine file will validate with an empty list object as children
         """
-        twine = Twine(source={"children": []})
+        twine = Twine(source="""{"children": []}""")
         self.assertEqual(len(twine._raw["children"]), 0)
 
 
@@ -47,13 +51,17 @@ class TestChildrenValidation(BaseTestCase):
     """ Tests related to whether validation of children occurs successfully (given a valid twine)
     """
 
-    VALID_TWINE_WITH_CHILDREN = {
-        "children": [{"key": "gis", "purpose": "The purpose", "notes": "Some notes.", "filters": "tags:gis"}]
-    }
+    VALID_TWINE_WITH_CHILDREN = """
+        {
+            "children": [{"key": "gis", "purpose": "The purpose", "notes": "Some notes.", "filters": "tags:gis"}]
+        }
+    """
 
-    VALID_CHILDREN_VALUE = [
-        {"key": "gis", "id": "some-id", "uri_env_name": "NAME_OF_SOME_ENV_VAR_THAT_CONTAINS_A_URI"}
-    ]
+    VALID_CHILD_VALUE = """
+        [
+            {"key": "gis", "id": "some-id", "uri_env_name": "NAME_OF_SOME_ENV_VAR_THAT_CONTAINS_A_URI"}
+        ]
+    """
 
     def test_no_children(self):
         """ Test that a twine with no children will validate on an empty children input
@@ -70,15 +78,17 @@ class TestChildrenValidation(BaseTestCase):
         """ Test that a twine with no children will not validate a non-empty children input
         """
         with self.assertRaises(exceptions.InvalidValuesContents):
-            Twine().validate_children(source=self.VALID_CHILDREN_VALUE)
+            Twine().validate_children(source=self.VALID_CHILD_VALUE)
 
     def test_extra_key_validation_on_empty_twine(self):
         """ Test that children with extra data will not raise a validation error on an empty twine.
         """
-        children_values_with_extra_data = [
-            {"key": "gis", "id": "id", "uri_env_name": "VAR_NAME", "an_extra_key": "shouldn't be a problem if present"},
-            {"key": "some_weird_other_child", "id": "some-other-id", "uri_env_name": "SOME_ENV_VAR_NAME"}
-        ]
+        children_values_with_extra_data = """
+            [
+                {"key": "gis", "id": "id", "uri_env_name": "VAR_NAME", "an_extra_key": "not a problem if present"},
+                {"key": "some_weird_other_child", "id": "some-other-id", "uri_env_name": "SOME_ENV_VAR_NAME"}
+            ]
+        """
 
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine().validate_children(source=children_values_with_extra_data)
@@ -87,14 +97,16 @@ class TestChildrenValidation(BaseTestCase):
         """ Test that children with extra data will not raise a validation error on a non-empty valid twine.
         # TODO review this behaviour - possibly should raise an error but allow for a user specified extra_data property
         """
-        single_child_with_extra_data = [
-            {
-                "key": "gis",
-                "id": "some-id",
-                "uri_env_name": "SOME_ENV_VAR_NAME",
-                "some_extra_property": "should not be a problem if present"
-            }
-        ]
+        single_child_with_extra_data = """
+            [
+                {
+                    "key": "gis",
+                    "id": "some-id",
+                    "uri_env_name": "SOME_ENV_VAR_NAME",
+                    "some_extra_property": "should not be a problem if present"
+                }
+            ]
+        """
 
         twine = Twine(source=self.VALID_TWINE_WITH_CHILDREN)
         twine.validate_children(source=single_child_with_extra_data)
@@ -102,13 +114,15 @@ class TestChildrenValidation(BaseTestCase):
     def test_invalid_env_name(self):
         """ Test that a child uri env name not in ALL_CAPS_SNAKE_CASE doesn't validate
         """
-        child_with_invalid_environment_variable_name = [
-            {
-                "key": "gis",
-                "id": "some-id",
-                "uri_env_name": "an environment variable which isn't in CAPS_CASE is invalid per the credentials spec"
-            }
-        ]
+        child_with_invalid_environment_variable_name = """
+            [
+                {
+                    "key": "gis",
+                    "id": "some-id",
+                    "uri_env_name": "an environment variable not in CAPS_CASE is invalid per the credentials spec"
+                }
+            ]
+        """
 
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine().validate_children(source=child_with_invalid_environment_variable_name)
@@ -125,7 +139,7 @@ class TestChildrenValidation(BaseTestCase):
         To those reading this, know that YOU'RE valid.
         """
         twine = Twine(source=self.VALID_TWINE_WITH_CHILDREN)
-        twine.validate_children(source=self.VALID_CHILDREN_VALUE)
+        twine.validate_children(source=self.VALID_CHILD_VALUE)
 
 
 if __name__ == "__main__":
