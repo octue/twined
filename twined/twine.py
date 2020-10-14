@@ -1,3 +1,4 @@
+import functools
 import json as jsonlib
 import logging
 import os
@@ -53,9 +54,8 @@ class Twine:
     def __init__(self, **kwargs):
         """ Constructor for the twine class
         """
-        self._load_twine(**kwargs)
-
-        self._available_strands = tuple(trim_suffix(k, "_schema") for k in self._raw.keys())
+        for name, strand in self._load_twine(**kwargs).items():
+            setattr(self, '_' + name, strand)
 
     def _load_twine(self, source=None):
         """ Load twine from a *.json filename, file-like or a json string and validates twine contents
@@ -63,13 +63,14 @@ class Twine:
 
         if source is None:
             # If loading an unspecified twine, return an empty one rather than raising error (like in _load_data())
-            self._raw = {}
+            raw = {}
             logger.warning("No twine source specified. Loading empty twine.")
         else:
-            self._raw = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string"))
+            raw = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string"))
 
-        self._validate_against_schema("twine", self._raw)
-        self._validate_twine_version()
+        self._validate_against_schema("twine", raw)
+        self._validate_twine_version(twine_file_twined_version=raw.get("twined_version", None))
+        return raw
 
     def _load_json(self, kind, source, **kwargs):
         """ Loads data from either a *.json file, an open file pointer or a json string. Directly returns any other data
@@ -117,10 +118,10 @@ class Twine:
         else:
             if strand not in SCHEMA_STRANDS:
                 raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
-            schema_key = strand + "_schema"
+            schema_key = '_' + strand + "_schema"
             try:
-                schema = self._raw[schema_key]
-            except KeyError:
+                schema = getattr(self, schema_key)
+            except AttributeError:
                 raise exceptions.StrandNotFound(f"Cannot validate - no {schema_key} strand in the twine")
 
         try:
@@ -130,11 +131,10 @@ class Twine:
         except ValidationError as e:
             raise exceptions.invalid_contents_map[strand](str(e))
 
-    def _validate_twine_version(self):
+    def _validate_twine_version(self, twine_file_twined_version):
         """ Validates that the installed version is consistent with an optional version specification in the twine file
         """
         installed_twined_version = pkg_resources.get_distribution("twined").version
-        twine_file_twined_version = self._raw.get("twined_version", None)
         logger.debug(
             "Twine versions... %s installed, %s specified in twine", installed_twined_version, twine_file_twined_version
         )
@@ -171,17 +171,11 @@ class Twine:
 
         return data
 
-    @property
+    @functools.cached_property
     def available_strands(self):
         """ Tuple of strand names that are found in this twine
         """
-        return self._available_strands
-
-    @available_strands.setter
-    def available_strands(self, value):
-        """ Ensures available_strands is a read-only attribute
-        """
-        raise exceptions.TwineValueException("Attribute available_strands is read only.")
+        return tuple(trim_suffix(name, "_schema") for name in vars(self))
 
     def validate_children(self, **kwargs):
         """ Validates that the children values, passed as either a file or a json string, are correct
@@ -190,7 +184,7 @@ class Twine:
         children = self._load_json("children", **kwargs)
         self._validate_against_schema("children", children)
 
-        strand = self._raw.get("children", [])
+        strand = getattr(self, "_children", [])
 
         # Loop the children and accumulate values so we have an O(1) check
         children_keys = {}
@@ -254,7 +248,7 @@ class Twine:
 
         # Loop through the required credentials to check for presence of each
         credentials = {}
-        for credential in self._raw.get("credentials", []):
+        for credential in getattr(self, "_credentials", []):
             name = credential["name"]
             default = credential.get("default", None)
             credentials[name] = os.environ.get(name, default)
@@ -384,6 +378,6 @@ class Twine:
                 klass = self._get_cls(arg, cls)
                 prepared[arg] = klass(**kwargs) if klass else dict(**kwargs)
                 if hasattr(prepared[arg], "prepare"):
-                    prepared[arg] = prepared[arg].prepare(self._raw[arg])
+                    prepared[arg] = prepared[arg].prepare(getattr(self, arg))
 
         return prepared

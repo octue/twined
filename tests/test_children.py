@@ -30,14 +30,14 @@ class TestChildrenTwine(BaseTestCase):
         """
         twine_file = self.path + "twines/valid_children_twine.json"
         twine = Twine(source=twine_file)
-        self.assertEqual(len(twine._raw["children"]), 1)
+        self.assertEqual(len(twine._children), 1)
 
     def test_empty_children(self):
         """ Ensures that a twine file will validate with an empty list object as children
         """
         twine_file = self.path + "twines/valid_empty_children_twine.json"
         twine = Twine(source=twine_file)
-        self.assertEqual(len(twine._raw["children"]), 0)
+        self.assertEqual(len(twine._children), 0)
 
 
 class TestChildrenValidation(BaseTestCase):
