@@ -1,4 +1,3 @@
-import functools
 import json as jsonlib
 import logging
 import os
@@ -56,6 +55,8 @@ class Twine:
         """
         for name, strand in self._load_twine(**kwargs).items():
             setattr(self, '_' + name, strand)
+
+        self._available_strands = tuple(trim_suffix(name, "_schema") for name in vars(self))
 
     def _load_twine(self, source=None):
         """ Load twine from a *.json filename, file-like or a json string and validates twine contents
@@ -171,11 +172,11 @@ class Twine:
 
         return data
 
-    @functools.cached_property
+    @property
     def available_strands(self):
         """ Tuple of strand names that are found in this twine
         """
-        return tuple(trim_suffix(name, "_schema") for name in vars(self))
+        return self._available_strands
 
     def validate_children(self, **kwargs):
         """ Validates that the children values, passed as either a file or a json string, are correct
