@@ -1,0 +1,7 @@
+[
+  {
+    "key": "gis",
+    "id": "some-id",
+    "uri_env_name": "NAME_OF_SOME_ENV_VAR_THAT_CONTAINS_A_URI"
+  }
+]

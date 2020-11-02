@@ -1,0 +1,10 @@
+{
+	"children": [
+		{
+			"key": "gis",
+			"purpose": "Something to do with GIS data.",
+			"notes": "Some internal note about how the filters work or similar.",
+			"filters": "tags:gis"
+		}
+	]
+}
