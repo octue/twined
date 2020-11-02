@@ -1,9 +1,0 @@
-{
-	"children": [
-		{
-			"purpose": "Something to do with GIS data.",
-			"notes": "This filter (which can use the extremely powerful 'lucene' query syntax)\n allows the digital twin to locate other digital twins (public across octue or\n private in your workspace) which can provide the data you need.",
-			"filters": "tags:gis"
-		}
-	]
-}
