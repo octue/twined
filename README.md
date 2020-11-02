@@ -3,8 +3,8 @@
 A library to help digital twins and data services talk to one another. Read more at [twined.readthedocs.io](https://twined.readthedocs.io)
 
 [![PyPI version](https://badge.fury.io/py/twined.svg)](https://badge.fury.io/py/twined)
-[![Build Status](https://travis-ci.com/octue/twined.svg?branch=master)](https://travis-ci.com/octue/twined)
-[![codecov](https://codecov.io/gh/octue/twined/branch/master/graph/badge.svg)](https://codecov.io/gh/octue/twined)
+[![Build Status](https://github.com/octue/twined/workflows/python-ci/badge.svg)](https://github.com/octue/twined)
+[![codecov](https://codecov.io/gh/octue/twined/branch/main/graph/badge.svg)](https://codecov.io/gh/octue/twined)
 [![Documentation Status](https://readthedocs.org/projects/twined/badge/?version=latest)](https://twined.readthedocs.io/en/latest/?badge=latest)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
@@ -45,14 +45,14 @@ roadmap, into which you can make your PR. We'll help review the changes and impr
 The process for creating a new release is as follows:
 
 1. Check out a branch for the next version, called `vX.Y.Z`
-2. Create a Pull Request into the `master` branch.
+2. Create a Pull Request into the `main` branch.
 3. Undertake your changes, committing and pushing to branch `vX.Y.Z`
 4. Ensure that documentation is updated to match changes, and increment the changelog. **Pull requests which do not update documentation will be refused.**
 5. Ensure that test coverage is sufficient. **Pull requests that decrease test coverage will be refused.**
 6. Ensure code meets style guidelines (pre-commit scripts and flake8 tests will fail otherwise)
 7. Address Review Comments on the PR
 8. Ensure the version in `setup.py` is correct and matches the branch version.
-9. Merge to master. Successful test, doc build, flake8 and a new version number will automatically create the release on pypi.
+9. Merge to main. Successful test, doc build, flake8 and a new version number will automatically create the release on pypi.
 10. Go to code > releases and create a new release on GitHub at the same SHA.
 
 
