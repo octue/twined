@@ -8,5 +8,5 @@ class BaseTestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        self.path = os.path.join(os.path.dirname(__file__), "data")
+        self.path = str(os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", ""))
         super().setUp()
