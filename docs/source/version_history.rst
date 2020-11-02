@@ -24,6 +24,13 @@ New Features
 ------------
 #. Documentation
 #. Travis- and RTD- based test and documentation build with Codecov integration
+#. Load and validation of twine itself against twine schema
+#. Main ``Twine()`` class with strands set as attributes
+#. Validation of input, config and output values against twine
+#. Validation of manifest json
+#. Credential parsing from the environment and validation
+#. Hook allowing instantiation of inputs and config to a given class e.g. ``Manifest``
+#. Tests to cover the majority of functionality
 
 Backward Incompatible API Changes
 ---------------------------------
