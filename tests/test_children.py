@@ -37,7 +37,6 @@ class TestChildrenTwine(BaseTestCase):
                 "children": [{"key": "gis", "purpose": "The purpose.", "notes": "Some notes.", "filters": "tags:gis"}]
             }
         """
-
         self.assertEqual(len(Twine(source=source)._raw["children"]), 1)
 
     def test_empty_children(self):
