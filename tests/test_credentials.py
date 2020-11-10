@@ -82,6 +82,26 @@ class TestCredentialsValidation(BaseTestCase):
     """ Tests related to whether validation of children occurs successfully (given a valid twine)
     """
 
+    VALID_CREDENTIALS_TWINE = """
+        {
+            "credentials": [
+                {
+                    "name": "SECRET_THE_FIRST",
+                    "purpose": "Token for accessing a 3rd party API service"
+                },
+                {
+                    "name": "SECRET_THE_SECOND",
+                    "purpose": "Token for accessing a 3rd party API service"
+                },
+                {
+                    "name": "SECRET_THE_THIRD",
+                    "purpose": "Usually a big secret but sometimes has a convenient non-secret default, like a sandbox or local database",
+                    "default": "postgres://pguser:pgpassword@localhost:5432/pgdb"
+                }
+            ]
+        }
+    """
+
     def test_no_credentials(self):
         """ Test that a twine with no credentials will validate straightforwardly
         """
@@ -91,14 +111,14 @@ class TestCredentialsValidation(BaseTestCase):
     def test_missing_credentials(self):
         """ Test that a twine with credentials will not validate where they are missing from the environment
         """
-        twine = Twine(source=os.path.join(self.path, "twines", "valid_credentials_twine.json"))
+        twine = Twine(source=self.VALID_CREDENTIALS_TWINE)
         with self.assertRaises(exceptions.CredentialNotFound):
             twine.validate_credentials()
 
     def test_default_credentials(self):
         """ Test that a twine with credentials will validate where ones with defaults are missing from the environment
         """
-        twine = Twine(source=os.path.join(self.path, "twines", "valid_credentials_twine.json"))
+        twine = Twine(source=self.VALID_CREDENTIALS_TWINE)
         with mock.patch.dict(os.environ, {"SECRET_THE_FIRST": "a value", "SECRET_THE_SECOND": "another value"}):
             credentials = twine.validate_credentials()
 
@@ -110,7 +130,7 @@ class TestCredentialsValidation(BaseTestCase):
     def test_nondefault_credentials(self):
         """ Test that the environment will override a default value for a credential
         """
-        twine = Twine(source=os.path.join(self.path, "twines", "valid_credentials_twine.json"))
+        twine = Twine(source=self.VALID_CREDENTIALS_TWINE)
         with mock.patch.dict(
             os.environ,
             {"SECRET_THE_FIRST": "a value", "SECRET_THE_SECOND": "another value", "SECRET_THE_THIRD": "nondefault"},
