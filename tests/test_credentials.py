@@ -3,7 +3,7 @@ import unittest
 from unittest import mock
 
 from twined import Twine, exceptions
-from .base import BaseTestCase
+from .base import VALID_SCHEMA_TWINE, BaseTestCase
 
 
 class TestCredentialsTwine(BaseTestCase):
@@ -105,7 +105,7 @@ class TestCredentialsValidation(BaseTestCase):
     def test_no_credentials(self):
         """ Test that a twine with no credentials will validate straightforwardly
         """
-        twine = Twine(source=os.path.join(self.path, "twines", "valid_schema_twine.json"))
+        twine = Twine(source=VALID_SCHEMA_TWINE)
         twine.validate_credentials()
 
     def test_missing_credentials(self):

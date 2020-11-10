@@ -68,7 +68,7 @@ class TestManifestStrands(BaseTestCase):
     # def test_empty_values(self):
     #     """ Ensures that appropriate errors are generated for invalid values
     #     """
-    #     twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+    #     twine_file = VALID_SCHEMA_TWINE
     #     twine = Twine(file=twine_file)
     #     values_file = os.path.join(self.path, "configurations", "empty.json")
     #     with self.assertRaises(exceptions.InvalidValuesJson):
@@ -77,7 +77,7 @@ class TestManifestStrands(BaseTestCase):
     # def test_incorrect_values(self):
     #     """ Ensures that appropriate errors are generated for invalid values
     #     """
-    #     twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+    #     twine_file = VALID_SCHEMA_TWINE
     #     twine = Twine(file=twine_file)
     #     values_file = os.path.join(self.path, "configurations", "incorrect.json")
     #     with self.assertRaises(exceptions.InvalidValuesContents):
@@ -86,7 +86,7 @@ class TestManifestStrands(BaseTestCase):
     # def test_missing_not_required_values(self):
     #     """ Ensures that appropriate errors are generated for missing values
     #     """
-    #     twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+    #     twine_file = VALID_SCHEMA_TWINE
     #     twine = Twine(file=twine_file)
     #     values_file = os.path.join(self.path, "outputs", "missing_not_required.json")
     #     twine.validate_output_values(file=values_file)
@@ -94,7 +94,7 @@ class TestManifestStrands(BaseTestCase):
     # def test_missing_required_values(self):
     #     """ Ensures that appropriate errors are generated for missing values
     #     """
-    #     twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+    #     twine_file = VALID_SCHEMA_TWINE
     #     twine = Twine(file=twine_file)
     #     values_file = os.path.join(self.path, "inputs", "missing_required.json")
     #     with self.assertRaises(exceptions.InvalidValuesContents):
@@ -103,7 +103,7 @@ class TestManifestStrands(BaseTestCase):
     # def test_valid_values_files(self):
     #     """ Ensures that values can be read and validated correctly from files on disk
     #     """
-    #     twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+    #     twine_file = VALID_SCHEMA_TWINE
     #     twine = Twine(file=twine_file)
     #     twine.validate_configuration(file=os.path.join(self.path, "configurations", "valid.json"))
     #     twine.validate_input_values(file=os.path.join(self.path, "inputs", "valid.json"))
@@ -112,7 +112,7 @@ class TestManifestStrands(BaseTestCase):
     # def test_valid_values_json(self):
     #     """ Ensures that values can be read and validated correctly from a json string
     #     """
-    #     twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+    #     twine_file = VALID_SCHEMA_TWINE
     #     twine = Twine(file=twine_file)
     #     values_file = os.path.join(self.path, "configurations", "valid.json")
     #     with open(values_file, "r", encoding="utf-8") as f:
@@ -122,7 +122,7 @@ class TestManifestStrands(BaseTestCase):
     # def test_valid_with_extra_values(self):
     #     """ Ensures that extra values get ignored
     #     """
-    #     twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+    #     twine_file = VALID_SCHEMA_TWINE
     #     twine = Twine(file=twine_file)
     #     values_file = os.path.join(self.path, "configurations", "valid_with_extra.json")
     #     twine.validate_configuration(file=values_file)

@@ -1,26 +1,31 @@
 import json
 import os
 import unittest
+from tempfile import TemporaryDirectory
 from unittest import mock
 import numpy as np
 
 from twined import exceptions
 from twined.utils import TwinedEncoder, load_json
-from .base import BaseTestCase
+from .base import VALID_SCHEMA_TWINE, BaseTestCase
 
 
 class TestUtils(BaseTestCase):
     """ Testing operation of the Twine class
-     """
+    """
 
     def test_load_json_with_file_like(self):
         """ Ensures that json can be loaded from a file-like object
         """
-        file_name = os.path.join(self.path, "twines", "valid_schema_twine.json")
-        with open(file_name, "r") as file_like:
-            data = load_json(file_like)
-            for key in data.keys():
-                self.assertIn(key, ("configuration_values_schema", "input_values_schema", "output_values_schema"))
+        with TemporaryDirectory() as tmp_dir:
+            valid_schema_twine_file_path = os.path.join(tmp_dir, "valid_schema_twine.json")
+            with open(valid_schema_twine_file_path, "w") as f:
+                json.dump(json.loads(VALID_SCHEMA_TWINE), f)
+
+            with open(valid_schema_twine_file_path, "r") as file_like:
+                data = load_json(file_like)
+                for key in data.keys():
+                    self.assertIn(key, ("configuration_values_schema", "input_values_schema", "output_values_schema"))
 
     def test_load_json_with_object(self):
         """ Ensures if load_json is called on an already loaded object, it'll pass-through successfully

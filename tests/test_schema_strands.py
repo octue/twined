@@ -2,7 +2,7 @@ import os
 import unittest
 
 from twined import Twine, exceptions
-from .base import BaseTestCase
+from .base import VALID_SCHEMA_TWINE, BaseTestCase
 
 
 class TestSchemaStrands(BaseTestCase):
@@ -14,7 +14,7 @@ class TestSchemaStrands(BaseTestCase):
         Note: This tests an internal method. The current API doesn't allow this error to emerge but tthis check allows
         us to extend to a generic method
         """
-        twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+        twine_file = VALID_SCHEMA_TWINE
         twine = Twine(source=twine_file)
         values_file = os.path.join(self.path, "values", "configurations", "configuration_valid.json")
         data = twine._load_json("configuration", source=values_file)
@@ -24,7 +24,7 @@ class TestSchemaStrands(BaseTestCase):
     def test_missing_values_files(self):
         """ Ensures that if you try to read values from missing files, the right exceptions get raised
         """
-        twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+        twine_file = VALID_SCHEMA_TWINE
         twine = Twine(source=twine_file)
         values_file = os.path.join(self.path, "not_a_file.json")
         with self.assertRaises(exceptions.ConfigurationValuesFileNotFound):
@@ -39,14 +39,14 @@ class TestSchemaStrands(BaseTestCase):
     def test_no_values(self):
         """ Ensures that giving no data source raises an invalidJson error
         """
-        twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+        twine_file = VALID_SCHEMA_TWINE
         with self.assertRaises(exceptions.InvalidValuesJson):
             Twine(source=twine_file).validate_configuration_values(source=None)
 
     def test_empty_values(self):
         """ Ensures that appropriate errors are generated for invalid values
         """
-        twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+        twine_file = VALID_SCHEMA_TWINE
         twine = Twine(source=twine_file)
         values_file = os.path.join(self.path, "values", "configurations", "configuration_empty.json")
         with self.assertRaises(exceptions.InvalidValuesJson):
@@ -81,7 +81,7 @@ class TestSchemaStrands(BaseTestCase):
     def test_incorrect_values(self):
         """ Ensures that appropriate errors are generated for invalid values
         """
-        twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+        twine_file = VALID_SCHEMA_TWINE
         values_file = os.path.join(self.path, "values", "configurations", "configuration_incorrect.json")
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine(source=twine_file).validate_configuration_values(source=values_file)
@@ -89,14 +89,14 @@ class TestSchemaStrands(BaseTestCase):
     def test_missing_not_required_values(self):
         """ Ensures that appropriate errors are generated for missing values
         """
-        twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+        twine_file = VALID_SCHEMA_TWINE
         values_file = os.path.join(self.path, "values", "outputs", "output_missing_not_required.json")
         Twine(source=twine_file).validate_output_values(source=values_file)
 
     def test_missing_required_values(self):
         """ Ensures that appropriate errors are generated for missing values
         """
-        twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+        twine_file = VALID_SCHEMA_TWINE
         values_file = os.path.join(self.path, "values", "inputs", "input_missing_required.json")
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine(source=twine_file).validate_input_values(source=values_file)
@@ -104,7 +104,7 @@ class TestSchemaStrands(BaseTestCase):
     def test_valid_values_files(self):
         """ Ensures that values can be read and validated correctly from files on disk
         """
-        twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+        twine_file = VALID_SCHEMA_TWINE
         twine = Twine(source=twine_file)
         twine.validate_configuration_values(
             source=os.path.join(self.path, "values", "configurations", "configuration_valid.json")
@@ -115,7 +115,7 @@ class TestSchemaStrands(BaseTestCase):
     def test_valid_values_json(self):
         """ Ensures that values can be read and validated correctly from a json string
         """
-        twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+        twine_file = VALID_SCHEMA_TWINE
         values_file = os.path.join(self.path, "values", "configurations", "configuration_valid.json")
         with open(values_file, "r", encoding="utf-8") as f:
             json_string = f.read()
@@ -124,7 +124,7 @@ class TestSchemaStrands(BaseTestCase):
     def test_valid_with_extra_values(self):
         """ Ensures that extra values get ignored
         """
-        twine_file = os.path.join(self.path, "twines", "valid_schema_twine.json")
+        twine_file = VALID_SCHEMA_TWINE
         values_file = os.path.join(self.path, "values", "configurations", "configuration_valid_with_extra.json")
         Twine(source=twine_file).validate_configuration_values(source=values_file)
 
