@@ -7,38 +7,75 @@ from .base import BaseTestCase
 
 
 class TestCredentialsTwine(BaseTestCase):
-    """ Tests related to the twine itself - ensuring that valid and invalid
-     `credentials` entries in a twine file work as expected
-     """
+    """ Tests related to the twine itself - ensuring that valid and invalid `credentials` entries in a twine file work
+    as expected.
+    """
 
     def test_fails_on_no_name(self):
-        """ Ensures InvalidTwine exceptions are raised when instantiating twines
-        with a missing `name` field in a credential
+        """ Ensures InvalidTwine exceptions are raised when instantiating twines with a missing `name` field in a
+        credential.
         """
-        twine_file = os.path.join(self.path, "twines", "invalid_credentials_no_name_twine.json")
+        invalid_credentials_no_name_twine = """
+            {
+                "credentials": [
+                    {
+                        "purpose": "credentials without a name should be invalid"
+                    }
+                ]
+            }
+        """
+
         with self.assertRaises(exceptions.InvalidTwine):
-            Twine(source=twine_file)
+            Twine(source=invalid_credentials_no_name_twine)
 
     def test_fails_on_lowercase_name(self):
-        """ Ensures InvalidTwine exceptions are raised when instantiating twines
-        with lowercase letters in the `name` field
+        """ Ensures InvalidTwine exceptions are raised when instantiating twines with lowercase letters in the `name`
+        field.
         """
-        twine_file = os.path.join(self.path, "twines", "invalid_credentials_lowercase_name_twine.json")
+        invalid_credentials_lowercase_name_twine = """
+            {
+                "credentials": [
+                    {
+                        "name": "my_secrets_should_be_uppercase",
+                        "purpose": "Token for accessing a 3rd party API service"
+                    }
+                ]
+            }
+        """
+
         with self.assertRaises(exceptions.InvalidTwine):
-            Twine(source=twine_file)
+            Twine(source=invalid_credentials_lowercase_name_twine)
 
     def test_fails_on_dict(self):
-        """ Ensures InvalidTwine exceptions are raised when instantiating twines
-        with invalid `credentials` entries (given as a dict, not an array)
+        """ Ensures InvalidTwine exceptions are raised when instantiating twines with invalid `credentials` entries
+        (given as a dict, not an array).
         """
-        twine_file = os.path.join(self.path, "twines", "invalid_credentials_dict_not_array_twine.json")
+        invalid_credentials_dict_not_array_twine = """
+            {
+                "credentials": {
+                    "name": "MY_API_SECRET_KEY",
+                    "purpose": "Token for accessing a 3rd party API service"
+                }
+            }
+        """
+
         with self.assertRaises(exceptions.InvalidTwine):
-            Twine(source=twine_file)
+            Twine(source=invalid_credentials_dict_not_array_twine)
 
     def test_fails_on_name_whitespace(self):
-        twine_file = os.path.join(self.path, "twines", "invalid_credentials_space_in_name_twine.json")
+        invalid_credentials_space_in_name_twine = """
+            {
+                "credentials": [
+                    {
+                        "name": "MY NAME SHOULD NOT HAVE WHITESPACE",
+                        "purpose": "Token for accessing a 3rd party API service"
+                    }
+                ]
+            }
+        """
+
         with self.assertRaises(exceptions.InvalidTwine):
-            Twine(source=twine_file)
+            Twine(source=invalid_credentials_space_in_name_twine)
 
 
 class TestCredentialsValidation(BaseTestCase):
