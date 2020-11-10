@@ -45,6 +45,7 @@ class TestManifestStrands(BaseTestCase):
         """
         twine = Twine(source=self.VALID_MANIFEST_STRAND)
         file = os.path.join(self.path, "not_a_file.json")
+
         with self.assertRaises(exceptions.ConfigurationManifestFileNotFound):
             twine.validate_configuration_manifest(source=file)
 
@@ -57,13 +58,133 @@ class TestManifestStrands(BaseTestCase):
     def test_valid_manifest_files(self):
         """ Ensures that a manifest file will validate
         """
+        valid_configuration_manifest = """
+            {
+                "id": "3ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "34ad7669-8162-4f64-8cd5-4abe92509e17",
+                        "name": "my configuration dataset",
+                        "tags": "the, config, tags",
+                        "files": [
+                            {
+                                "path": "configuration/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": "",
+                                "posix_timestamp": 0,
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "last_modified": "2019-02-28T22:40:30.533005Z",
+                                "name": "file_1.csv",
+                                "size_bytes": 59684813,
+                                "sha-512/256": "somesha"
+                            },
+                            {
+                                "path": "configuration/datasets/7ead7669/file_2.csv",
+                                "cluster": 0,
+                                "sequence": 1,
+                                "extension": "csv",
+                                "tags": "",
+                                "posix_timestamp": 0,
+                                "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
+                                "last_modified": "2019-02-28T22:40:40.633001Z",
+                                "name": "file_2.csv",
+                                "size_bytes": 59684813,
+                                "sha-512/256": "someothersha"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        valid_input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                        "name": "my meteorological dataset",
+                        "tags": "met, mast, wind",
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": "",
+                                "posix_timestamp": 0,
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "last_modified": "2019-02-28T22:40:30.533005Z",
+                                "name": "file_1.csv",
+                                "size_bytes": 59684813,
+                                "sha-512/256": "somesha"
+                            },
+                            {
+                                "path": "input/datasets/7ead7669/file_2.csv",
+                                "cluster": 0,
+                                "sequence": 1,
+                                "extension": "csv",
+                                "tags": "",
+                                "posix_timestamp": 0,
+                                "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
+                                "last_modified": "2019-02-28T22:40:40.633001Z",
+                                "name": "file_2.csv",
+                                "size_bytes": 59684813,
+                                "sha-512/256": "someothersha"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        valid_output_manifest = """
+            {
+                "id": "2ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "1ead7669-8162-4f64-8cd5-4abe92509e17",
+                        "name": "my output dataset",
+                        "tags": "the, output, tags",
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": "",
+                                "posix_timestamp": 0,
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "last_modified": "2019-02-28T22:40:30.533005Z",
+                                "name": "file_1.csv",
+                                "size_bytes": 59684813,
+                                "sha-512/256": "somesha"
+                            },
+                            {
+                                "path": "input/datasets/7ead7669/file_2.csv",
+                                "cluster": 0,
+                                "sequence": 1,
+                                "extension": "csv",
+                                "tags": "",
+                                "posix_timestamp": 0,
+                                "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
+                                "last_modified": "2019-02-28T22:40:40.633001Z",
+                                "name": "file_2.csv",
+                                "size_bytes": 59684813,
+                                "sha-512/256": "someothersha"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
         twine = Twine(source=self.VALID_MANIFEST_STRAND)
-        file = os.path.join(self.path, "manifests", "configuration", "configuration_valid.json")
-        twine.validate_input_manifest(source=file)
-        file = os.path.join(self.path, "manifests", "inputs", "input_valid.json")
-        twine.validate_input_manifest(source=file)
-        file = os.path.join(self.path, "manifests", "outputs", "output_valid.json")
-        twine.validate_output_manifest(source=file)
+        twine.validate_input_manifest(source=valid_configuration_manifest)
+        twine.validate_input_manifest(source=valid_input_manifest)
+        twine.validate_output_manifest(source=valid_output_manifest)
 
     # def test_empty_values(self):
     #     """ Ensures that appropriate errors are generated for invalid values
