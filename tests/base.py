@@ -1,3 +1,4 @@
+import json
 import os
 import unittest
 
@@ -57,3 +58,9 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         self.path = os.path.join(os.path.dirname(__file__), "data")
         super().setUp()
+
+    def _write_json_string_to_file(self, json_string, directory_name):
+        """Write a JSON string to a JSON file in the given directory."""
+        with open(valid_schema_twine_file_path := os.path.join(directory_name, "json_written_to_file.json"), "w") as f:
+            json.dump(json.loads(json_string), f)
+            return valid_schema_twine_file_path

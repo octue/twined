@@ -1,4 +1,3 @@
-import json
 import os
 import unittest
 from tempfile import TemporaryDirectory
@@ -100,10 +99,7 @@ class TestSchemaStrands(BaseTestCase):
         twine = Twine(source=VALID_SCHEMA_TWINE)
 
         with TemporaryDirectory() as tmp_dir:
-            valid_configuration_file = os.path.join(tmp_dir, "valid_configuration_value.json")
-            with open(valid_configuration_file, "w") as f:
-                json.dump(json.loads(self.VALID_CONFIGURATION_VALUE), f)
-
+            valid_configuration_file = self._write_json_string_to_file(self.VALID_CONFIGURATION_VALUE, tmp_dir)
             twine.validate_configuration_values(source=valid_configuration_file)
             twine.validate_input_values(source="""{"height": 40}""")
             twine.validate_output_values(source="""{"width": 36}""")

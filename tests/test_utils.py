@@ -1,5 +1,4 @@
 import json
-import os
 import unittest
 from tempfile import TemporaryDirectory
 from unittest import mock
@@ -18,11 +17,7 @@ class TestUtils(BaseTestCase):
         """ Ensures that json can be loaded from a file-like object
         """
         with TemporaryDirectory() as tmp_dir:
-            valid_schema_twine_file_path = os.path.join(tmp_dir, "valid_schema_twine.json")
-            with open(valid_schema_twine_file_path, "w") as f:
-                json.dump(json.loads(VALID_SCHEMA_TWINE), f)
-
-            with open(valid_schema_twine_file_path, "r") as file_like:
+            with open(self._write_json_string_to_file(VALID_SCHEMA_TWINE, tmp_dir), "r") as file_like:
                 data = load_json(file_like)
                 for key in data.keys():
                     self.assertIn(key, ("configuration_values_schema", "input_values_schema", "output_values_schema"))
