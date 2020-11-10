@@ -7,13 +7,43 @@ from .base import BaseTestCase
 
 class TestManifestStrands(BaseTestCase):
     """ Testing operation of the Twine class for validation of data using strands which require manifests
-     """
+    """
+
+    VALID_MANIFEST_STRAND = """
+        {
+            "configuration_manifest": [
+                {
+                    "key": "configuration_files_data",
+                    "purpose": "A dataset containing files used in configuration",
+                    "filters": "tags:(the AND config AND tags) files:(extension:csv AND sequence:>=0)"
+                }
+            ],
+            "input_manifest": [
+                {
+                    "key": "met_mast_data",
+                    "purpose": "A dataset containing meteorological mast data",
+                    "filters": "tags:(met* AND mast AND location) files:(extension:csv AND sequence:>=0) location:10"
+                },
+                {
+                    "key": "scada_data",
+                    "purpose": "A dataset containing scada data",
+                    "filters": "tags:(met* AND mast) files:(extension:csv AND sequence:>=0) location:10"
+                }
+            ],
+            "output_manifest": [
+                {
+                    "key": "output_files_data",
+                    "purpose": "A dataset containing output results",
+                    "filters": "tags:(the AND output AND tags) files:(extension:csv AND sequence:>=0)"
+                }
+            ]
+        }
+    """
 
     def test_missing_manifest_files(self):
         """ Ensures that if you try to read values from missing files, the right exceptions get raised
         """
-        twine_file = os.path.join(self.path, "twines", "valid_manifest_twine.json")
-        twine = Twine(source=twine_file)
+        twine = Twine(source=self.VALID_MANIFEST_STRAND)
         file = os.path.join(self.path, "not_a_file.json")
         with self.assertRaises(exceptions.ConfigurationManifestFileNotFound):
             twine.validate_configuration_manifest(source=file)
@@ -27,8 +57,7 @@ class TestManifestStrands(BaseTestCase):
     def test_valid_manifest_files(self):
         """ Ensures that a manifest file will validate
         """
-        twine_file = os.path.join(self.path, "twines", "valid_manifest_twine.json")
-        twine = Twine(source=twine_file)
+        twine = Twine(source=self.VALID_MANIFEST_STRAND)
         file = os.path.join(self.path, "manifests", "configuration", "configuration_valid.json")
         twine.validate_input_manifest(source=file)
         file = os.path.join(self.path, "manifests", "inputs", "input_valid.json")
