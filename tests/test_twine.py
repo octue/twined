@@ -28,8 +28,9 @@ class TestTwine(BaseTestCase):
     def test_incorrect_version_twine(self):
         """ Ensures exception is thrown on mismatch between installed and specified versions of twined
         """
+        incorrect_version_twine = """{"twined_version": "0.0.0"}"""
         with self.assertRaises(exceptions.TwineVersionConflict):
-            Twine(source=os.path.join(self.path, "twines", "incorrect_version_twine.json"))
+            Twine(source=incorrect_version_twine)
 
     def test_empty_twine(self):
         """ Ensures that an empty twine file can be loaded
@@ -54,8 +55,22 @@ class TestTwine(BaseTestCase):
     def test_broken_json_twine(self):
         """ Ensures that an invalid json file raises an InvalidTwine exception
         """
+        invalid_json_twine = """
+            {
+                "children": [
+                "configuration_schema": {
+                    "$schema": "http://json-schema.org/2019-09/schema#",
+                    "title": "The example configuration form",
+                    "description": "The configuration strand of an example twine",
+                    "type": "object",
+                    "properties": {
+                    }
+                },
+            }
+        """
+
         with self.assertRaises(exceptions.InvalidTwineJson):
-            Twine(source=os.path.join(self.path, "twines", "invalid_json_twine.json"))
+            Twine(source=invalid_json_twine)
 
 
 if __name__ == "__main__":

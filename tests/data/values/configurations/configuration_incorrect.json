@@ -1,3 +1,0 @@
-{
-  "n_iterations": "should not be a string, this field requires an integer"
-}
