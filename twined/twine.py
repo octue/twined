@@ -334,7 +334,6 @@ class Twine:
         # pop any strand name:data pairs out of kwargs and into their own dict
         source_kwargs = tuple(name for name in kwargs.keys() if name in ALL_STRANDS)
         sources = dict((name, kwargs.pop(name)) for name in source_kwargs)
-
         for strand_name, strand_data in sources.items():
 
             if not allow_extra:
@@ -361,6 +360,8 @@ class Twine:
                 method = getattr(self, f"validate_{strand_name}")
                 klass = self._get_cls(strand_name, cls)
                 sources[strand_name] = method(strand_data, cls=klass, **kwargs)
+            else:
+                sources[strand_name] = None
 
         return sources
 
