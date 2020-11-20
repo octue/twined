@@ -61,7 +61,7 @@ Let's look at basic examples for twines containing each of these strands:
 
       This *twine* contains an example ``configuration_values_schema`` with one control parameter.
 
-      `Many more detailed and specialised examples are available in the GitHub repository <https://github.com/octue/twined/tree/master/examples>`_
+      `Many more detailed and specialised examples are available in the GitHub repository <https://github.com/octue/twined/tree/main/examples>`_
 
       .. code-block:: javascript
 

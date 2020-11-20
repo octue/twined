@@ -54,7 +54,7 @@ class Twine:
         """ Constructor for the twine class
         """
         for name, strand in self._load_twine(**kwargs).items():
-            setattr(self, '_' + name, strand)
+            setattr(self, "_" + name, strand)
 
         self._available_strands = tuple(trim_suffix(name, "_schema") for name in vars(self))
 
@@ -67,7 +67,7 @@ class Twine:
             raw = {}
             logger.warning("No twine source specified. Loading empty twine.")
         else:
-            self._raw = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string", "object"))
+            raw = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string", "object"))
 
         self._validate_against_schema("twine", raw)
         self._validate_twine_version(twine_file_twined_version=raw.get("twined_version", None))
@@ -119,7 +119,7 @@ class Twine:
         else:
             if strand not in SCHEMA_STRANDS:
                 raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
-            schema_key = '_' + strand + "_schema"
+            schema_key = "_" + strand + "_schema"
             try:
                 schema = getattr(self, schema_key)
             except AttributeError:
@@ -329,7 +329,6 @@ class Twine:
         # pop any strand name:data pairs out of kwargs and into their own dict
         source_kwargs = tuple(name for name in kwargs.keys() if name in ALL_STRANDS)
         sources = dict((name, kwargs.pop(name)) for name in source_kwargs)
-
         for strand_name, strand_data in sources.items():
 
             if not allow_extra:
@@ -356,6 +355,8 @@ class Twine:
                 method = getattr(self, f"validate_{strand_name}")
                 klass = self._get_cls(strand_name, cls)
                 sources[strand_name] = method(strand_data, cls=klass, **kwargs)
+            else:
+                sources[strand_name] = None
 
         return sources
 
