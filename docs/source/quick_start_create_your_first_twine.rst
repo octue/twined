@@ -77,7 +77,7 @@ The loading process checks the twine itself is valid. It's as simple as:
 
     from twined import Twine
 
-    my_twine = Twine(file='twine.json')
+    my_twine = Twine(source='twine.json')
 
 
 .. _validate_some_inputs:
@@ -104,7 +104,7 @@ Then parse and validate directly from the file:
 
 .. code-block:: py
 
-    my_input_values = my_twine.validate_input_values(file="input_values.json")
+    my_input_values = my_twine.validate_input_values(source="input_values.json")
 
 
 .. ATTENTION::

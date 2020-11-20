@@ -44,30 +44,14 @@ roadmap, into which you can make your PR. We'll help review the changes and impr
 
 The process for creating a new release is as follows:
 
-1. Check out a branch for the next version, called `vX.Y.Z`
+1. Check out a branch for your release, called eg `release/X.Y.Z`
 2. Create a Pull Request into the `main` branch.
-3. Undertake your changes, committing and pushing to branch `vX.Y.Z`
+3. Undertake your changes in other branches according to the git flow and create pull requests into `release/X.Y.Z`
 4. Ensure that documentation is updated to match changes, and increment the changelog. **Pull requests which do not update documentation will be refused.**
 5. Ensure that test coverage is sufficient. **Pull requests that decrease test coverage will be refused.**
 6. Ensure code meets style guidelines (pre-commit scripts and flake8 tests will fail otherwise)
 7. Address Review Comments on the PR
 8. Ensure the version in `setup.py` is correct and matches the branch version.
 9. Merge to main. Successful test, doc build, flake8 and a new version number will automatically create the release on pypi.
+10. Confirm the successful release on pypi
 10. Go to code > releases and create a new release on GitHub at the same SHA.
-
-
-### Building documents locally
-
-**You don't need to do this unless you plan to develop Twined.**
-
-Install `doxgen`. On a mac, that's `brew install doxygen`; other systems may differ.
-
-Install sphinx and other requirements for building the docs:
-```
-pip install -r docs/requirements.txt
-```
-
-Run the build process:
-```
-sphinx-build -b html docs/source docs/build
-```
