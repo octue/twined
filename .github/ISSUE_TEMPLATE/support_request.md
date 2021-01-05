@@ -1,3 +1,8 @@
+---
+name: Support request
+about: Request support using the code
+---
+
 ## Support request
 
 ### About me

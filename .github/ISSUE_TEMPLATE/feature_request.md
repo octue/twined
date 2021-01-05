@@ -1,3 +1,8 @@
+---
+name: Feature request
+about: Request a feature
+---
+
 ## Feature request
 
 ### About me

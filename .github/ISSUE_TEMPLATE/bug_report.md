@@ -1,3 +1,8 @@
+---
+name: Bug report
+about: Report a bug
+---
+
 ## Bug report
 
 ### About me
