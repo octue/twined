@@ -178,11 +178,11 @@ class Twine:
         """
         return self._available_strands
 
-    def validate_children(self, source):
+    def validate_children(self, source, **kwargs):
         """ Validates that the children values, passed as either a file or a json string, are correct
         """
         # TODO cache this loaded data keyed on a hashed version of kwargs
-        children = self._load_json("children", source)
+        children = self._load_json("children", source, **kwargs)
         self._validate_against_schema("children", children)
 
         strand = getattr(self, "children", [])
