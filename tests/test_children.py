@@ -37,13 +37,13 @@ class TestChildrenTwine(BaseTestCase):
                 "children": [{"key": "gis", "purpose": "The purpose.", "notes": "Some notes.", "filters": "tags:gis"}]
             }
         """
-        self.assertEqual(len(Twine(source=source)._children), 1)
+        self.assertEqual(len(Twine(source=source).children), 1)
 
     def test_empty_children(self):
         """ Ensures that a twine file will validate with an empty list object as children
         """
         twine = Twine(source="""{"children": []}""")
-        self.assertEqual(len(twine._children), 0)
+        self.assertEqual(len(twine.children), 0)
 
 
 class TestChildrenValidation(BaseTestCase):
