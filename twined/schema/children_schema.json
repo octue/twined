@@ -8,7 +8,7 @@
                 "type": "string"
             },
             "id": {
-                "description": "The universally unique ID of the running child twin",
+                "description": "The universally unique ID (UUID) of the running child twin",
                 "type": "string"
             },
             "gcp_project_name": {
