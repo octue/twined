@@ -11,12 +11,11 @@
                 "description": "The universally unique ID of the running child twin",
                 "type": "string"
             },
-            "uri_env_name": {
-                "description": "Name of the environment variable containing the URI of the twin (which may contain credentials)",
-                "type": "string",
-                "pattern": "^[A-Z]+(?:_[A-Z]+)*$"
+            "gcp_project_name": {
+                "description": "Name of the Google Cloud Platform (GCP) project the child exists in.",
+                "type": "string"
             }
         },
-        "required": ["key", "id", "uri_env_name"]
+        "required": ["key", "id", "gcp_project_name"]
     }
 }
