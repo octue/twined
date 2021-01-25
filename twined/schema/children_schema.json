@@ -11,11 +11,31 @@
                 "description": "The universally unique ID (UUID) of the running child twin",
                 "type": "string"
             },
-            "gcp_project_name": {
-                "description": "Name of the Google Cloud Platform (GCP) project the child exists in.",
-                "type": "string"
+            "backend": {
+                "description": "The backend running the child.",
+                "type": "object",
+                "oneOf": [
+                    {
+                        "type": "object",
+                        "title": "GCP Pub/Sub",
+                        "properties": {
+                            "name": {
+                                "description": "Type of backend (in this case, it should be GCPPubSub",
+                                "type": "string"
+                            },
+                            "project_name": {
+                                "description": "Name of the Google Cloud Platform (GCP) project the child exists in.",
+                                "type": "string"
+                            },
+                            "credentials_filename": {
+                                "description": "Absolute path to Google Cloud Platform credentials JSON file.",
+                                "type": "string"
+                            }
+                        }
+                    }
+                ]
             }
         },
-        "required": ["key", "id", "gcp_project_name"]
+        "required": ["key", "id", "backend"]
     }
 }
