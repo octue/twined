@@ -37,13 +37,13 @@ class TestChildrenTwine(BaseTestCase):
                 "children": [{"key": "gis", "purpose": "The purpose.", "notes": "Some notes.", "filters": "tags:gis"}]
             }
         """
-        self.assertEqual(len(Twine(source=source)._children), 1)
+        self.assertEqual(len(Twine(source=source).children), 1)
 
     def test_empty_children(self):
         """ Ensures that a twine file will validate with an empty list object as children
         """
         twine = Twine(source="""{"children": []}""")
-        self.assertEqual(len(twine._children), 0)
+        self.assertEqual(len(twine.children), 0)
 
 
 class TestChildrenValidation(BaseTestCase):
@@ -58,7 +58,15 @@ class TestChildrenValidation(BaseTestCase):
 
     VALID_CHILD_VALUE = """
         [
-            {"key": "gis", "id": "some-id", "uri_env_name": "NAME_OF_SOME_ENV_VAR_THAT_CONTAINS_A_URI"}
+            {
+                "key": "gis",
+                "id": "some-id",
+                "backend": {
+                    "name": "GCPPubSubBackend",
+                    "project_name": "my-project",
+                    "credentials_filename": "hello.json"
+                }
+            }
         ]
     """
 
@@ -78,6 +86,13 @@ class TestChildrenValidation(BaseTestCase):
         """
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine().validate_children(source=self.VALID_CHILD_VALUE)
+
+    def test_backend_cannot_be_empty(self):
+        """ Test that the backend field of a child cannot be empty. """
+        single_child_missing_backend = """[{"key": "gis", "id": "some-id", "backend": {}}]"""
+
+        with self.assertRaises(exceptions.InvalidValuesContents):
+            Twine().validate_children(source=single_child_missing_backend)
 
     def test_extra_key_validation_on_empty_twine(self):
         """ Test that children with extra data will not raise a validation error on an empty twine.
@@ -101,7 +116,11 @@ class TestChildrenValidation(BaseTestCase):
                 {
                     "key": "gis",
                     "id": "some-id",
-                    "uri_env_name": "SOME_ENV_VAR_NAME",
+                    "backend": {
+                        "name": "GCPPubSubBackend",
+                        "project_name": "my-project",
+                        "credentials_filename": "hello.json"
+                    },
                     "some_extra_property": "should not be a problem if present"
                 }
             ]
