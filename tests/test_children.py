@@ -58,7 +58,15 @@ class TestChildrenValidation(BaseTestCase):
 
     VALID_CHILD_VALUE = """
         [
-            {"key": "gis", "id": "some-id", "uri_env_name": "NAME_OF_SOME_ENV_VAR_THAT_CONTAINS_A_URI"}
+            {
+                "key": "gis",
+                "id": "some-id",
+                "backend": {
+                    "name": "GCPPubSubBackend",
+                    "project_name": "my-project",
+                    "credentials_filename": "hello.json"
+                }
+            }
         ]
     """
 
@@ -101,7 +109,11 @@ class TestChildrenValidation(BaseTestCase):
                 {
                     "key": "gis",
                     "id": "some-id",
-                    "uri_env_name": "SOME_ENV_VAR_NAME",
+                    "backend": {
+                        "name": "GCPPubSubBackend",
+                        "project_name": "my-project",
+                        "credentials_filename": "hello.json"
+                    },
                     "some_extra_property": "should not be a problem if present"
                 }
             ]
