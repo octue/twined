@@ -20,7 +20,7 @@
                         "title": "GCP Pub/Sub",
                         "properties": {
                             "name": {
-                                "description": "Type of backend (in this case, it can only be GCPPubSub)",
+                                "description": "Type of backend (in this case, it can only be GCPPubSubBackend)",
                                 "type": "string",
                                 "pattern": "^(GCPPubSubBackend)$"
                             },
