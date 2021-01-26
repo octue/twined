@@ -54,7 +54,7 @@ class Twine:
         """ Constructor for the twine class
         """
         for name, strand in self._load_twine(**kwargs).items():
-            setattr(self, "_" + name, strand)
+            setattr(self, name, strand)
 
         self._available_strands = tuple(trim_suffix(name, "_schema") for name in vars(self))
 
@@ -119,7 +119,7 @@ class Twine:
         else:
             if strand not in SCHEMA_STRANDS:
                 raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
-            schema_key = "_" + strand + "_schema"
+            schema_key = strand + "_schema"
             try:
                 schema = getattr(self, schema_key)
             except AttributeError:
@@ -178,14 +178,14 @@ class Twine:
         """
         return self._available_strands
 
-    def validate_children(self, **kwargs):
+    def validate_children(self, source, **kwargs):
         """ Validates that the children values, passed as either a file or a json string, are correct
         """
         # TODO cache this loaded data keyed on a hashed version of kwargs
-        children = self._load_json("children", **kwargs)
+        children = self._load_json("children", source, **kwargs)
         self._validate_against_schema("children", children)
 
-        strand = getattr(self, "_children", [])
+        strand = getattr(self, "children", [])
 
         # Loop the children and accumulate values so we have an O(1) check
         children_keys = {}
@@ -249,7 +249,7 @@ class Twine:
 
         # Loop through the required credentials to check for presence of each
         credentials = {}
-        for credential in getattr(self, "_credentials", []):
+        for credential in getattr(self, "credentials", []):
             name = credential["name"]
             default = credential.get("default", None)
             credentials[name] = os.environ.get(name, default)
