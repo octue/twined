@@ -32,7 +32,8 @@
                                 "description": "Absolute path to Google Cloud Platform credentials JSON file.",
                                 "type": "string"
                             }
-                        }
+                        },
+                        "required": ["name", "project_name", "credentials_filename"]
                     }
                 ]
             }

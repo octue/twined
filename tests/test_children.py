@@ -87,6 +87,13 @@ class TestChildrenValidation(BaseTestCase):
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine().validate_children(source=self.VALID_CHILD_VALUE)
 
+    def test_backend_cannot_be_empty(self):
+        """ Test that the backend field of a child cannot be empty. """
+        single_child_missing_backend = """[{"key": "gis", "id": "some-id", "backend": {}}]"""
+
+        with self.assertRaises(exceptions.InvalidValuesContents):
+            Twine().validate_children(source=single_child_missing_backend)
+
     def test_extra_key_validation_on_empty_twine(self):
         """ Test that children with extra data will not raise a validation error on an empty twine.
         """
