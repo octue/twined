@@ -64,7 +64,7 @@ class TestChildrenValidation(BaseTestCase):
                 "backend": {
                     "name": "GCPPubSubBackend",
                     "project_name": "my-project",
-                    "credentials_filename": "hello.json"
+                    "credentials_environment_variable": "GCP_SERVICE_ACCOUNT"
                 }
             }
         ]
@@ -119,7 +119,7 @@ class TestChildrenValidation(BaseTestCase):
                     "backend": {
                         "name": "GCPPubSubBackend",
                         "project_name": "my-project",
-                        "credentials_filename": "hello.json"
+                        "credentials_environment_variable": "GCP_SERVICE_ACCOUNT"
                     },
                     "some_extra_property": "should not be a problem if present"
                 }
