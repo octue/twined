@@ -6,8 +6,7 @@ from .base import BaseTestCase
 
 
 class TestManifestStrands(BaseTestCase):
-    """ Testing operation of the Twine class for validation of data using strands which require manifests
-    """
+    """Testing operation of the Twine class for validation of data using strands which require manifests"""
 
     VALID_MANIFEST_STRAND = """
         {
@@ -41,8 +40,7 @@ class TestManifestStrands(BaseTestCase):
     """
 
     def test_missing_manifest_files(self):
-        """ Ensures that if you try to read values from missing files, the right exceptions get raised
-        """
+        """Ensures that if you try to read values from missing files, the right exceptions get raised"""
         twine = Twine(source=self.VALID_MANIFEST_STRAND)
         file = os.path.join(self.path, "not_a_file.json")
 
@@ -56,8 +54,7 @@ class TestManifestStrands(BaseTestCase):
             twine.validate_output_manifest(source=file)
 
     def test_valid_manifest_files(self):
-        """ Ensures that a manifest file will validate
-        """
+        """Ensures that a manifest file will validate"""
         valid_configuration_manifest = """
             {
                 "id": "3ead7669-8162-4f64-8cd5-4abe92509e17",

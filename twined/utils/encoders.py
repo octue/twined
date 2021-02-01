@@ -7,7 +7,7 @@ _numpy_spec = importlib.util.find_spec("numpy")
 
 
 class TwinedEncoder(json.JSONEncoder):
-    """ An encoder which will cope with serialising numpy arrays, ndarrays and matrices to JSON (in list form)
+    """An encoder which will cope with serialising numpy arrays, ndarrays and matrices to JSON (in list form)
 
     This is designed to work "out of the box" to help people serialise the outputs from twined applications.
     It does not require installation of numpy - it'll work fine if numpy is not present, so can be used in a versatile
