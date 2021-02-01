@@ -6,7 +6,7 @@ import sys
 PACKAGE_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 
-class NotAVersionBranchException(Exception):
+class NotAReleaseBranchException(Exception):
     pass
 
 
@@ -33,15 +33,15 @@ def release_branch_version_matches_setup_version(setup_version, full_branch_name
     :raise NotAVersionBranchException:
     :return bool:
     """
+    if not full_branch_name.startswith("release"):
+        raise NotAReleaseBranchException(f"The branch is not a release branch: {full_branch_name!r}.")
+
     try:
         branch_type, branch_name = full_branch_name.split("/")
     except ValueError:
         raise InvalidBranchNameFormat(
             f"The branch name must be in the form 'branch_type/branch_name'; received {full_branch_name!r}"
         )
-
-    if branch_type != "release":
-        raise NotAVersionBranchException(f"The branch is not a release branch: {full_branch_name!r}.")
 
     return branch_name == setup_version
 
@@ -63,6 +63,6 @@ if __name__ == "__main__":
         )
         sys.exit(1)
 
-    except NotAVersionBranchException as e:
+    except NotAReleaseBranchException as e:
         print(e.args[0])
         sys.exit(0)
