@@ -207,7 +207,7 @@ class Twine:
         # TODO Additional validation that the children match what is set as required in the Twine
         return children
 
-    def validate_credentials(self, dotenv_path=None, **kwargs):
+    def validate_credentials(self, *args, dotenv_path=None, **kwargs):
         """Validates that all credentials required by the twine are present
 
         Credentials may either be set as environment variables or defined in a '.env' file. If not present in the
