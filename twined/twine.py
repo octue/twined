@@ -207,7 +207,7 @@ class Twine:
         # TODO Additional validation that the children match what is set as required in the Twine
         return children
 
-    def validate_credentials(self, dotenv_path=None):
+    def validate_credentials(self, dotenv_path=None, **kwargs):
         """Validates that all credentials required by the twine are present
 
         Credentials may either be set as environment variables or defined in a '.env' file. If not present in the
@@ -234,21 +234,24 @@ class Twine:
         export MULTILINE_VAR="hello\nworld"
         ```
         """
-
-        # Load any variables from the .env file into the environment
+        # Load any variables from the .env file into the environment.
         dotenv_path = dotenv_path or os.path.join(".", ".env")
         load_dotenv(dotenv_path)
 
-        # Loop through the required credentials to check for presence of each
-        credentials = {}
-        for credential in getattr(self, "credentials", []):
-            name = credential["name"]
-            default = credential.get("default", None)
-            credentials[name] = os.environ.get(name, default)
-            if credentials[name] is None:
-                raise exceptions.CredentialNotFound(f"Credential '{name}' missing from environment or .env file")
+        for credential in self.credentials:
 
-        return credentials
+            if credential["name"] not in os.environ:
+                default = credential.get("default", None)
+
+                if default is not None:
+                    os.environ[credential["name"]] = default
+                    continue
+
+                raise exceptions.CredentialNotFound(
+                    f"Credential {credential['name']!r} missing from environment or .env file."
+                )
+
+        return {credential["name"] for credential in self.credentials}
 
     def validate_configuration_values(self, source, **kwargs):
         """Validates that the configuration values, passed as either a file or a json string, are correct"""
