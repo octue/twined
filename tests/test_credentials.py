@@ -128,9 +128,8 @@ class TestCredentialsValidation(BaseTestCase):
             os.environ,
             {"SECRET_THE_FIRST": "a value", "SECRET_THE_SECOND": "another value", "SECRET_THE_THIRD": "nondefault"},
         ):
-            credentials = twine.validate_credentials()
-
-        self.assertEqual(credentials["SECRET_THE_THIRD"], "nondefault")
+            twine.validate_credentials()
+            self.assertEqual(os.environ["SECRET_THE_THIRD"], "nondefault")
 
 
 if __name__ == "__main__":

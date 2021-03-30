@@ -234,6 +234,9 @@ class Twine:
         export MULTILINE_VAR="hello\nworld"
         ```
         """
+        if not hasattr(self, "credentials"):
+            return set()
+
         # Load any variables from the .env file into the environment.
         dotenv_path = dotenv_path or os.path.join(".", ".env")
         load_dotenv(dotenv_path)
