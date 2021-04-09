@@ -86,19 +86,16 @@ class TestCredentialsValidation(BaseTestCase):
             "credentials": [
                 {
                     "name": "SECRET_THE_FIRST",
-                    "purpose": "Token for accessing a 3rd party API service",
-                    "location": "local"
+                    "purpose": "Token for accessing a 3rd party API service"
                 },
                 {
                     "name": "SECRET_THE_SECOND",
-                    "purpose": "Token for accessing a 3rd party API service",
-                    "location": "local"
+                    "purpose": "Token for accessing a 3rd party API service"
                 },
                 {
                     "name": "SECRET_THE_THIRD",
                     "purpose": "Usually a big secret but sometimes has a convenient non-secret default, like a sandbox or local database",
-                    "default": "postgres://pguser:pgpassword@localhost:5432/pgdb",
-                    "location": "local"
+                    "default": "postgres://pguser:pgpassword@localhost:5432/pgdb"
                 }
             ]
         }
@@ -140,8 +137,7 @@ class TestCredentialsValidation(BaseTestCase):
             {
                 "credentials": [
                     {
-                        "name": "LOCAL_SECRET",
-                        "location": "local"
+                        "name": "LOCAL_SECRET"
                     },
                     {
                         "name": "GOOGLE_SECRET",
