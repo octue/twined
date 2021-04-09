@@ -75,9 +75,9 @@ class Twine:
         """Loads data from either a *.json file, an open file pointer or a json string. Directly returns any other data"""
 
         if source is None:
-            raise exceptions.invalid_json_map[kind](f"Cannot load {kind} - no data source specified")
+            raise exceptions.invalid_json_map[kind](f"Cannot load {kind} - no data source specified.")
 
-        # Decode the json string and deserialize to objects
+        # Decode the json string and deserialize to objects.
         try:
             data = load_json(source, **kwargs)
         except FileNotFoundError as e:
@@ -110,8 +110,11 @@ class Twine:
         elif strand in MANIFEST_STRANDS:
             # The data is a manifest of files. The "*_manifest" strands of the twine describe matching criteria used to
             # filter files appropriate for consumption by the digital twin, not the schema of the manifest data, which
-            # is distributed with thie package to ensure version consistency...
+            # is distributed with this package to ensure version consistency...
             schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/manifest_schema.json"))
+
+        elif strand == "credentials":
+            schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/credentials.json"))
 
         else:
             if strand not in SCHEMA_STRANDS:
@@ -208,12 +211,15 @@ class Twine:
         return children
 
     def validate_credentials(self, *args, dotenv_path=None, **kwargs):
-        """Validates that all credentials required by the twine are present
+        """Validate that all credentials required by the twine are present.
 
-        Credentials may either be set as environment variables or defined in a '.env' file. If not present in the
-        environment, validate_credentials will check for variables in a .env file (if present) and populate the
-        environment with them. If not present in either the environment or the .env file, default values are used
-        (if defined) or an error is thrown.
+        Credentials may either be set as environment variables, stored remotely in a secrets manager (e.g. Google Cloud
+        Secrets), or defined in a '.env' file. If stored remotely, they must be loaded into the environment before
+        validating the credentials strand.
+
+        If not present in the environment, validate_credentials will check for variables in a .env file (if present)
+        and populate the environment with them. If not present in either the environment or the .env file, default
+        values are used (if defined) or an error is thrown.
 
         Typically a .env file resides at the root of your application (the working directory) although a specific path
         may be set using the `dotenv_path` argument.
@@ -237,11 +243,14 @@ class Twine:
         if not hasattr(self, "credentials"):
             return set()
 
+        credentials = self._load_json("credentials", self.credentials, **kwargs)
+        self._validate_against_schema("credentials", credentials)
+
         # Load any variables from the .env file into the environment.
         dotenv_path = dotenv_path or os.path.join(".", ".env")
         load_dotenv(dotenv_path)
 
-        for credential in self.credentials:
+        for credential in credentials:
 
             if credential["name"] not in os.environ:
                 default = credential.get("default", None)
@@ -254,7 +263,7 @@ class Twine:
                     f"Credential {credential['name']!r} missing from environment or .env file."
                 )
 
-        return {credential["name"] for credential in self.credentials}
+        return {credential["name"] for credential in credentials}
 
     def validate_configuration_values(self, source, **kwargs):
         """Validates that the configuration values, passed as either a file or a json string, are correct"""

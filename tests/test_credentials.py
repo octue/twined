@@ -86,16 +86,19 @@ class TestCredentialsValidation(BaseTestCase):
             "credentials": [
                 {
                     "name": "SECRET_THE_FIRST",
-                    "purpose": "Token for accessing a 3rd party API service"
+                    "purpose": "Token for accessing a 3rd party API service",
+                    "location": "local"
                 },
                 {
                     "name": "SECRET_THE_SECOND",
-                    "purpose": "Token for accessing a 3rd party API service"
+                    "purpose": "Token for accessing a 3rd party API service",
+                    "location": "local"
                 },
                 {
                     "name": "SECRET_THE_THIRD",
                     "purpose": "Usually a big secret but sometimes has a convenient non-secret default, like a sandbox or local database",
-                    "default": "postgres://pguser:pgpassword@localhost:5432/pgdb"
+                    "default": "postgres://pguser:pgpassword@localhost:5432/pgdb",
+                    "location": "local"
                 }
             ]
         }
@@ -130,6 +133,31 @@ class TestCredentialsValidation(BaseTestCase):
         ):
             twine.validate_credentials()
             self.assertEqual(os.environ["SECRET_THE_THIRD"], "nondefault")
+
+    def test_credentials_with_google_secrets(self):
+        """Test that both local and Google secrets are valid as credentials."""
+        valid_credentials_twine_with_google_secret = """
+            {
+                "credentials": [
+                    {
+                        "name": "LOCAL_SECRET",
+                        "location": "local"
+                    },
+                    {
+                        "name": "GOOGLE_SECRET",
+                        "location": "google",
+                        "project_name": "blah",
+                        "version": "latest"
+                    }
+                ]
+            }
+        """
+
+        twine = Twine(source=valid_credentials_twine_with_google_secret)
+        with mock.patch.dict(os.environ, {"LOCAL_SECRET": "a value", "GOOGLE_SECRET": "My precious!"}):
+            credentials = twine.validate_credentials()
+            self.assertTrue("LOCAL_SECRET" in credentials)
+            self.assertTrue("GOOGLE_SECRET" in credentials)
 
 
 if __name__ == "__main__":

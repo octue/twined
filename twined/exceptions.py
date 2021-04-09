@@ -155,6 +155,7 @@ invalid_json_map = {
     "configuration_manifest": InvalidManifestJson,
     "input_manifest": InvalidManifestJson,
     "output_manifest": InvalidManifestJson,
+    "credentials": InvalidValuesJson,
 }
 
 # TODO Specialised per-strand exceptions to help drill to the root of the issues
