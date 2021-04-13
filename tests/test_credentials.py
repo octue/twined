@@ -115,10 +115,10 @@ class TestCredentialsValidation(BaseTestCase):
         twine = Twine(source=self.VALID_CREDENTIALS_TWINE)
         with mock.patch.dict(
             os.environ,
-            {"SECRET_THE_FIRST": "a value", "SECRET_THE_SECOND": "another value", "SECRET_THE_THIRD": "nondefault"},
+            {"SECRET_THE_FIRST": "a value", "SECRET_THE_SECOND": "another value", "SECRET_THE_THIRD": "value"},
         ):
             twine.validate_credentials()
-            self.assertEqual(os.environ["SECRET_THE_THIRD"], "nondefault")
+            self.assertEqual(os.environ["SECRET_THE_THIRD"], "value")
 
 
 if __name__ == "__main__":

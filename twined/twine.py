@@ -210,16 +210,13 @@ class Twine:
     def validate_credentials(self, *args, dotenv_path=None, **kwargs):
         """Validate that all credentials required by the twine are present.
 
-        Credentials may either be set as environment variables, stored remotely in a secrets manager (e.g. Google Cloud
-        Secrets), or defined in a '.env' file. If stored remotely, they must be loaded into the environment before
-        validating the credentials strand.
+        Credentials must be set as environment variables, or defined in a '.env' file. If stored remotely in a secrets
+        manager (e.g. Google Cloud Secrets), they must be loaded into the environment before validating the credentials
+        strand.
 
         If not present in the environment, validate_credentials will check for variables in a .env file (if present)
-        and populate the environment with them. If not present in either the environment or the .env file, default
-        values are used (if defined) or an error is thrown.
-
-        Typically a .env file resides at the root of your application (the working directory) although a specific path
-        may be set using the `dotenv_path` argument.
+        and populate the environment with them. Typically a .env file resides at the root of your application (the
+        working directory) although a specific path may be set using the `dotenv_path` argument.
 
         .env files should never be committed to git or any other version control system.
 
@@ -240,26 +237,17 @@ class Twine:
         if not hasattr(self, "credentials"):
             return set()
 
-        credentials = self._load_json("credentials", self.credentials, **kwargs)
-
         # Load any variables from the .env file into the environment.
         dotenv_path = dotenv_path or os.path.join(".", ".env")
         load_dotenv(dotenv_path)
 
-        for credential in credentials:
-
+        for credential in self.credentials:
             if credential["name"] not in os.environ:
-                default = credential.get("default", None)
-
-                if default is not None:
-                    os.environ[credential["name"]] = default
-                    continue
-
                 raise exceptions.CredentialNotFound(
                     f"Credential {credential['name']!r} missing from environment or .env file."
                 )
 
-        return {credential["name"] for credential in credentials}
+        return self.credentials
 
     def validate_configuration_values(self, source, **kwargs):
         """Validates that the configuration values, passed as either a file or a json string, are correct"""
