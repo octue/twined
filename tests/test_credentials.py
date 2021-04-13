@@ -131,30 +131,6 @@ class TestCredentialsValidation(BaseTestCase):
             twine.validate_credentials()
             self.assertEqual(os.environ["SECRET_THE_THIRD"], "nondefault")
 
-    def test_credentials_with_google_secrets(self):
-        """Test that both local and Google secrets are valid as credentials."""
-        valid_credentials_twine_with_google_secret = """
-            {
-                "credentials": [
-                    {
-                        "name": "LOCAL_SECRET"
-                    },
-                    {
-                        "name": "GOOGLE_SECRET",
-                        "location": "google",
-                        "project_name": "blah",
-                        "version": "latest"
-                    }
-                ]
-            }
-        """
-
-        twine = Twine(source=valid_credentials_twine_with_google_secret)
-        with mock.patch.dict(os.environ, {"LOCAL_SECRET": "a value", "GOOGLE_SECRET": "My precious!"}):
-            credentials = twine.validate_credentials()
-            self.assertTrue("LOCAL_SECRET" in credentials)
-            self.assertTrue("GOOGLE_SECRET" in credentials)
-
 
 if __name__ == "__main__":
     unittest.main()
