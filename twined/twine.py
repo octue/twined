@@ -113,9 +113,6 @@ class Twine:
             # is distributed with this package to ensure version consistency...
             schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/manifest_schema.json"))
 
-        elif strand == "credentials":
-            schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/credentials.json"))
-
         else:
             if strand not in SCHEMA_STRANDS:
                 raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
@@ -244,7 +241,6 @@ class Twine:
             return set()
 
         credentials = self._load_json("credentials", self.credentials, **kwargs)
-        self._validate_against_schema("credentials", credentials)
 
         # Load any variables from the .env file into the environment.
         dotenv_path = dotenv_path or os.path.join(".", ".env")
