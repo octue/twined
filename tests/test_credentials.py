@@ -93,9 +93,7 @@ class TestCredentialsValidation(BaseTestCase):
                     "purpose": "Token for accessing a 3rd party API service"
                 },
                 {
-                    "name": "SECRET_THE_THIRD",
-                    "purpose": "Usually a big secret but sometimes has a convenient non-secret default, like a sandbox or local database",
-                    "default": "postgres://pguser:pgpassword@localhost:5432/pgdb"
+                    "name": "SECRET_THE_THIRD"
                 }
             ]
         }
@@ -112,27 +110,15 @@ class TestCredentialsValidation(BaseTestCase):
         with self.assertRaises(exceptions.CredentialNotFound):
             twine.validate_credentials()
 
-    def test_default_credentials(self):
-        """Test that a twine with credentials will validate where ones with defaults are missing from the environment"""
-        twine = Twine(source=self.VALID_CREDENTIALS_TWINE)
-        with mock.patch.dict(os.environ, {"SECRET_THE_FIRST": "a value", "SECRET_THE_SECOND": "another value"}):
-            credentials = twine.validate_credentials()
-
-        self.assertIn("SECRET_THE_FIRST", credentials.keys())
-        self.assertIn("SECRET_THE_SECOND", credentials.keys())
-        self.assertIn("SECRET_THE_THIRD", credentials.keys())
-        self.assertEqual(credentials["SECRET_THE_THIRD"], "postgres://pguser:pgpassword@localhost:5432/pgdb")
-
-    def test_nondefault_credentials(self):
-        """Test that the environment will override a default value for a credential"""
+    def test_credentials(self):
+        """ Test that the environment will override a default value for a credential."""
         twine = Twine(source=self.VALID_CREDENTIALS_TWINE)
         with mock.patch.dict(
             os.environ,
-            {"SECRET_THE_FIRST": "a value", "SECRET_THE_SECOND": "another value", "SECRET_THE_THIRD": "nondefault"},
+            {"SECRET_THE_FIRST": "a value", "SECRET_THE_SECOND": "another value", "SECRET_THE_THIRD": "value"},
         ):
-            credentials = twine.validate_credentials()
-
-        self.assertEqual(credentials["SECRET_THE_THIRD"], "nondefault")
+            twine.validate_credentials()
+            self.assertEqual(os.environ["SECRET_THE_THIRD"], "value")
 
 
 if __name__ == "__main__":
