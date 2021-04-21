@@ -40,7 +40,7 @@ ALL_STRANDS = (
 
 
 class Twine:
-    """ Twine class manages validation of inputs and outputs to/from a data service, based on spec in a 'twine' file.
+    """Twine class manages validation of inputs and outputs to/from a data service, based on spec in a 'twine' file.
 
     Instantiate a Twine by providing a file name or a utf-8 encoded string containing valid json.
     The twine is itself validated to be correct on instantiation of Twine().
@@ -51,16 +51,14 @@ class Twine:
     """
 
     def __init__(self, **kwargs):
-        """ Constructor for the twine class
-        """
+        """Constructor for the twine class"""
         for name, strand in self._load_twine(**kwargs).items():
             setattr(self, name, strand)
 
         self._available_strands = tuple(trim_suffix(name, "_schema") for name in vars(self))
 
     def _load_twine(self, source=None):
-        """ Load twine from a *.json filename, file-like or a json string and validates twine contents
-        """
+        """Load twine from a *.json filename, file-like or a json string and validates twine contents"""
 
         if source is None:
             # If loading an unspecified twine, return an empty one rather than raising error (like in _load_data())
@@ -74,13 +72,12 @@ class Twine:
         return raw
 
     def _load_json(self, kind, source, **kwargs):
-        """ Loads data from either a *.json file, an open file pointer or a json string. Directly returns any other data
-        """
+        """Loads data from either a *.json file, an open file pointer or a json string. Directly returns any other data"""
 
         if source is None:
-            raise exceptions.invalid_json_map[kind](f"Cannot load {kind} - no data source specified")
+            raise exceptions.invalid_json_map[kind](f"Cannot load {kind} - no data source specified.")
 
-        # Decode the json string and deserialize to objects
+        # Decode the json string and deserialize to objects.
         try:
             data = load_json(source, **kwargs)
         except FileNotFoundError as e:
@@ -92,7 +89,7 @@ class Twine:
         return data
 
     def _validate_against_schema(self, strand, data):
-        """ Validates data against a schema, raises exceptions of type Invalid<strand>Json if not compliant.
+        """Validates data against a schema, raises exceptions of type Invalid<strand>Json if not compliant.
 
         Can be used to validate:
             - the twine file contents itself against the present version twine spec
@@ -113,7 +110,7 @@ class Twine:
         elif strand in MANIFEST_STRANDS:
             # The data is a manifest of files. The "*_manifest" strands of the twine describe matching criteria used to
             # filter files appropriate for consumption by the digital twin, not the schema of the manifest data, which
-            # is distributed with thie package to ensure version consistency...
+            # is distributed with this package to ensure version consistency...
             schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/manifest_schema.json"))
 
         else:
@@ -133,8 +130,7 @@ class Twine:
             raise exceptions.invalid_contents_map[strand](str(e))
 
     def _validate_twine_version(self, twine_file_twined_version):
-        """ Validates that the installed version is consistent with an optional version specification in the twine file
-        """
+        """Validates that the installed version is consistent with an optional version specification in the twine file"""
         installed_twined_version = pkg_resources.get_distribution("twined").version
         logger.debug(
             "Twine versions... %s installed, %s specified in twine", installed_twined_version, twine_file_twined_version
@@ -145,8 +141,7 @@ class Twine:
             )
 
     def _validate_values(self, kind, source, cls=None, **kwargs):
-        """ Common values validator method
-        """
+        """Common values validator method"""
         data = self._load_json(kind, source, **kwargs)
         self._validate_against_schema(kind, data)
         if cls:
@@ -154,8 +149,7 @@ class Twine:
         return data
 
     def _validate_manifest(self, kind, source, cls=None, **kwargs):
-        """ Common manifest validator method
-        """
+        """Common manifest validator method"""
         data = self._load_json(kind, source, **kwargs)
 
         # TODO elegant way of cleaning up this nasty serialisation hack to manage conversion of outbound manifests to primitive
@@ -174,13 +168,11 @@ class Twine:
 
     @property
     def available_strands(self):
-        """ Tuple of strand names that are found in this twine
-        """
+        """Tuple of strand names that are found in this twine"""
         return self._available_strands
 
     def validate_children(self, source, **kwargs):
-        """ Validates that the children values, passed as either a file or a json string, are correct
-        """
+        """Validates that the children values, passed as either a file or a json string, are correct"""
         # TODO cache this loaded data keyed on a hashed version of kwargs
         children = self._load_json("children", source, **kwargs)
         self._validate_against_schema("children", children)
@@ -215,16 +207,16 @@ class Twine:
         # TODO Additional validation that the children match what is set as required in the Twine
         return children
 
-    def validate_credentials(self, dotenv_path=None):
-        """ Validates that all credentials required by the twine are present
+    def validate_credentials(self, *args, dotenv_path=None, **kwargs):
+        """Validate that all credentials required by the twine are present.
 
-        Credentials may either be set as environment variables or defined in a '.env' file. If not present in the
-        environment, validate_credentials will check for variables in a .env file (if present) and populate the
-        environment with them. If not present in either the environment or the .env file, default values are used
-        (if defined) or an error is thrown.
+        Credentials must be set as environment variables, or defined in a '.env' file. If stored remotely in a secrets
+        manager (e.g. Google Cloud Secrets), they must be loaded into the environment before validating the credentials
+        strand.
 
-        Typically a .env file resides at the root of your application (the working directory) although a specific path
-        may be set using the `dotenv_path` argument.
+        If not present in the environment, validate_credentials will check for variables in a .env file (if present)
+        and populate the environment with them. Typically a .env file resides at the root of your application (the
+        working directory) although a specific path may be set using the `dotenv_path` argument.
 
         .env files should never be committed to git or any other version control system.
 
@@ -242,60 +234,52 @@ class Twine:
         export MULTILINE_VAR="hello\nworld"
         ```
         """
+        if not hasattr(self, "credentials"):
+            return set()
 
-        # Load any variables from the .env file into the environment
+        # Load any variables from the .env file into the environment.
         dotenv_path = dotenv_path or os.path.join(".", ".env")
         load_dotenv(dotenv_path)
 
-        # Loop through the required credentials to check for presence of each
-        credentials = {}
-        for credential in getattr(self, "credentials", []):
-            name = credential["name"]
-            default = credential.get("default", None)
-            credentials[name] = os.environ.get(name, default)
-            if credentials[name] is None:
-                raise exceptions.CredentialNotFound(f"Credential '{name}' missing from environment or .env file")
+        for credential in self.credentials:
+            if credential["name"] not in os.environ:
+                raise exceptions.CredentialNotFound(
+                    f"Credential {credential['name']!r} missing from environment or .env file."
+                )
 
-        return credentials
+        return self.credentials
 
     def validate_configuration_values(self, source, **kwargs):
-        """ Validates that the configuration values, passed as either a file or a json string, are correct
-        """
+        """Validates that the configuration values, passed as either a file or a json string, are correct"""
         return self._validate_values("configuration_values", source, **kwargs)
 
     def validate_input_values(self, source, **kwargs):
-        """ Validates that the input values, passed as either a file or a json string, are correct
-        """
+        """Validates that the input values, passed as either a file or a json string, are correct"""
         return self._validate_values("input_values", source, **kwargs)
 
     def validate_output_values(self, source, **kwargs):
-        """ Validates that the output values, passed as either a file or a json string, are correct
-        """
+        """Validates that the output values, passed as either a file or a json string, are correct"""
         return self._validate_values("output_values", source, **kwargs)
 
     def validate_configuration_manifest(self, source, **kwargs):
-        """ Validates the input manifest, passed as either a file or a json string
-        """
+        """Validates the input manifest, passed as either a file or a json string"""
         return self._validate_manifest("configuration_manifest", source, **kwargs)
 
     def validate_input_manifest(self, source, **kwargs):
-        """ Validates the input manifest, passed as either a file or a json string
-        """
+        """Validates the input manifest, passed as either a file or a json string"""
         return self._validate_manifest("input_manifest", source, **kwargs)
 
     def validate_output_manifest(self, source, **kwargs):
-        """ Validates the output manifest, passed as either a file or a json string
-        """
+        """Validates the output manifest, passed as either a file or a json string"""
         return self._validate_manifest("output_manifest", source, **kwargs)
 
     @staticmethod
     def _get_cls(name, cls):
-        """ Getter that will return cls[name] if cls is a dict or cls otherwise
-        """
+        """Getter that will return cls[name] if cls is a dict or cls otherwise"""
         return cls.get(name, None) if isinstance(cls, dict) else cls
 
     def validate(self, allow_missing=False, allow_extra=False, cls=None, **kwargs):
-        """ Validate strands from sources provided as keyword arguments
+        """Validate strands from sources provided as keyword arguments
 
         Usage:
         ```
@@ -361,13 +345,11 @@ class Twine:
         return sources
 
     def validate_strand(self, name, source, **kwargs):
-        """ Validates a single strand by name
-        """
+        """Validates a single strand by name"""
         return self.validate({name: source}, **kwargs)[name]
 
     def prepare(self, *args, cls=None, **kwargs):
-        """ Prepares instance for strand data using a class map
-        """
+        """Prepares instance for strand data using a class map"""
         prepared = {}
         for arg in args:
             if arg not in ALL_STRANDS:

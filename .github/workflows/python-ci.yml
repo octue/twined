@@ -19,12 +19,13 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '#skip_ci_tests')"
+    if: "!contains(github.event.head_commit.message, 'skip_ci_tests')"
     env:
       USING_COVERAGE: '3.8'
     strategy:
       matrix:
-        python: [3.6, 3.7, 3.8]
+        python: [3.8]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -73,4 +74,3 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
           verbose: true
-
