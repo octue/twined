@@ -62,14 +62,14 @@ class TestManifestStrands(BaseTestCase):
                     {
                         "id": "34ad7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "my configuration dataset",
-                        "tags": "the, config, tags",
+                        "tags": ["the", "config", "tags"],
                         "files": [
                             {
                                 "path": "configuration/datasets/7ead7669/file_1.csv",
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": "",
+                                "tags": [],
                                 "posix_timestamp": 0,
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "last_modified": "2019-02-28T22:40:30.533005Z",
@@ -82,7 +82,7 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 1,
                                 "extension": "csv",
-                                "tags": "",
+                                "tags": [],
                                 "posix_timestamp": 0,
                                 "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
                                 "last_modified": "2019-02-28T22:40:40.633001Z",
@@ -103,14 +103,14 @@ class TestManifestStrands(BaseTestCase):
                     {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "my meteorological dataset",
-                        "tags": "met, mast, wind",
+                        "tags": ["met", "mast", "wind"],
                         "files": [
                             {
                                 "path": "input/datasets/7ead7669/file_1.csv",
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": "",
+                                "tags": [],
                                 "posix_timestamp": 0,
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "last_modified": "2019-02-28T22:40:30.533005Z",
@@ -123,7 +123,7 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 1,
                                 "extension": "csv",
-                                "tags": "",
+                                "tags": [],
                                 "posix_timestamp": 0,
                                 "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
                                 "last_modified": "2019-02-28T22:40:40.633001Z",
@@ -144,14 +144,14 @@ class TestManifestStrands(BaseTestCase):
                     {
                         "id": "1ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "my output dataset",
-                        "tags": "the, output, tags",
+                        "tags": ["the", "output", "tags"],
                         "files": [
                             {
                                 "path": "input/datasets/7ead7669/file_1.csv",
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": "",
+                                "tags": [],
                                 "posix_timestamp": 0,
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "last_modified": "2019-02-28T22:40:30.533005Z",
@@ -164,7 +164,7 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 1,
                                 "extension": "csv",
-                                "tags": "",
+                                "tags": [],
                                 "posix_timestamp": 0,
                                 "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
                                 "last_modified": "2019-02-28T22:40:40.633001Z",

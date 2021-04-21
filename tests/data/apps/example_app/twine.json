@@ -60,7 +60,7 @@
 		{
 			"key": "production_data",
 			"purpose": "A dataset containing production data",
-			"tags": "production, wind"
+			"tags": ["production", "wind"]
 		}
 	],
 	"output_values_schema": {

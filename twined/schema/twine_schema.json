@@ -96,8 +96,12 @@
           },
           "tags": {
             "description": "Comma separated tags that will be applied to the dataset when created",
-            "type": "string",
-            "default": ""
+            "type": "array",
+            "items": [
+              {
+                "type": "string"
+              }
+            ]
           }
         },
         "required": ["key"]

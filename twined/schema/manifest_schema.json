@@ -34,7 +34,12 @@
           },
           "tags": {
             "description": "Textual tags associated with the dataset",
-            "type": "string"
+            "type": "array",
+            "items": [
+              {
+                "type": "string"
+              }
+            ]
           },
           "files": {
             "description": "Textual tags associated with the manifest",
@@ -67,7 +72,13 @@
                   "type": "number"
                 },
                 "tags": {
-                  "description": "Textual tags associated with the file"
+                  "description": "Textual tags associated with the file",
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ]
                 }
               },
               "required": [
