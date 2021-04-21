@@ -1,4 +1,4 @@
-name: Publish on merge of release/x.y.z into main
+name: Release the package on merge of release/x.y.z into main
 
 # Only trigger when a pull request into main branch is closed.
 on:
