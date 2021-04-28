@@ -16,7 +16,7 @@ with open("LICENSE") as f:
 
 setup(
     name="twined",
-    version="0.0.18",
+    version="0.0.19",
     py_modules=[],
     install_requires=["jsonschema ~= 3.2.0", "python-dotenv"],
     url="https://www.github.com/octue/twined",
@@ -35,6 +35,6 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.6",
     keywords=["digital", "twins", "data", "services", "python", "schema"],
 )
