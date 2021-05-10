@@ -38,13 +38,6 @@ ALL_STRANDS = (
     *MONITOR_STRANDS,
 )
 
-TAG_TYPE_MAP = {
-    "string": str,
-    "float": float,
-    "int": int,
-    "boolean": bool,
-}
-
 
 class Twine:
     """Twine class manages validation of inputs and outputs to/from a data service, based on spec in a 'twine' file.
@@ -185,6 +178,13 @@ class Twine:
         converted_tags = {}
         dataset_schemas = getattr(self, kind)
 
+        TAG_TYPE_MAP = {
+            "string": str,
+            "float": float,
+            "int": int,
+            "boolean": self._convert_string_to_boolean,
+        }
+
         for dataset, dataset_schema in zip(data["datasets"], dataset_schemas):
             required_tags = {
                 required_tag["name"]: required_tag for required_tag in dataset_schema.get("required_tags", {})
@@ -229,8 +229,11 @@ class Twine:
 
                     try:
                         converted_tags[file["id"]][outer_tag] = required_type(inner_tag)
-                    except TypeError:
-                        raise TypeError(f"Tag {tag!r} should be of type {required_type!r} but wasn't.")
+                    except (TypeError, ValueError):
+                        if required_tag_info["kind"] == "bool":
+                            required_type = bool
+
+                        raise TypeError(f"Tag {tag!r} for datafile {file['id']!r} should be of type {required_type!r}.")
 
                     tags_to_remove.append(tag)
 
@@ -238,6 +241,21 @@ class Twine:
                     file["tags"].remove(tag)
 
         return converted_tags
+
+    @staticmethod
+    def _convert_string_to_boolean(value):
+        """Convert "true" to `True` and "false" to `False`.
+
+        :raise TypeError: if the value given isn't "true" or "false"
+        :return bool:
+        """
+        if value.lower() == "true":
+            return True
+
+        if value.lower() == "false":
+            return False
+
+        raise TypeError(f"Could not convert {value!r} to a boolean.")
 
     @property
     def available_strands(self):
