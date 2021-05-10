@@ -45,6 +45,10 @@ class TestManifestStrands(BaseTestCase):
                         {
                             "name": "manufacturer",
                             "kind": "string"
+                        },
+                        {
+                            "name": "height",
+                            "kind": "float"
                         }
                     ]
                 }
@@ -303,7 +307,7 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": ["manufacturer:Vestas:UK"],
+                                "tags": ["manufacturer:Vestas:UK", "height:500"],
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "name": "file_1.csv"
                             }
@@ -333,7 +337,7 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": ["manufacturer:Vestas"],
+                                "tags": ["manufacturer:Vestas", "height:500"],
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "name": "file_1.csv"
                             }
@@ -345,6 +349,58 @@ class TestManifestStrands(BaseTestCase):
 
         twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS)
         twine.validate_input_manifest(source=input_manifest)
+
+    def test_validate_input_manifest_with_required_tags_with_cls_sets_tags_as_attributes(self):
+        """Test that using `Twine.validate_input_manifest` with the `cls` argument on a manifest with required tags
+        sets the tags on the datafiles as attributes.
+        """
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                        "name": "my meteorological dataset",
+                        "tags": ["met", "mast", "wind"],
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": ["manufacturer:Vestas", "height:500"],
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_1.csv"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        class Datafile:
+            def __init__(self, **kwargs):
+                for key, value in kwargs.items():
+                    setattr(self, key, value)
+
+        class Dataset:
+            def __init__(self, files, **kwargs):
+                self.files = [Datafile(**file) for file in files]
+
+                for key, value in kwargs.items():
+                    setattr(self, key, value)
+
+        class Manifest:
+            def __init__(self, datasets, **kwargs):
+                self.datasets = [Dataset(**dataset) for dataset in datasets]
+
+                for key, value in kwargs.items():
+                    setattr(self, key, value)
+
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS)
+        manifest = twine.validate_input_manifest(source=input_manifest, cls=Manifest)
+        self.assertEqual(manifest.datasets[0].files[0].manufacturer, "Vestas")
+        self.assertEqual(manifest.datasets[0].files[0].height, 500)
 
 
 if __name__ == "__main__":
