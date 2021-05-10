@@ -182,21 +182,22 @@ class Twine:
         return data
 
     def _validate_required_dataset_tags(self, kind, data):
+        tags_to_remove = []
         converted_tags = {}
         dataset_schemas = getattr(self, kind)
 
         for dataset, dataset_schema in zip(data["datasets"], dataset_schemas):
-            required_tags = dataset_schema.get("required_tags")
+            required_tags = {
+                required_tag["name"]: required_tag for required_tag in dataset_schema.get("required_tags", {})
+            }
 
             if not required_tags:
                 return
 
-            required_tag_names = {tag["name"] for tag in required_tags}
-
             for file in dataset["files"]:
                 converted_tags[file["id"]] = {}
                 datafile_outer_tags = {tag.split(":")[0] for tag in file["tags"]}
-                missing_tags = required_tag_names - datafile_outer_tags
+                missing_tags = required_tags.keys() - datafile_outer_tags
 
                 if missing_tags:
                     raise exceptions.InvalidValuesContents(
@@ -204,27 +205,33 @@ class Twine:
                         f"please provide values for them."
                     )
 
-                for required_tag in required_tags:
-                    for tag in file["tags"]:
-                        if not tag.startswith(required_tag["name"]):
-                            continue
+                for tag in file["tags"]:
+                    subtags = tag.split(":")
 
-                        subtags = tag.split(":")
+                    if len(subtags) > 2:
+                        raise ValueError(f"Tags cannot contain more than one colon; received {tag!r}.")
 
-                        if len(subtags) > 2:
-                            raise ValueError(f"Tags cannot contain more than one colon; received {tag!r}.")
+                    outer_tag, inner_tag = subtags
+                    required_tag_info = required_tags.get(outer_tag)
 
-                        subtag = subtags[1]
-                        required_type = TAG_TYPE_MAP[required_tag["kind"]]
+                    if not required_tag_info:
+                        continue
 
-                        if not self._is_type(value=subtag, type=required_type):
-                            raise TypeError(f"Tag {tag!r} should be of type {required_type!r} but wasn't.")
+                    required_type = TAG_TYPE_MAP[required_tag_info["kind"]]
 
-                        converted_tags[file["id"]][required_tag["name"]] = required_type(subtag)
+                    if not self._is_type(value=inner_tag, type=required_type):
+                        raise TypeError(f"Tag {tag!r} should be of type {required_type!r} but wasn't.")
+
+                    converted_tags[file["id"]][outer_tag] = required_type(inner_tag)
+                    tags_to_remove.append(tag)
+
+                for tag in tags_to_remove:
+                    file["tags"].remove(tag)
 
         return converted_tags
 
-    def _is_type(self, value, type):
+    @staticmethod
+    def _is_type(value, type):
         try:
             type(value)
         except:  # noqa
