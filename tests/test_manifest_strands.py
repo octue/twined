@@ -340,6 +340,15 @@ class TestManifestStrands(BaseTestCase):
                                 "tags": ["manufacturer:Vestas", "height:500"],
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "name": "file_1.csv"
+                            },
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 1,
+                                "extension": "csv",
+                                "tags": ["manufacturer:Zestas", "height:350"],
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_1.csv"
                             }
                         ]
                     }

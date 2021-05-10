@@ -182,7 +182,6 @@ class Twine:
         return data
 
     def _validate_required_dataset_tags(self, kind, data):
-        tags_to_remove = []
         converted_tags = {}
         dataset_schemas = getattr(self, kind)
 
@@ -204,6 +203,11 @@ class Twine:
                         f"{list(missing_tags)!r} are required tags for datafile {file['id']!r} but are missing - "
                         f"please provide values for them."
                     )
+
+                # Remove tags from datafile.tags if they are required and valid - they will later be added as attributes
+                # to the corresponding Datafile instance. Non-key-value tags and non-required key-value tags are left in
+                # datafile.tags
+                tags_to_remove = []
 
                 for tag in file["tags"]:
                     subtags = tag.split(":")
