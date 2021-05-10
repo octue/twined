@@ -66,6 +66,26 @@
             "description": "What data this dataset contains, eg 'the set of data files from the energy production calculation process'",
             "type": "string",
             "default": ""
+          },
+          "required_tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name":{
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": ["float", "int", "string", "bool"]
+                },
+                "purpose": {
+                  "type": "string"
+                }
+              },
+              "required": ["name", "kind"]
+            },
+            "minItems": 1
           }
         },
         "required": ["key"]
