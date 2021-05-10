@@ -66,11 +66,6 @@
             "description": "What data this dataset contains, eg 'the set of data files from the energy production calculation process'",
             "type": "string",
             "default": ""
-          },
-          "filters": {
-            "description": "A search term, using the Lucene Query Language, which can be used to automatically refine the list of available datasets down to ones suitable for use with this twin",
-            "type": "string",
-            "default": ""
           }
         },
         "required": ["key"]

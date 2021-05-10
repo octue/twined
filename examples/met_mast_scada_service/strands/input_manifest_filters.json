@@ -5,16 +5,11 @@
       // Once the inputs are validated, your analysis program can use this key to access the dataset
       "key": "met_mast_data",
       // General notes, which are helpful as a reminder to users of the service
-      "purpose": "A dataset containing meteorological mast data",
-      // Searches datasets which are tagged "met*" (allowing for "met" and "meterological"), whose
-      // files are CSVs in a numbered sequence, and which occur at a particular location
-      "filters": "tags:(met* AND mast) AND files:(extension:csv AND sequence:>=0) AND location:10"
+      "purpose": "A dataset containing meteorological mast data"
     },
     {
       "key": "scada_data",
-      "purpose": "A dataset containing scada data",
-      // The organisation: filter refines search to datasets owned by a particular organisation handle
-      "filters": "organisation: megacorp AND tags:(scada AND mast) AND files:(extension:csv AND sequence:>=0)"
+      "purpose": "A dataset containing scada data"
     }
-  ],
+  ]
 }

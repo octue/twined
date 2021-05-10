@@ -128,8 +128,7 @@ copied straight from the unit test cases, so you can always check there to see h
          	"input_manifest": [
          		{
          			"key": "wind_resource_data",
-         			"purpose": "A dataset containing Wind Resource Grid files",
-         			"filters": "tags:(wind AND resource) files:(extension:wrg)"
+         			"purpose": "A dataset containing Wind Resource Grid files"
          		}
          	],
          	"input_values_schema": {

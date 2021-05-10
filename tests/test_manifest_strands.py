@@ -13,27 +13,23 @@ class TestManifestStrands(BaseTestCase):
             "configuration_manifest": [
                 {
                     "key": "configuration_files_data",
-                    "purpose": "A dataset containing files used in configuration",
-                    "filters": "tags:(the AND config AND tags) files:(extension:csv AND sequence:>=0)"
+                    "purpose": "A dataset containing files used in configuration"
                 }
             ],
             "input_manifest": [
                 {
                     "key": "met_mast_data",
-                    "purpose": "A dataset containing meteorological mast data",
-                    "filters": "tags:(met* AND mast AND location) files:(extension:csv AND sequence:>=0) location:10"
+                    "purpose": "A dataset containing meteorological mast data"
                 },
                 {
                     "key": "scada_data",
-                    "purpose": "A dataset containing scada data",
-                    "filters": "tags:(met* AND mast) files:(extension:csv AND sequence:>=0) location:10"
+                    "purpose": "A dataset containing scada data"
                 }
             ],
             "output_manifest": [
                 {
                     "key": "output_files_data",
-                    "purpose": "A dataset containing output results",
-                    "filters": "tags:(the AND output AND tags) files:(extension:csv AND sequence:>=0)"
+                    "purpose": "A dataset containing output results"
                 }
             ]
         }

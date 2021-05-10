@@ -2,8 +2,7 @@
 	"children": [
 		{
 			"key": "turbines",
-			"purpose": "wind turbines in a farm",
-			"filters": "tags:(met* AND mast AND location) files:(extension:csv AND sequence:>=0) location:10"
+			"purpose": "wind turbines in a farm"
 		}
 	],
 	"configuration_schema": {
@@ -34,13 +33,11 @@
 	"input_manifest": [
 		{
 			"key": "met_mast_data",
-			"purpose": "A dataset containing meteorological mast data",
-			"filters": "tags:(met* AND mast AND location) files:(extension:csv AND sequence:>=0) location:10"
+			"purpose": "A dataset containing meteorological mast data"
 		},
 		{
 			"key": "scada_data",
-			"purpose": "A dataset containing scada data",
-			"filters": "tags:(met* AND mast) files:(extension:csv AND sequence:>=0) location:10"
+			"purpose": "A dataset containing scada data"
 		}
 	],
 	"input_values_schema": {
