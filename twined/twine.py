@@ -38,6 +38,13 @@ ALL_STRANDS = (
     *MONITOR_STRANDS,
 )
 
+TAG_TYPE_MAP = {
+    "string": str,
+    "float": float,
+    "int": int,
+    "boolean": bool,
+}
+
 
 class Twine:
     """Twine class manages validation of inputs and outputs to/from a data service, based on spec in a 'twine' file.
@@ -159,33 +166,43 @@ class Twine:
             data = data.serialise()
 
         self._validate_against_schema(kind, data)
+        converted_tags = self._validate_required_dataset_tags(kind, data)
 
+        if cls and inbound:
+            # TODO verify that all the required keys etc are there
+            manifest = cls(**data)
+
+            for dataset in manifest.datasets:
+                for file in dataset.files:
+                    for tag_name, tag_value in converted_tags[file.id].items():
+                        setattr(file, tag_name, tag_value)
+
+            return manifest
+
+        return data
+
+    def _validate_required_dataset_tags(self, kind, data):
+        converted_tags = {}
         dataset_schemas = getattr(self, kind)
 
         for dataset, dataset_schema in zip(data["datasets"], dataset_schemas):
             required_tags = dataset_schema.get("required_tags")
 
             if not required_tags:
-                break
+                return
 
-            required_tag_names = set(tag["name"] for tag in required_tags)
+            required_tag_names = {tag["name"] for tag in required_tags}
 
             for file in dataset["files"]:
-                datafile_super_tags = {tag.split(":")[0] for tag in file["tags"]}
-                missing_tags = required_tag_names - datafile_super_tags
+                converted_tags[file["id"]] = {}
+                datafile_outer_tags = {tag.split(":")[0] for tag in file["tags"]}
+                missing_tags = required_tag_names - datafile_outer_tags
 
                 if missing_tags:
                     raise exceptions.InvalidValuesContents(
                         f"{list(missing_tags)!r} are required tags for datafile {file['id']!r} but are missing - "
                         f"please provide values for them."
                     )
-
-                type_map = {
-                    "string": str,
-                    "float": float,
-                    "int": int,
-                    "boolean": bool,
-                }
 
                 for required_tag in required_tags:
                     for tag in file["tags"]:
@@ -195,20 +212,17 @@ class Twine:
                         subtags = tag.split(":")
 
                         if len(subtags) > 2:
-                            raise ValueError(f"Tags cannot contain more than one colon; received {tag!r}")
+                            raise ValueError(f"Tags cannot contain more than one colon; received {tag!r}.")
 
                         subtag = subtags[1]
+                        required_type = TAG_TYPE_MAP[required_tag["kind"]]
 
-                        if not self._is_type(subtag, type_map[required_tag["kind"]]):
-                            raise TypeError(
-                                f"Tag {tag!r} should be of type {type_map[required_tag['kind']]!r} but wasn't."
-                            )
+                        if not self._is_type(value=subtag, type=required_type):
+                            raise TypeError(f"Tag {tag!r} should be of type {required_type!r} but wasn't.")
 
-        if cls and inbound:
-            # TODO verify that all the required keys etc are there
-            return cls(**data)
+                        converted_tags[file["id"]][required_tag["name"]] = required_type(subtag)
 
-        return data
+        return converted_tags
 
     def _is_type(self, value, type):
         try:
