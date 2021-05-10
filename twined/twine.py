@@ -160,11 +160,63 @@ class Twine:
 
         self._validate_against_schema(kind, data)
 
+        dataset_schemas = getattr(self, kind)
+
+        for dataset, dataset_schema in zip(data["datasets"], dataset_schemas):
+            required_tags = dataset_schema.get("required_tags")
+
+            if not required_tags:
+                break
+
+            required_tag_names = set(tag["name"] for tag in required_tags)
+
+            for file in dataset["files"]:
+                datafile_super_tags = {tag.split(":")[0] for tag in file["tags"]}
+                missing_tags = required_tag_names - datafile_super_tags
+
+                if missing_tags:
+                    raise exceptions.InvalidValuesContents(
+                        f"{list(missing_tags)!r} are required tags for datafile {file['id']!r} but are missing - "
+                        f"please provide values for them."
+                    )
+
+                type_map = {
+                    "string": str,
+                    "float": float,
+                    "int": int,
+                    "boolean": bool,
+                }
+
+                for required_tag in required_tags:
+                    for tag in file["tags"]:
+                        if not tag.startswith(required_tag["name"]):
+                            continue
+
+                        subtags = tag.split(":")
+
+                        if len(subtags) > 2:
+                            raise ValueError(f"Tags cannot contain more than one colon; received {tag!r}")
+
+                        subtag = subtags[1]
+
+                        if not self._is_type(subtag, type_map[required_tag["kind"]]):
+                            raise TypeError(
+                                f"Tag {tag!r} should be of type {type_map[required_tag['kind']]!r} but wasn't."
+                            )
+
         if cls and inbound:
             # TODO verify that all the required keys etc are there
             return cls(**data)
 
         return data
+
+    def _is_type(self, value, type):
+        try:
+            type(value)
+        except:  # noqa
+            return False
+
+        return True
 
     @property
     def available_strands(self):
