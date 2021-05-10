@@ -35,6 +35,23 @@ class TestManifestStrands(BaseTestCase):
         }
     """
 
+    TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS = """
+        {
+            "input_manifest": [
+                {
+                    "key": "met_mast_data",
+                    "purpose": "A dataset containing meteorological mast data",
+                    "required_tags": [
+                        {
+                            "name": "manufacturer",
+                            "kind": "string"
+                        }
+                    ]
+                }
+            ]
+        }
+    """
+
     def test_missing_manifest_files(self):
         """Ensures that if you try to read values from missing files, the right exceptions get raised"""
         twine = Twine(source=self.VALID_MANIFEST_STRAND)
@@ -240,6 +257,65 @@ class TestManifestStrands(BaseTestCase):
     #     twine = Twine(file=twine_file)
     #     values_file = os.path.join(self.path, "configurations", "valid_with_extra.json")
     #     twine.validate_configuration(file=values_file)
+
+    def test_error_raised_when_required_tags_missing(self):
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                        "name": "my meteorological dataset",
+                        "tags": ["met", "mast", "wind"],
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": [],
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_1.csv"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS)
+
+        with self.assertRaises(exceptions.InvalidValuesContents):
+            twine.validate_input_manifest(source=input_manifest)
+
+    def test_with_required_tags(self):
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                        "name": "my meteorological dataset",
+                        "tags": ["met", "mast", "wind"],
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": ["manufacturer:Vestas"],
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_1.csv"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS)
+
+        twine.validate_input_manifest(source=input_manifest)
 
 
 if __name__ == "__main__":
