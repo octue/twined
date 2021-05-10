@@ -175,7 +175,7 @@ class TestManifestStrands(BaseTestCase):
         """
 
         twine = Twine(source=self.VALID_MANIFEST_STRAND)
-        twine.validate_input_manifest(source=valid_configuration_manifest)
+        twine.validate_configuration_manifest(source=valid_configuration_manifest)
         twine.validate_input_manifest(source=valid_input_manifest)
         twine.validate_output_manifest(source=valid_output_manifest)
 
