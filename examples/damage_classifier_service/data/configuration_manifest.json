@@ -5,14 +5,14 @@
       "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
       "name": "training data for system abc123",
       "organisation": "megacorp",
-      "tags": "classifier, damage, system:abc123",
+      "tags": ["classifier", "damage", "system:abc123"],
       "files": [
         {
           "path": "datasets/7ead7669/blade_damage.mdl",
           "cluster": 0,
           "sequence": 0,
           "extension": "csv",
-          "tags": "",
+          "tags": [],
           "posix_timestamp": 0,
           "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
           "last_modified": "2019-02-28T22:40:30.533005Z",
