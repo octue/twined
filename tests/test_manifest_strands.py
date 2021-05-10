@@ -377,7 +377,7 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": ["manufacturer:Vestas", "height:500"],
+                                "tags": ["manufacturer:Vestas", "height:500", "an-extra-tag", "another-extra-tag:true"],
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "name": "file_1.csv"
                             }
@@ -408,8 +408,14 @@ class TestManifestStrands(BaseTestCase):
 
         twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS)
         manifest = twine.validate_input_manifest(source=input_manifest, cls=Manifest)
+
+        # Check that required tags are set as attributes on files.
         self.assertEqual(manifest.datasets[0].files[0].manufacturer, "Vestas")
         self.assertEqual(manifest.datasets[0].files[0].height, 500)
+
+        # Check that non-required tags are left in the tags attribute.
+        self.assertTrue("an-extra-tag" in manifest.datasets[0].files[0].tags)
+        self.assertTrue("another-extra-tag:true" in manifest.datasets[0].files[0].tags)
 
 
 if __name__ == "__main__":

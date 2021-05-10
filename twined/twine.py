@@ -191,7 +191,7 @@ class Twine:
             }
 
             if not required_tags:
-                return
+                return None
 
             for file in dataset["files"]:
                 converted_tags[file["id"]] = {}
@@ -209,8 +209,12 @@ class Twine:
                 # datafile.tags
                 tags_to_remove = []
 
+                # Validate tags and cast them to their required types.
                 for tag in file["tags"]:
                     subtags = tag.split(":")
+
+                    if len(subtags) == 1:
+                        continue
 
                     if len(subtags) > 2:
                         raise ValueError(f"Tags cannot contain more than one colon; received {tag!r}.")
@@ -223,25 +227,17 @@ class Twine:
 
                     required_type = TAG_TYPE_MAP[required_tag_info["kind"]]
 
-                    if not self._is_type(value=inner_tag, type=required_type):
+                    try:
+                        converted_tags[file["id"]][outer_tag] = required_type(inner_tag)
+                    except TypeError:
                         raise TypeError(f"Tag {tag!r} should be of type {required_type!r} but wasn't.")
 
-                    converted_tags[file["id"]][outer_tag] = required_type(inner_tag)
                     tags_to_remove.append(tag)
 
                 for tag in tags_to_remove:
                     file["tags"].remove(tag)
 
         return converted_tags
-
-    @staticmethod
-    def _is_type(value, type):
-        try:
-            type(value)
-        except:  # noqa
-            return False
-
-        return True
 
     @property
     def available_strands(self):
