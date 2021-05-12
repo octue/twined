@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from jsonschema import ValidationError, validate as jsonschema_validate
 
 from twined import exceptions
-from twined.utils import ConvertStringRepresentedBooleanToBooleanType, load_json, trim_suffix
+from twined.utils import convert_string_represented_boolean_to_boolean_type, load_json, trim_suffix
 
 
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ TAG_TYPE_MAP = {
     "string": str,
     "float": float,
     "integer": int,
-    "boolean": ConvertStringRepresentedBooleanToBooleanType(),
+    "boolean": convert_string_represented_boolean_to_boolean_type,
 }
 
 
@@ -257,7 +257,7 @@ class Twine:
                     except (TypeError, ValueError):
                         raise TypeError(
                             f"The value {inner_tag!r} from tag {tag!r} for datafile {file['id']!r} should be of type "
-                            f"{required_type.__name__!r}."
+                            f"{required_tag_info['kind']!r}."
                         )
 
         return converted_tags
