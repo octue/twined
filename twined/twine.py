@@ -166,15 +166,28 @@ class Twine:
             data = data.serialise()
 
         self._validate_against_schema(kind, data)
-        converted_tags = self._validate_required_dataset_tags(kind, data)
+        required_tags = self._validate_required_dataset_tags(kind, data)
 
         if cls and inbound:
             # TODO verify that all the required keys etc are there
+
+            # Remove tags from file["tags"] if they are required and valid to avoid them appearing as attributes of the
+            # Datafile instance as well as keyword tags. Non-key-value tags and non-required key-value tags are left in
+            # file["tags"].
+            for dataset in data["datasets"]:
+                for file in dataset["files"]:
+                    for name, value in required_tags.get(file["id"], {}).items():
+                        if isinstance(value, bool):
+                            value = str(value).lower()
+
+                        file["tags"].remove(f"{name}:{value}")
+
             manifest = cls(**data)
 
+            # Add required tags to datafiles in manifest as attributes.
             for dataset in manifest.datasets:
                 for file in dataset.files:
-                    for tag_name, tag_value in converted_tags[file.id].items():
+                    for tag_name, tag_value in required_tags[file.id].items():
                         setattr(file, tag_name, tag_value)
 
             return manifest
@@ -215,11 +228,6 @@ class Twine:
                         f"please provide values for them."
                     )
 
-                # Remove tags from datafile.tags if they are required and valid - they will later be added as attributes
-                # to the corresponding Datafile instance. Non-key-value tags and non-required key-value tags are left in
-                # datafile.tags
-                tags_to_remove = []
-
                 # Validate tags and cast them to their required types.
                 for tag in file["tags"]:
                     present_subtags = tag.split(":")
@@ -251,11 +259,6 @@ class Twine:
                             f"The value {inner_tag!r} from tag {tag!r} for datafile {file['id']!r} should be of type "
                             f"{required_type.__name__!r}."
                         )
-
-                    tags_to_remove.append(tag)
-
-                for tag in tags_to_remove:
-                    file["tags"].remove(tag)
 
         return converted_tags
 

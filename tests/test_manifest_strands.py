@@ -1,3 +1,4 @@
+import json
 import os
 import unittest
 
@@ -401,7 +402,14 @@ class TestManifestStrands(BaseTestCase):
         """
 
         twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS)
-        twine.validate_input_manifest(source=input_manifest)
+        data = twine.validate_input_manifest(source=input_manifest)
+
+        # Ensure that all tags are left in the tags key of the file when the `cls` parameter is not provided to
+        # Twine.validate_input_manifest
+        for i in range(2):
+            self.assertEqual(
+                data["datasets"][0]["files"][i]["tags"], json.loads(input_manifest)["datasets"][0]["files"][i]["tags"]
+            )
 
     def test_validate_input_manifest_with_required_tags_with_cls_sets_tags_as_attributes(self):
         """Test that using `Twine.validate_input_manifest` with the `cls` argument on a manifest with required tags
