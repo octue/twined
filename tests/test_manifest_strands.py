@@ -293,6 +293,9 @@ class TestManifestStrands(BaseTestCase):
     #     twine.validate_configuration(file=values_file)
 
     def test_error_raised_when_required_tags_missing_for_validate_input_manifest(self):
+        """Test that an error is raised when required tags for a dataset are missing when validating the input
+        manifest.
+        """
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
@@ -323,6 +326,9 @@ class TestManifestStrands(BaseTestCase):
             twine.validate_input_manifest(source=input_manifest)
 
     def test_error_raised_if_non_string_required_tags_have_more_than_one_colon(self):
+        """Test that an error is raised if non-string required tags for a dataset have more than one colon in them when
+        validating the input manifest.
+        """
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
@@ -337,7 +343,12 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": ["manufacturer:Vestas:UK", "height:500:9", "is_recycled:true", "number_of_blades:3"],
+                                "tags": [
+                                    "manufacturer:Vestas:UK",
+                                    "height:500:9",
+                                    "is_recycled:true",
+                                    "number_of_blades:3"
+                                ],
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "name": "file_1.csv"
                             }
@@ -353,6 +364,9 @@ class TestManifestStrands(BaseTestCase):
             twine.validate_input_manifest(source=input_manifest)
 
     def test_validate_input_manifest_with_required_tags(self):
+        """Test that validating an input manifest with required tags for a dataset works for tags meeting the
+        requirements.
+        """
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
@@ -439,6 +453,9 @@ class TestManifestStrands(BaseTestCase):
         self.assertTrue("another-extra-tag:true" in manifest.datasets[0].files[0].tags)
 
     def test_validate_input_manifest_raises_error_if_required_tags_are_not_of_required_type(self):
+        """Test that an error is raised if the required tags for a dataset are present but cannot be converted to the
+        required type when validating an input manifest.
+        """
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
@@ -474,6 +491,7 @@ class TestManifestStrands(BaseTestCase):
                 twine.validate_input_manifest(source=input_manifest % tags, cls=MockManifest)
 
     def test_validate_input_manifest_with_required_tags_in_several_datasets(self):
+        """Test that required tags are validated separately and correctly for each dataset."""
         TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS_FOR_MULTIPLE_DATASETS = """
             {
                 "input_manifest": [
