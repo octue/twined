@@ -1,3 +1,4 @@
+import copy
 import io
 import json
 import logging
@@ -38,7 +39,7 @@ def load_json(source, *args, **kwargs):
     elif not isinstance(source, str):
         logger.debug("Source is not a string, bypassing (returning raw data)")
         check("object")
-        return source
+        return copy.copy(source)
 
     elif source.endswith(".json"):
         logger.debug("Detected source is name of a *.json file, loading from %s", source)
