@@ -1,4 +1,55 @@
 {
+  "$defs": {
+    "manifest": {
+      "type": "array",
+      "description": "A list of entries, each describing a dataset that should be attached to / made available to the digital twin",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "description": "A textual key identifying this dataset within the application/twin",
+            "type": "string"
+          },
+          "purpose": {
+            "description": "What data this dataset contains, eg 'the set of data files from the energy production calculation process'",
+            "type": "string",
+            "default": ""
+          },
+          "required_tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "float",
+                    "integer",
+                    "string",
+                    "boolean"
+                  ]
+                },
+                "purpose": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "kind"
+              ]
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "key"
+        ]
+      }
+    }
+  },
   "type": "object",
   "$schema": "http://json-schema.org/2019-09/schema#",
   "properties": {
@@ -27,6 +78,7 @@
         ]
       }
     },
+    "configuration_manifest": {"$ref":  "#/$defs/manifest"},
     "configuration_schema": {
       "type": "object",
       "required": ["properties"]
@@ -52,45 +104,7 @@
         "additionalProperties": false
       }
     },
-    "input_manifest": {
-      "type": "array",
-      "description": "A list of entries, each describing a dataset that should be attached to / made available to the digital twin",
-      "items": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "description": "A textual key identifying this dataset within the application/twin",
-            "type": "string"
-          },
-          "purpose": {
-            "description": "What data this dataset contains, eg 'the set of data files from the energy production calculation process'",
-            "type": "string",
-            "default": ""
-          },
-          "required_tags": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name":{
-                  "type": "string"
-                },
-                "kind": {
-                  "type": "string",
-                  "enum": ["float", "integer", "string", "boolean"]
-                },
-                "purpose": {
-                  "type": "string"
-                }
-              },
-              "required": ["name", "kind"]
-            },
-            "minItems": 1
-          }
-        },
-        "required": ["key"]
-      }
-    },
+    "input_manifest": {"$ref":  "#/$defs/manifest"},
     "input_values_schema": {
       "type": "object"
     },
