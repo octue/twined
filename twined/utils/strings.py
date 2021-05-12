@@ -5,16 +5,23 @@ def trim_suffix(text, suffix):
     return text[: len(text) - len(suffix)]
 
 
-def convert_string_represented_boolean_to_boolean_type(value):
-    """Convert "true" to `True` and "false" to `False`.
-
-    :raise TypeError: if the value given isn't "true" or "false"
-    :return bool:
+class ConvertStringRepresentedBooleanToBooleanType:
+    """An extension of `bool` that, when called, converts string-represented booleans to the `bool` type rather than
+    converting all non-empty strings to `True`.
     """
-    if value.lower() == "true":
-        return True
 
-    if value.lower() == "false":
-        return False
+    def __repr__(self):
+        return repr(bool)
 
-    raise TypeError(f"Could not convert {value!r} to a boolean.")
+    def __call__(self, value):
+        """Convert "true" to `True`, "false" to `False`, and anything else to `bool(value)`
+
+        :return bool:
+        """
+        if value.lower() == "true":
+            return True
+
+        if value.lower() == "false":
+            return False
+
+        return bool(value)
