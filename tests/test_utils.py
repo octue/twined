@@ -5,7 +5,7 @@ from unittest import mock
 import numpy as np
 
 from twined import exceptions
-from twined.utils import TwinedEncoder, load_json
+from twined.utils import TwinedEncoder, convert_string_represented_boolean_to_boolean_type, load_json
 from .base import VALID_SCHEMA_TWINE, BaseTestCase
 
 
@@ -49,6 +49,18 @@ class TestUtils(BaseTestCase):
         """Ensures that the json encoder can work with numpy installed"""
         some_json = {"a": np.array([0, 1])}
         json.dumps(some_json, cls=TwinedEncoder)
+
+
+class TestString(BaseTestCase):
+    def test_convert_string_represented_boolean_to_boolean_type(self):
+        """Test that string-represented booleans can be converted to booleans."""
+        self.assertTrue(convert_string_represented_boolean_to_boolean_type("true"))
+        self.assertFalse(convert_string_represented_boolean_to_boolean_type("false"))
+
+    def test_error_raised_if_non_string_represented_boolean_given(self):
+        """Test that an error is raised if trying to convert a string that does not represent a boolean."""
+        with self.assertRaises(TypeError):
+            convert_string_represented_boolean_to_boolean_type("blah")
 
 
 if __name__ == "__main__":
