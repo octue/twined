@@ -156,7 +156,14 @@ class Twine:
         return data
 
     def _validate_manifest(self, kind, source, cls=None, **kwargs):
-        """Common manifest validator method"""
+        """Validate a manifest against the schema for its kind, check that its datasets have any required tags, and
+        instantiate it if `cls` is provided.
+
+        :param str kind:
+        :param str|dict source:
+        :param type|None cls:
+        :return dict|type:
+        """
         data = self._load_json(kind, source, **kwargs)
 
         # TODO elegant way of cleaning up this nasty serialisation hack to manage conversion of outbound manifests to primitive
@@ -174,21 +181,23 @@ class Twine:
             # Remove tags from file["tags"] if they are required and valid to avoid them appearing as attributes of the
             # Datafile instance as well as keyword tags. Non-key-value tags and non-required key-value tags are left in
             # file["tags"].
-            for dataset in data["datasets"]:
-                for file in dataset["files"]:
-                    for name, value in required_tags.get(file["id"], {}).items():
-                        if isinstance(value, bool):
-                            value = str(value).lower()
+            if required_tags:
+                for dataset in data["datasets"]:
+                    for file in dataset["files"]:
+                        for name, value in required_tags.get(file["id"], {}).items():
+                            if isinstance(value, bool):
+                                value = str(value).lower()
 
-                        file["tags"].remove(f"{name}:{value}")
+                            file["tags"].remove(f"{name}:{value}")
 
             manifest = cls(**data)
 
             # Add required tags to datafiles in manifest as attributes.
-            for dataset in manifest.datasets:
-                for file in dataset.files:
-                    for tag_name, tag_value in required_tags[file.id].items():
-                        setattr(file, tag_name, tag_value)
+            if required_tags:
+                for dataset in manifest.datasets:
+                    for file in dataset.files:
+                        for tag_name, tag_value in required_tags.get(file.id, {}).items():
+                            setattr(file, tag_name, tag_value)
 
             return manifest
 
@@ -213,7 +222,7 @@ class Twine:
             }
 
             if not required_tags:
-                return None
+                return {}
 
             for file in dataset["files"]:
                 converted_tags[file["id"]] = {}
