@@ -6,7 +6,7 @@
 			"filters": "tags:(met* AND mast AND location) files:(extension:csv AND sequence:>=0) location:10"
 		}
 	],
-	"configuration_schema": {
+	"configuration_values_schema": {
 		"$schema": "http://json-schema.org/2019-09/schema#",
 		"title": "The example configuration form",
 		"description": "The configuration strand of an example twine",

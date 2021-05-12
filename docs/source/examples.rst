@@ -47,7 +47,7 @@ copied straight from the unit test cases, so you can always check there to see h
              "description": "This twine helps compute the cost of an installed foundation.",
              "children": [
              ],
-             "configuration_schema": {
+             "configuration_values_schema": {
                  "$schema": "http://json-schema.org/2019-09/schema#",
                  "title": "Foundation cost twin configuration",
                  "description": "Set config parameters and constants at startup of the twin.",
