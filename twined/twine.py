@@ -5,8 +5,8 @@ import pkg_resources
 from dotenv import load_dotenv
 from jsonschema import ValidationError, validate as jsonschema_validate
 
-from . import exceptions
-from .utils import load_json, trim_suffix
+from twined import exceptions
+from twined.utils import convert_string_represented_boolean_to_boolean_type, load_json, trim_suffix
 
 
 logger = logging.getLogger(__name__)
@@ -37,6 +37,13 @@ ALL_STRANDS = (
     *CHILDREN_STRANDS,
     *MONITOR_STRANDS,
 )
+
+TAG_TYPE_MAP = {
+    "string": str,
+    "float": float,
+    "int": int,
+    "boolean": convert_string_represented_boolean_to_boolean_type,
+}
 
 
 class Twine:
@@ -187,13 +194,6 @@ class Twine:
         converted_tags = {}
         dataset_schemas = getattr(self, manifest_type)
 
-        TAG_TYPE_MAP = {
-            "string": str,
-            "float": float,
-            "int": int,
-            "boolean": self._convert_string_represented_boolean_to_boolean_type,
-        }
-
         for dataset, dataset_schema in zip(serialised_manifest["datasets"], dataset_schemas):
             required_tags = {
                 required_tag["name"]: required_tag for required_tag in dataset_schema.get("required_tags", {})
@@ -254,21 +254,6 @@ class Twine:
                     file["tags"].remove(tag)
 
         return converted_tags
-
-    @staticmethod
-    def _convert_string_represented_boolean_to_boolean_type(value):
-        """Convert "true" to `True` and "false" to `False`.
-
-        :raise TypeError: if the value given isn't "true" or "false"
-        :return bool:
-        """
-        if value.lower() == "true":
-            return True
-
-        if value.lower() == "false":
-            return False
-
-        raise TypeError(f"Could not convert {value!r} to a boolean.")
 
     @property
     def available_strands(self):

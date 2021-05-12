@@ -3,3 +3,18 @@ def trim_suffix(text, suffix):
     if not text.endswith(suffix):
         return text
     return text[: len(text) - len(suffix)]
+
+
+def convert_string_represented_boolean_to_boolean_type(value):
+    """Convert "true" to `True` and "false" to `False`.
+
+    :raise TypeError: if the value given isn't "true" or "false"
+    :return bool:
+    """
+    if value.lower() == "true":
+        return True
+
+    if value.lower() == "false":
+        return False
+
+    raise TypeError(f"Could not convert {value!r} to a boolean.")
