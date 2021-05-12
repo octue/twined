@@ -5,6 +5,28 @@ from twined import Twine, exceptions
 from .base import BaseTestCase
 
 
+class MockDatafile:
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
+class MockDataset:
+    def __init__(self, files, **kwargs):
+        self.files = [MockDatafile(**file) for file in files]
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
+class MockManifest:
+    def __init__(self, datasets, **kwargs):
+        self.datasets = [MockDataset(**dataset) for dataset in datasets]
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
 class TestManifestStrands(BaseTestCase):
     """Testing operation of the Twine class for validation of data using strands which require manifests"""
 
@@ -49,6 +71,14 @@ class TestManifestStrands(BaseTestCase):
                         {
                             "name": "height",
                             "kind": "float"
+                        },
+                        {
+                            "name": "is_recycled",
+                            "kind": "boolean"
+                        },
+                        {
+                            "name": "number_of_blades",
+                            "kind": "integer"
                         }
                     ]
                 }
@@ -307,7 +337,7 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": ["manufacturer:Vestas:UK", "height:500"],
+                                "tags": ["manufacturer:Vestas:UK", "height:500", "is_recycled:true", "number_of_blades:3"],
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "name": "file_1.csv"
                             }
@@ -337,7 +367,7 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": ["manufacturer:Vestas", "height:500"],
+                                "tags": ["manufacturer:Vestas", "height:500", "is_recycled:true", "number_of_blades:3"],
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "name": "file_1.csv"
                             },
@@ -346,7 +376,7 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 1,
                                 "extension": "csv",
-                                "tags": ["manufacturer:Zestas", "height:350"],
+                                "tags": ["manufacturer:Zestas", "height:350", "is_recycled:true", "number_of_blades:3"],
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "name": "file_1.csv"
                             }
@@ -361,7 +391,7 @@ class TestManifestStrands(BaseTestCase):
 
     def test_validate_input_manifest_with_required_tags_with_cls_sets_tags_as_attributes(self):
         """Test that using `Twine.validate_input_manifest` with the `cls` argument on a manifest with required tags
-        sets the tags on the datafiles as attributes.
+        sets the required tags on the datafiles as attributes while leaving non-required tags in the `tags` attribute.
         """
         input_manifest = """
             {
@@ -377,7 +407,14 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": ["manufacturer:Vestas", "height:500", "an-extra-tag", "another-extra-tag:true"],
+                                "tags": [
+                                    "manufacturer:Vestas",
+                                    "height:503.7",
+                                    "is_recycled:true",
+                                    "number_of_blades:3",
+                                    "an-extra-tag",
+                                    "another-extra-tag:true"
+                                ],
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "name": "file_1.csv"
                             }
@@ -387,31 +424,15 @@ class TestManifestStrands(BaseTestCase):
             }
         """
 
-        class Datafile:
-            def __init__(self, **kwargs):
-                for key, value in kwargs.items():
-                    setattr(self, key, value)
-
-        class Dataset:
-            def __init__(self, files, **kwargs):
-                self.files = [Datafile(**file) for file in files]
-
-                for key, value in kwargs.items():
-                    setattr(self, key, value)
-
-        class Manifest:
-            def __init__(self, datasets, **kwargs):
-                self.datasets = [Dataset(**dataset) for dataset in datasets]
-
-                for key, value in kwargs.items():
-                    setattr(self, key, value)
-
         twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS)
-        manifest = twine.validate_input_manifest(source=input_manifest, cls=Manifest)
+        manifest = twine.validate_input_manifest(source=input_manifest, cls=MockManifest)
 
         # Check that required tags are set as attributes on files.
         self.assertEqual(manifest.datasets[0].files[0].manufacturer, "Vestas")
-        self.assertEqual(manifest.datasets[0].files[0].height, 500)
+        self.assertEqual(manifest.datasets[0].files[0].height, 503.7)
+        self.assertTrue(manifest.datasets[0].files[0].is_recycled)
+        self.assertEqual(manifest.datasets[0].files[0].number_of_blades, 3)
+        self.assertIsInstance(manifest.datasets[0].files[0].number_of_blades, int)
 
         # Check that non-required tags are left in the tags attribute.
         self.assertTrue("an-extra-tag" in manifest.datasets[0].files[0].tags)
