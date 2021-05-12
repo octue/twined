@@ -473,6 +473,117 @@ class TestManifestStrands(BaseTestCase):
             with self.assertRaises(TypeError):
                 twine.validate_input_manifest(source=input_manifest % tags, cls=MockManifest)
 
+    def test_validate_input_manifest_with_required_tags_in_several_datasets(self):
+        TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS_FOR_MULTIPLE_DATASETS = """
+            {
+                "input_manifest": [
+                    {
+                        "key": "first_dataset",
+                        "purpose": "A dataset containing meteorological mast data",
+                        "required_tags": [
+                            {
+                                "name": "manufacturer",
+                                "kind": "string"
+                            },
+                            {
+                                "name": "height",
+                                "kind": "float"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "second_dataset",
+                        "required_tags": [
+                            {
+                                "name": "is_recycled",
+                                "kind": "boolean"
+                            },
+                            {
+                                "name": "number_of_blades",
+                                "kind": "integer"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
+                        "name": "first dataset",
+                        "tags": [],
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_0.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": [
+                                    "manufacturer:Vestas",
+                                    "height:503.7",
+                                    "is_recycled:true",
+                                    "number_of_blades:3"
+                                ],
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_0.csv"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e18",
+                        "name": "second dataset",
+                        "tags": [],
+                        "files": [
+                            {
+                                "path": "input/datasets/blah/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": [
+                                    "manufacturer:Vestas",
+                                    "height:503.7",
+                                    "is_recycled:true",
+                                    "number_of_blades:3"
+                                ],
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e82",
+                                "name": "file_1.csv"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        twine = Twine(source=TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS_FOR_MULTIPLE_DATASETS)
+        manifest = twine.validate_input_manifest(source=input_manifest, cls=MockManifest)
+
+        # Check that the first dataset only has its required tags set as attributes.
+        first_dataset_file = manifest.datasets[0].files[0]
+        self.assertEqual(first_dataset_file.manufacturer, "Vestas")
+        self.assertEqual(first_dataset_file.height, 503.7)
+        self.assertFalse(hasattr(first_dataset_file, "is_recycled"))
+        self.assertFalse(hasattr(first_dataset_file, "number_of_blades"))
+
+        # Check that any other tags given for it are left in the tags attribute.
+        self.assertTrue("is_recycled:true" in first_dataset_file.tags)
+        self.assertTrue("number_of_blades:3" in first_dataset_file.tags)
+
+        # Check that the second dataset only has its required tags set as attributes.
+        second_dataset_file = manifest.datasets[1].files[0]
+        self.assertTrue(second_dataset_file.is_recycled)
+        self.assertEqual(second_dataset_file.number_of_blades, 3)
+        self.assertIsInstance(second_dataset_file.number_of_blades, int)
+        self.assertFalse(hasattr(second_dataset_file, "manufacturer"))
+        self.assertFalse(hasattr(second_dataset_file, "height"))
+
+        # Check that any other tags given for it are left in the tags attribute.
+        self.assertTrue("manufacturer:Vestas" in second_dataset_file.tags)
+        self.assertTrue("height:503.7" in second_dataset_file.tags)
+
 
 if __name__ == "__main__":
     unittest.main()
