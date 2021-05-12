@@ -77,7 +77,7 @@
                 },
                 "kind": {
                   "type": "string",
-                  "enum": ["float", "int", "string", "bool"]
+                  "enum": ["float", "integer", "string", "boolean"]
                 },
                 "purpose": {
                   "type": "string"

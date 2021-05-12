@@ -41,7 +41,7 @@ ALL_STRANDS = (
 TAG_TYPE_MAP = {
     "string": str,
     "float": float,
-    "int": int,
+    "integer": int,
     "boolean": ConvertStringRepresentedBooleanToBooleanType(),
 }
 
