@@ -322,7 +322,7 @@ class TestManifestStrands(BaseTestCase):
         with self.assertRaises(exceptions.InvalidValuesContents):
             twine.validate_input_manifest(source=input_manifest)
 
-    def test_error_raised_if_tags_have_more_than_one_colon(self):
+    def test_error_raised_if_non_string_required_tags_have_more_than_one_colon(self):
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
@@ -337,7 +337,7 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": ["manufacturer:Vestas:UK", "height:500", "is_recycled:true", "number_of_blades:3"],
+                                "tags": ["manufacturer:Vestas:UK", "height:500:9", "is_recycled:true", "number_of_blades:3"],
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "name": "file_1.csv"
                             }

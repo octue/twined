@@ -228,10 +228,8 @@ class Twine:
                     if len(present_subtags) == 1:
                         continue
 
-                    if len(present_subtags) > 2:
-                        raise ValueError(f"Tags cannot contain more than one colon; received {tag!r}.")
-
-                    outer_tag, inner_tag = present_subtags
+                    outer_tag = present_subtags[0]
+                    inner_tag = ":".join(present_subtags[1:])
                     required_tag_info = required_tags.get(outer_tag)
 
                     # If the tag isn't required, nothing needs to be done to it and it can be left in file["tags"].
@@ -239,6 +237,12 @@ class Twine:
                         continue
 
                     required_type = TAG_TYPE_MAP[required_tag_info["kind"]]
+
+                    # Multiple colons are only allowed in required tags that will be cast to strings.
+                    if required_type is not str and ":" in inner_tag:
+                        raise ValueError(
+                            f"Non-string required tags cannot contain more than one colon; received {tag!r}."
+                        )
 
                     try:
                         converted_tags[file["id"]][outer_tag] = required_type(inner_tag)
