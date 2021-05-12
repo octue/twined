@@ -174,18 +174,27 @@ class Twine:
 
         return data
 
-    def _validate_required_dataset_tags(self, kind, data):
+    def _validate_required_dataset_tags(self, manifest_type, serialised_manifest):
+        """Ensure the required tags for each dataset are present on each of its files, cast them to their required
+        types, and return them in a dictionary of file IDs mapped to dictionaries of `tag-name:tag-value` pairs. The
+        required tags are removed from each file's `tags` key/attribute to avoid duplication, but keyword-only tags are
+        left in place.
+
+        :param str manifest_type: the kind of manifest e.g. "input_manifest"
+        :param dict serialised_manifest:
+        :return dict:
+        """
         converted_tags = {}
-        dataset_schemas = getattr(self, kind)
+        dataset_schemas = getattr(self, manifest_type)
 
         TAG_TYPE_MAP = {
             "string": str,
             "float": float,
             "int": int,
-            "boolean": self._convert_string_to_boolean,
+            "boolean": self._convert_string_represented_boolean_to_boolean_type,
         }
 
-        for dataset, dataset_schema in zip(data["datasets"], dataset_schemas):
+        for dataset, dataset_schema in zip(serialised_manifest["datasets"], dataset_schemas):
             required_tags = {
                 required_tag["name"]: required_tag for required_tag in dataset_schema.get("required_tags", {})
             }
@@ -247,7 +256,7 @@ class Twine:
         return converted_tags
 
     @staticmethod
-    def _convert_string_to_boolean(value):
+    def _convert_string_represented_boolean_to_boolean_type(value):
         """Convert "true" to `True` and "false" to `False`.
 
         :raise TypeError: if the value given isn't "true" or "false"
