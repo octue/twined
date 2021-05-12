@@ -195,6 +195,8 @@ class Twine:
 
             for file in dataset["files"]:
                 converted_tags[file["id"]] = {}
+
+                # Check if any required tags are missing.
                 datafile_outer_tags = {tag.split(":")[0] for tag in file["tags"]}
                 missing_tags = required_tags.keys() - datafile_outer_tags
 
@@ -211,17 +213,19 @@ class Twine:
 
                 # Validate tags and cast them to their required types.
                 for tag in file["tags"]:
-                    subtags = tag.split(":")
+                    present_subtags = tag.split(":")
 
-                    if len(subtags) == 1:
+                    # Tags that are just keywords/labels are only used externally and are never required.
+                    if len(present_subtags) == 1:
                         continue
 
-                    if len(subtags) > 2:
+                    if len(present_subtags) > 2:
                         raise ValueError(f"Tags cannot contain more than one colon; received {tag!r}.")
 
-                    outer_tag, inner_tag = subtags
+                    outer_tag, inner_tag = present_subtags
                     required_tag_info = required_tags.get(outer_tag)
 
+                    # If the tag isn't required, nothing needs to be done to it and it can be left in file["tags"].
                     if not required_tag_info:
                         continue
 
