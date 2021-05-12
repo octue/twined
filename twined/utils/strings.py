@@ -13,9 +13,13 @@ class ConvertStringRepresentedBooleanToBooleanType:
     def __repr__(self):
         return repr(bool)
 
+    def __name__(self):
+        return "bool"
+
     def __call__(self, value):
         """Convert "true" to `True`, "false" to `False`, and anything else to `bool(value)`
 
+        :raise TypeError: if the value given isn't the string "true" or "false"
         :return bool:
         """
         if value.lower() == "true":
@@ -24,4 +28,4 @@ class ConvertStringRepresentedBooleanToBooleanType:
         if value.lower() == "false":
             return False
 
-        return bool(value)
+        raise TypeError(f"Could not convert {value!r} to a boolean.")

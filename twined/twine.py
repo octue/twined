@@ -247,7 +247,10 @@ class Twine:
                     try:
                         converted_tags[file["id"]][outer_tag] = required_type(inner_tag)
                     except (TypeError, ValueError):
-                        raise TypeError(f"Tag {tag!r} for datafile {file['id']!r} should be of type {required_type!r}.")
+                        raise TypeError(
+                            f"The value {inner_tag!r} from tag {tag!r} for datafile {file['id']!r} should be of type "
+                            f"{required_type.__name__!r}."
+                        )
 
                     tags_to_remove.append(tag)
 

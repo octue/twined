@@ -438,6 +438,41 @@ class TestManifestStrands(BaseTestCase):
         self.assertTrue("an-extra-tag" in manifest.datasets[0].files[0].tags)
         self.assertTrue("another-extra-tag:true" in manifest.datasets[0].files[0].tags)
 
+    def test_validate_input_manifest_raises_error_if_required_tags_are_not_of_required_type(self):
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                        "name": "my meteorological dataset",
+                        "tags": ["met", "mast", "wind"],
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": %s,
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_1.csv"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS)
+
+        for tags in (
+            '["manufacturer:Vestas", "height:tall", "is_recycled:false", "number_of_blades:3"]',
+            '["manufacturer:Vestas", "height:350", "is_recycled:no", "number_of_blades:3"]',
+            '["manufacturer:Vestas", "height:350", "is_recycled:false", "number_of_blades:3.2"]',
+        ):
+            with self.assertRaises(TypeError):
+                twine.validate_input_manifest(source=input_manifest % tags, cls=MockManifest)
+
 
 if __name__ == "__main__":
     unittest.main()
