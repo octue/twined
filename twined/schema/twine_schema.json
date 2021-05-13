@@ -51,7 +51,7 @@
       }
     },
     "configuration_manifest": {"$ref": "#/$defs/manifest"},
-    "configuration_schema": {
+    "configuration_values_schema": {
       "type": "object",
       "required": ["properties"]
     },
