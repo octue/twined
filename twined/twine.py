@@ -198,8 +198,16 @@ class Twine:
         manifest_schema = getattr(self, manifest_kind)
 
         for dataset_schema, dataset in zip(manifest_schema, manifest["datasets"]):
+            file_tags_template = dataset_schema.get("file_tags_template")
+
+            if not file_tags_template:
+                continue
+
             for file in dataset["files"]:
-                jsonschema_validate(instance=file["tags"], schema=dataset_schema["file_tags_template"])
+                try:
+                    jsonschema_validate(instance=file["tags"], schema=file_tags_template)
+                except ValidationError as e:
+                    raise exceptions.invalid_contents_map[manifest_kind](str(e))
 
     @property
     def available_strands(self):
