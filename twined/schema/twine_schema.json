@@ -80,34 +80,7 @@
     "input_values_schema": {
       "type": "object"
     },
-    "output_manifest": {
-      "type": "array",
-      "description": "A list of entries, each describing a dataset that may be created/updated when the twin is run",
-      "items": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "description": "A textual key identifying this dataset within the application/twin",
-            "type": "string"
-          },
-          "purpose": {
-            "description": "What data this dataset contains, eg 'the set of data files from the energy production calculation process'",
-            "type": "string",
-            "default": ""
-          },
-          "tags": {
-            "description": "Comma separated tags that will be applied to the dataset when created",
-            "type": "array",
-            "items": [
-              {
-                "type": "string"
-              }
-            ]
-          }
-        },
-        "required": ["key"]
-      }
-    },
+    "output_manifest": {"$ref": "#/$defs/manifest"},
     "output_values_schema": {
       "type": "object"
     }
