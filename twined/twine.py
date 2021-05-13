@@ -179,12 +179,27 @@ class Twine:
             data = data.serialise()
 
         self._validate_against_schema(kind, data)
+        self._validate_dataset_file_tags(manifest_kind=kind, manifest=data)
 
         if cls and inbound:
             # TODO verify that all the required keys etc are there
             return cls(**data)
 
         return data
+
+    def _validate_dataset_file_tags(self, manifest_kind, manifest):
+        """Validate the tags of the files of each dataset in the manifest against the file tags template in the
+        corresponding dataset field in the given manifest field of the twine.
+
+        :param str manifest_kind:
+        :param dict manifest:
+        :return None:
+        """
+        manifest_schema = getattr(self, manifest_kind)
+
+        for dataset_schema, dataset in zip(manifest_schema, manifest["datasets"]):
+            for file in dataset["files"]:
+                jsonschema_validate(instance=file["tags"], schema=dataset_schema["file_tags_template"])
 
     @property
     def available_strands(self):
