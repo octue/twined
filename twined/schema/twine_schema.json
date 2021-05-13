@@ -1,6 +1,6 @@
 {
   "$defs": {
-    "tags_template": {
+    "file_tags_template": {
       "type": "object",
       "properties": {
         "$schema": {
@@ -19,7 +19,7 @@
           }
         }
       },
-      "required": ["$schema", "type", "properties"]
+      "required": ["type", "properties"]
     },
     "manifest": {
       "type": "array",
@@ -36,9 +36,7 @@
             "type": "string",
             "default": ""
           },
-          "tags_template": {
-            "$ref": "#/defs/tags_template"
-          }
+          "file_tags_template": {"$ref": "#/$defs/file_tags_template"}
         },
         "required": ["key"]
       }
