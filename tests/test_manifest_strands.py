@@ -39,6 +39,40 @@ class TestManifestStrands(BaseTestCase):
         }
     """
 
+    TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE = """
+        {
+            "input_manifest": [
+                {
+                    "key": "met_mast_data",
+                    "purpose": "A dataset containing meteorological mast data",
+                    "file_tags_template": {
+                        "type": "object",
+                        "properties": {
+                            "manufacturer": {
+                                "type": "string"
+                            },
+                            "height": {
+                                "type": "number"
+                            },
+                            "is_recycled": {
+                                "type": "boolean"
+                            },
+                            "number_of_blades": {
+                                "type": "number"
+                            }
+                        },
+                        "required": [
+                            "manufacturer",
+                            "height",
+                            "is_recycled",
+                            "number_of_blades"
+                        ]
+                    }
+                }
+            ]
+        }
+    """
+
     def test_missing_manifest_files(self):
         """Ensures that if you try to read values from missing files, the right exceptions get raised"""
         twine = Twine(source=self.VALID_MANIFEST_STRAND)
@@ -62,14 +96,16 @@ class TestManifestStrands(BaseTestCase):
                     {
                         "id": "34ad7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "my configuration dataset",
-                        "tags": ["the", "config", "tags"],
+                        "tags": {},
+                        "labels": ["the", "config", "labels"],
                         "files": [
                             {
                                 "path": "configuration/datasets/7ead7669/file_1.csv",
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": [],
+                                "tags": {},
+                                "labels": [],
                                 "posix_timestamp": 0,
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "last_modified": "2019-02-28T22:40:30.533005Z",
@@ -82,7 +118,8 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 1,
                                 "extension": "csv",
-                                "tags": [],
+                                "tags": {},
+                                "labels": [],
                                 "posix_timestamp": 0,
                                 "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
                                 "last_modified": "2019-02-28T22:40:40.633001Z",
@@ -103,14 +140,16 @@ class TestManifestStrands(BaseTestCase):
                     {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "my meteorological dataset",
-                        "tags": ["met", "mast", "wind"],
+                        "tags": {},
+                        "labels": ["met", "mast", "wind"],
                         "files": [
                             {
                                 "path": "input/datasets/7ead7669/file_1.csv",
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": [],
+                                "tags": {},
+                                "labels": [],
                                 "posix_timestamp": 0,
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "last_modified": "2019-02-28T22:40:30.533005Z",
@@ -123,7 +162,8 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 1,
                                 "extension": "csv",
-                                "tags": [],
+                                "tags": {},
+                                "labels": [],
                                 "posix_timestamp": 0,
                                 "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
                                 "last_modified": "2019-02-28T22:40:40.633001Z",
@@ -144,14 +184,16 @@ class TestManifestStrands(BaseTestCase):
                     {
                         "id": "1ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "my output dataset",
-                        "tags": ["the", "output", "tags"],
+                        "tags": {},
+                        "labels": ["the", "output", "labels"],
                         "files": [
                             {
                                 "path": "input/datasets/7ead7669/file_1.csv",
                                 "cluster": 0,
                                 "sequence": 0,
                                 "extension": "csv",
-                                "tags": [],
+                                "tags": {},
+                                "labels": [],
                                 "posix_timestamp": 0,
                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
                                 "last_modified": "2019-02-28T22:40:30.533005Z",
@@ -164,7 +206,8 @@ class TestManifestStrands(BaseTestCase):
                                 "cluster": 0,
                                 "sequence": 1,
                                 "extension": "csv",
-                                "tags": [],
+                                "tags": {},
+                                "labels": [],
                                 "posix_timestamp": 0,
                                 "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
                                 "last_modified": "2019-02-28T22:40:40.633001Z",
@@ -244,6 +287,225 @@ class TestManifestStrands(BaseTestCase):
     #     twine = Twine(file=twine_file)
     #     values_file = os.path.join(self.path, "configurations", "valid_with_extra.json")
     #     twine.validate_configuration(file=values_file)
+
+    def test_error_raised_when_required_tags_missing_for_validate_input_manifest(self):
+        """Test that an error is raised when required tags from the file tags template for a dataset are missing when
+        validating the input manifest.
+        """
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                        "name": "my meteorological dataset",
+                        "tags": {},
+                        "labels": ["met", "mast", "wind"],
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": {},
+                                "labels": [],
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_1.csv"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
+
+        with self.assertRaises(exceptions.InvalidManifestContents):
+            twine.validate_input_manifest(source=input_manifest)
+
+    def test_validate_input_manifest_raises_error_if_required_tags_are_not_of_required_type(self):
+        """Test that an error is raised if the required tags from the file tags template for a dataset are present but
+        are not of the required type when validating an input manifest.
+        """
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                        "name": "my meteorological dataset",
+                        "tags": {},
+                        "labels": ["met", "mast", "wind"],
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": %s,
+                                "labels": [],
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_1.csv"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
+
+        for tags in (
+            '{"manufacturer": "Vestas", "height": 350, "is_recycled": false, "number_of_blades": "3"}',
+            '{"manufacturer": "Vestas", "height": 350, "is_recycled": "no", "number_of_blades": 3}',
+            '{"manufacturer": false, "height": 350, "is_recycled": "false", "number_of_blades": 3}',
+        ):
+            with self.assertRaises(exceptions.InvalidManifestContents):
+                twine.validate_input_manifest(source=input_manifest % tags)
+
+    def test_validate_input_manifest_with_required_tags(self):
+        """Test that validating an input manifest with required tags from the file tags template for a dataset works
+        for tags meeting the requirements.
+        """
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                        "name": "my meteorological dataset",
+                        "tags": {},
+                        "labels": ["met", "mast", "wind"],
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "labels": ["mykeyword1", "mykeyword2"],
+                                "tags": {
+                                    "manufacturer": "vestas",
+                                    "height": 500,
+                                    "is_recycled": true,
+                                    "number_of_blades": 3
+                                },
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_1.csv"
+                            },
+                            {
+                                "path": "input/datasets/7ead7669/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 1,
+                                "extension": "csv",
+                                "labels": [],
+                                "tags": {
+                                    "manufacturer": "vestas",
+                                    "height": 500,
+                                    "is_recycled": true,
+                                    "number_of_blades": 3
+                                },
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_1.csv"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
+        twine.validate_input_manifest(source=input_manifest)
+
+    def test_validate_input_manifest_with_required_tags_in_several_datasets(self):
+        """Test that required tags from the file tags template are validated separately and correctly for each dataset."""
+        TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS_FOR_MULTIPLE_DATASETS = """
+            {
+                "input_manifest": [
+                    {
+                        "key": "first_dataset",
+                        "purpose": "A dataset containing meteorological mast data",
+                        "file_tags_template": {
+                            "type": "object",
+                            "properties": {
+                                "manufacturer": {
+                                    "type": "string"
+                                },
+                                "height": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "key": "second_dataset",
+                        "file_tags_template": {
+                            "type": "object",
+                            "properties": {
+                                "is_recycled": {
+                                    "type": "boolean"
+                                },
+                                "number_of_blades": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        """
+
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
+                        "name": "first dataset",
+                        "tags": {},
+                        "labels": [],
+                        "files": [
+                            {
+                                "path": "input/datasets/7ead7669/file_0.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": {
+                                    "manufacturer": "Vestas",
+                                    "height": 503.7
+                                },
+                                "labels": [],
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                                "name": "file_0.csv"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e18",
+                        "name": "second dataset",
+                        "tags": {},
+                        "labels": [],
+                        "files": [
+                            {
+                                "path": "input/datasets/blah/file_1.csv",
+                                "cluster": 0,
+                                "sequence": 0,
+                                "extension": "csv",
+                                "tags": {
+                                    "is_recycled": true,
+                                    "number_of_blades": 3
+                                },
+                                "labels": [],
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e82",
+                                "name": "file_1.csv"
+                            }
+                        ]
+                    }
+                ]
+            }
+        """
+
+        twine = Twine(source=TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS_FOR_MULTIPLE_DATASETS)
+        twine.validate_input_manifest(source=input_manifest)
 
 
 if __name__ == "__main__":
