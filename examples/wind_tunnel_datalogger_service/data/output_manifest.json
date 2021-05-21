@@ -6,6 +6,7 @@
       "name": "Test results from naca0012 section",
       "organisation": "megacorp",
       "tags": {"section": "naca0012"},
+      "labels": [],
       "files": [
         {
           "path": "datasets/7ead7669/sys_temp.json",
