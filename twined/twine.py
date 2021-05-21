@@ -195,9 +195,23 @@ class Twine:
         :param dict manifest:
         :return None:
         """
+        # This is the manifest schema included in the twine.json file, not the schema for manifest.json files.
         manifest_schema = getattr(self, manifest_kind)
 
-        for dataset_schema, dataset in zip(manifest_schema, manifest["datasets"]):
+        for dataset_schema in manifest_schema:
+            datasets = [dataset for dataset in manifest["datasets"] if dataset["name"] == dataset_schema["key"]]
+
+            if not datasets:
+                continue
+
+            if len(datasets) > 1:
+                raise exceptions.DatasetNameIsNotUnique(
+                    f"There is more than one dataset named {dataset_schema['key']!r} - ensure each dataset within a "
+                    f"manifest is uniquely named."
+                )
+
+            dataset = datasets.pop(0)
+
             file_tags_template = dataset_schema.get("file_tags_template")
 
             if not file_tags_template:

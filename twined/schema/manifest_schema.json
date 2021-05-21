@@ -76,12 +76,7 @@
             }
           }
         },
-        "required": [
-          "id",
-          "tags",
-          "labels",
-          "files"
-        ]
+        "required": ["id", "name", "tags", "labels", "files"]
       }
     }
   },

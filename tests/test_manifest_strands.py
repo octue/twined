@@ -84,14 +84,14 @@ class TestManifestStrands(BaseTestCase):
             twine.validate_output_manifest(source=file)
 
     def test_valid_manifest_files(self):
-        """Ensures that a manifest file will validate"""
+        """Ensures that a manifest file will validate."""
         valid_configuration_manifest = """
             {
                 "id": "3ead7669-8162-4f64-8cd5-4abe92509e17",
                 "datasets": [
                     {
                         "id": "34ad7669-8162-4f64-8cd5-4abe92509e17",
-                        "name": "my configuration dataset",
+                        "name": "configuration_files_data",
                         "tags": {},
                         "labels": ["the", "config", "labels"],
                         "files": [
@@ -135,7 +135,7 @@ class TestManifestStrands(BaseTestCase):
                 "datasets": [
                     {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
-                        "name": "my meteorological dataset",
+                        "name": "met_mast_data",
                         "tags": {},
                         "labels": ["met", "mast", "wind"],
                         "files": [
@@ -179,7 +179,7 @@ class TestManifestStrands(BaseTestCase):
                 "datasets": [
                     {
                         "id": "1ead7669-8162-4f64-8cd5-4abe92509e17",
-                        "name": "my output dataset",
+                        "name": "output_files_data",
                         "tags": {},
                         "labels": ["the", "output", "labels"],
                         "files": [
@@ -294,7 +294,7 @@ class TestManifestStrands(BaseTestCase):
                 "datasets": [
                     {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
-                        "name": "my meteorological dataset",
+                        "name": "met_mast_data",
                         "tags": {},
                         "labels": ["met", "mast", "wind"],
                         "files": [
@@ -329,7 +329,7 @@ class TestManifestStrands(BaseTestCase):
                 "datasets": [
                     {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
-                        "name": "my meteorological dataset",
+                        "name": "met_mast_data",
                         "tags": {},
                         "labels": ["met", "mast", "wind"],
                         "files": [
@@ -369,7 +369,7 @@ class TestManifestStrands(BaseTestCase):
                 "datasets": [
                     {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
-                        "name": "my meteorological dataset",
+                        "name": "met_mast_data",
                         "tags": {},
                         "labels": ["met", "mast", "wind"],
                         "files": [
@@ -456,7 +456,7 @@ class TestManifestStrands(BaseTestCase):
                 "datasets": [
                     {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
-                        "name": "first dataset",
+                        "name": "first_dataset",
                         "tags": {},
                         "labels": [],
                         "files": [
@@ -477,7 +477,7 @@ class TestManifestStrands(BaseTestCase):
                     },
                     {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e18",
-                        "name": "second dataset",
+                        "name": "second_dataset",
                         "tags": {},
                         "labels": [],
                         "files": [
