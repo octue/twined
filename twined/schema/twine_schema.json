@@ -70,7 +70,8 @@
         ]
       }
     },
-    "configuration_schema": {
+    "configuration_manifest": {"$ref": "#/$defs/manifest"},
+    "configuration_values_schema": {
       "type": "object",
       "required": ["properties"]
     },
