@@ -57,8 +57,7 @@
 	"output_manifest": [
 		{
 			"key": "production_data",
-			"purpose": "A dataset containing production data",
-			"tags": ["production", "wind"]
+			"purpose": "A dataset containing production data"
 		}
 	],
 	"output_values_schema": {
