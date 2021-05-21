@@ -10,62 +10,70 @@ class TestManifestStrands(BaseTestCase):
 
     VALID_MANIFEST_STRAND = """
         {
-            "configuration_manifest": [
-                {
-                    "key": "configuration_files_data",
-                    "purpose": "A dataset containing files used in configuration"
-                }
-            ],
-            "input_manifest": [
-                {
-                    "key": "met_mast_data",
-                    "purpose": "A dataset containing meteorological mast data"
-                },
-                {
-                    "key": "scada_data",
-                    "purpose": "A dataset containing scada data"
-                }
-            ],
-            "output_manifest": [
-                {
-                    "key": "output_files_data",
-                    "purpose": "A dataset containing output results"
-                }
-            ]
+            "configuration_manifest": {
+                "datasets": [
+                    {
+                        "key": "configuration_files_data",
+                        "purpose": "A dataset containing files used in configuration"
+                    }
+                ]
+            },
+            "input_manifest": {
+                "datasets": [
+                    {
+                        "key": "met_mast_data",
+                        "purpose": "A dataset containing meteorological mast data"
+                    },
+                    {
+                        "key": "scada_data",
+                        "purpose": "A dataset containing scada data"
+                    }
+                ]
+            },
+            "output_manifest": {
+                "datasets": [
+                    {
+                        "key": "output_files_data",
+                        "purpose": "A dataset containing output results"
+                    }
+                ]
+            }
         }
     """
 
     TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE = """
         {
-            "input_manifest": [
-                {
-                    "key": "met_mast_data",
-                    "purpose": "A dataset containing meteorological mast data",
-                    "file_tags_template": {
-                        "type": "object",
-                        "properties": {
-                            "manufacturer": {
-                                "type": "string"
+            "input_manifest": {
+                "datasets": [
+                    {
+                        "key": "met_mast_data",
+                        "purpose": "A dataset containing meteorological mast data",
+                        "file_tags_template": {
+                            "type": "object",
+                            "properties": {
+                                "manufacturer": {
+                                    "type": "string"
+                                },
+                                "height": {
+                                    "type": "number"
+                                },
+                                "is_recycled": {
+                                    "type": "boolean"
+                                },
+                                "number_of_blades": {
+                                    "type": "number"
+                                }
                             },
-                            "height": {
-                                "type": "number"
-                            },
-                            "is_recycled": {
-                                "type": "boolean"
-                            },
-                            "number_of_blades": {
-                                "type": "number"
-                            }
-                        },
-                        "required": [
-                            "manufacturer",
-                            "height",
-                            "is_recycled",
-                            "number_of_blades"
-                        ]
+                            "required": [
+                                "manufacturer",
+                                "height",
+                                "is_recycled",
+                                "number_of_blades"
+                            ]
+                        }
                     }
-                }
-            ]
+                ]
+            }
         }
     """
 
@@ -416,37 +424,39 @@ class TestManifestStrands(BaseTestCase):
         """Test that required tags from the file tags template are validated separately and correctly for each dataset."""
         TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS_FOR_MULTIPLE_DATASETS = """
             {
-                "input_manifest": [
-                    {
-                        "key": "first_dataset",
-                        "purpose": "A dataset containing meteorological mast data",
-                        "file_tags_template": {
-                            "type": "object",
-                            "properties": {
-                                "manufacturer": {
-                                    "type": "string"
-                                },
-                                "height": {
-                                    "type": "number"
+                "input_manifest": {
+                    "datasets": [
+                        {
+                            "key": "first_dataset",
+                            "purpose": "A dataset containing meteorological mast data",
+                            "file_tags_template": {
+                                "type": "object",
+                                "properties": {
+                                    "manufacturer": {
+                                        "type": "string"
+                                    },
+                                    "height": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "key": "second_dataset",
+                            "file_tags_template": {
+                                "type": "object",
+                                "properties": {
+                                    "is_recycled": {
+                                        "type": "boolean"
+                                    },
+                                    "number_of_blades": {
+                                        "type": "number"
+                                    }
                                 }
                             }
                         }
-                    },
-                    {
-                        "key": "second_dataset",
-                        "file_tags_template": {
-                            "type": "object",
-                            "properties": {
-                                "is_recycled": {
-                                    "type": "boolean"
-                                },
-                                "number_of_blades": {
-                                    "type": "number"
-                                }
-                            }
-                        }
-                    }
-                ]
+                    ]
+                }
             }
         """
 

@@ -31,16 +31,18 @@
 			"purpose": "A URI for accessing an external database from within a twin or analysis"
 		}
 	],
-	"input_manifest": [
-		{
-			"key": "met_mast_data",
-			"purpose": "A dataset containing meteorological mast data"
-		},
-		{
-			"key": "scada_data",
-			"purpose": "A dataset containing scada data"
-		}
-	],
+	"input_manifest": {
+		"datasets": [
+			{
+				"key": "met_mast_data",
+				"purpose": "A dataset containing meteorological mast data"
+			},
+			{
+				"key": "scada_data",
+				"purpose": "A dataset containing scada data"
+			}
+		]
+	},
 	"input_values_schema": {
 		"$schema": "http://json-schema.org/2019-09/schema#",
 		"title": "Input Values",
@@ -54,12 +56,14 @@
 			}
 		}
 	},
-	"output_manifest": [
-		{
-			"key": "production_data",
-			"purpose": "A dataset containing production data"
-		}
-	],
+	"output_manifest": {
+		"datasets": [
+			{
+				"key": "production_data",
+				"purpose": "A dataset containing production data"
+			}
+		]
+	},
 	"output_values_schema": {
 		"title": "Output Values",
 		"description": "The output values strand of an example twine",
