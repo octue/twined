@@ -1,4 +1,27 @@
 {
+  "$defs": {
+    "manifest": {
+      "type": "array",
+      "description": "A list of entries, each describing a dataset that should be attached to / made available to the digital twin",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "description": "A textual key identifying this dataset within the application/twin",
+            "type": "string"
+          },
+          "purpose": {
+            "description": "What data this dataset contains, eg 'the set of data files from the energy production calculation process'",
+            "type": "string",
+            "default": ""
+          }
+        },
+        "required": [
+          "key"
+        ]
+      }
+    }
+  },
   "type": "object",
   "$schema": "http://json-schema.org/2019-09/schema#",
   "properties": {
@@ -27,7 +50,8 @@
         ]
       }
     },
-    "configuration_schema": {
+    "configuration_manifest": {"$ref": "#/$defs/manifest"},
+    "configuration_values_schema": {
       "type": "object",
       "required": ["properties"]
     },
@@ -52,61 +76,11 @@
         "additionalProperties": false
       }
     },
-    "input_manifest": {
-      "type": "array",
-      "description": "A list of entries, each describing a dataset that should be attached to / made available to the digital twin",
-      "items": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "description": "A textual key identifying this dataset within the application/twin",
-            "type": "string"
-          },
-          "purpose": {
-            "description": "What data this dataset contains, eg 'the set of data files from the energy production calculation process'",
-            "type": "string",
-            "default": ""
-          },
-          "filters": {
-            "description": "A search term, using the Lucene Query Language, which can be used to automatically refine the list of available datasets down to ones suitable for use with this twin",
-            "type": "string",
-            "default": ""
-          }
-        },
-        "required": ["key"]
-      }
-    },
+    "input_manifest": {"$ref": "#/$defs/manifest"},
     "input_values_schema": {
       "type": "object"
     },
-    "output_manifest": {
-      "type": "array",
-      "description": "A list of entries, each describing a dataset that may be created/updated when the twin is run",
-      "items": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "description": "A textual key identifying this dataset within the application/twin",
-            "type": "string"
-          },
-          "purpose": {
-            "description": "What data this dataset contains, eg 'the set of data files from the energy production calculation process'",
-            "type": "string",
-            "default": ""
-          },
-          "tags": {
-            "description": "Comma separated tags that will be applied to the dataset when created",
-            "type": "array",
-            "items": [
-              {
-                "type": "string"
-              }
-            ]
-          }
-        },
-        "required": ["key"]
-      }
-    },
+    "output_manifest": {"$ref": "#/$defs/manifest"},
     "output_values_schema": {
       "type": "object"
     }
