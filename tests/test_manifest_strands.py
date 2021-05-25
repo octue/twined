@@ -570,6 +570,35 @@ class TestManifestStrands(BaseTestCase):
         twine = Twine(source=TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS_FOR_MULTIPLE_DATASETS)
         twine.validate_input_manifest(source=input_manifest)
 
+    def test_error_raised_if_multiple_datasets_have_same_name(self):
+        """Test that an error is raised if the input manifest has more than one dataset with the same name."""
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
+                        "name": "met_mast_data",
+                        "tags": {},
+                        "labels": [],
+                        "files": []
+                    },
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e18",
+                        "name": "met_mast_data",
+                        "tags": {},
+                        "labels": [],
+                        "files": []
+                    }
+                ]
+            }
+        """
+
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
+
+        with self.assertRaises(exceptions.DatasetNameIsNotUnique):
+            twine.validate_input_manifest(source=input_manifest)
+
 
 if __name__ == "__main__":
     unittest.main()
