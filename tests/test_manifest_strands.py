@@ -1,5 +1,8 @@
+import copy
 import os
 import unittest
+from unittest.mock import patch
+from jsonschema.validators import RefResolver
 
 from twined import Twine, exceptions
 from .base import BaseTestCase
@@ -421,8 +424,11 @@ class TestManifestStrands(BaseTestCase):
         twine.validate_input_manifest(source=self.INPUT_MANIFEST_WITH_CORRECT_FILE_TAGS)
 
     def test_validate_input_manifest_with_required_tags_for_remote_tag_template_schema(self):
-        """Test that a remote tag template can be used for validating tags on the datafiles in a manifest. """
-        twine_with_input_manifest_with_remote_tag_template = """
+        """Test that a remote tag template can be used for validating tags on the datafiles in a manifest."""
+        schema_url = "https://refs.schema.octue.com/octue/my-file-type-tag-template/0.0.0.json"
+
+        twine_with_input_manifest_with_remote_tag_template = (
+            """
             {
                 "input_manifest": {
                     "datasets": [
@@ -430,16 +436,46 @@ class TestManifestStrands(BaseTestCase):
                             "key": "met_mast_data",
                             "purpose": "A dataset containing meteorological mast data",
                             "file_tags_template": {
-                                "$ref": "https://refs.schema.octue.com/octue/my-file-type-tag-template/0.0.0.json"
+                                "$ref": "%s"
                             }
                         }
                     ]
                 }
             }
-        """
+            """
+            % schema_url
+        )
+
+        remote_schema = {
+            "type": "object",
+            "properties": {
+                "manufacturer": {"type": "string"},
+                "height": {"type": "number"},
+                "is_recycled": {"type": "boolean"},
+                "number_of_blades": {"type": "number"},
+            },
+            "required": ["manufacturer", "height", "is_recycled", "number_of_blades"],
+        }
 
         twine = Twine(source=twine_with_input_manifest_with_remote_tag_template)
-        twine.validate_input_manifest(source=self.INPUT_MANIFEST_WITH_CORRECT_FILE_TAGS)
+
+        original_resolve_from_url = copy.copy(RefResolver.resolve_from_url)
+
+        def patch_if_url_is_schema_url(instance, url):
+            """Patch the jsonschema validator `RefResolver.resolve_from_url` if the url is the schema URL, otherwise
+            leave it unpatched.
+
+            :param jsonschema.validators.RefResolver instance:
+            :param str url:
+            :return mixed:
+            """
+            if url == schema_url:
+                return remote_schema
+            else:
+                return original_resolve_from_url(instance, url)
+
+        with patch("jsonschema.validators.RefResolver.resolve_from_url", new=patch_if_url_is_schema_url):
+            twine.validate_input_manifest(source=self.INPUT_MANIFEST_WITH_CORRECT_FILE_TAGS)
 
     def test_validate_input_manifest_with_required_tags_in_several_datasets(self):
         """Test that required tags from the file tags template are validated separately and correctly for each dataset."""
