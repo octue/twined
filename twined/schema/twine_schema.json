@@ -1,24 +1,38 @@
 {
   "$defs": {
     "file_tags_template": {
-      "type": "object",
-      "properties": {
-        "$schema": {
-          "type": "string"
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "$schema": {
+              "type": "string"
+            },
+            "type": {
+              "const": "object"
+            },
+            "properties": {
+              "type": "object"
+            },
+            "required": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["type", "properties"]
         },
-        "type": {
-          "const": "object"
-        },
-        "properties": {
-          "type": "object"
-        },
-        "required": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        {
+          "type": "object",
+          "properties": {
+            "$ref": {
+              "type": "string"
+            }
+          },
+          "required": ["$ref"]
         }
-      }
+      ]
     },
     "manifest": {
       "type": "object",
