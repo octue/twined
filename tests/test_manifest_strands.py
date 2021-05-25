@@ -77,6 +77,52 @@ class TestManifestStrands(BaseTestCase):
         }
     """
 
+    INPUT_MANIFEST_WITH_CORRECT_FILE_TAGS = """
+        {
+            "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+            "datasets": [
+                {
+                    "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                    "name": "met_mast_data",
+                    "tags": {},
+                    "labels": ["met", "mast", "wind"],
+                    "files": [
+                        {
+                            "path": "input/datasets/7ead7669/file_1.csv",
+                            "cluster": 0,
+                            "sequence": 0,
+                            "extension": "csv",
+                            "labels": ["mykeyword1", "mykeyword2"],
+                            "tags": {
+                                "manufacturer": "vestas",
+                                "height": 500,
+                                "is_recycled": true,
+                                "number_of_blades": 3
+                            },
+                            "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                            "name": "file_1.csv"
+                        },
+                        {
+                            "path": "input/datasets/7ead7669/file_1.csv",
+                            "cluster": 0,
+                            "sequence": 1,
+                            "extension": "csv",
+                            "labels": [],
+                            "tags": {
+                                "manufacturer": "vestas",
+                                "height": 500,
+                                "is_recycled": true,
+                                "number_of_blades": 3
+                            },
+                            "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                            "name": "file_1.csv"
+                        }
+                    ]
+                }
+            ]
+        }
+    """
+
     def test_missing_manifest_files(self):
         """Ensures that if you try to read values from missing files, the right exceptions get raised"""
         twine = Twine(source=self.VALID_MANIFEST_STRAND)
@@ -371,54 +417,29 @@ class TestManifestStrands(BaseTestCase):
         """Test that validating an input manifest with required tags from the file tags template for a dataset works
         for tags meeting the requirements.
         """
-        input_manifest = """
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
+        twine.validate_input_manifest(source=self.INPUT_MANIFEST_WITH_CORRECT_FILE_TAGS)
+
+    def test_validate_input_manifest_with_required_tags_for_remote_tag_template_schema(self):
+        """Test that a remote tag template can be used for validating tags on the datafiles in a manifest. """
+        twine_with_input_manifest_with_remote_tag_template = """
             {
-                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
-                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
-                        "name": "met_mast_data",
-                        "tags": {},
-                        "labels": ["met", "mast", "wind"],
-                        "files": [
-                            {
-                                "path": "input/datasets/7ead7669/file_1.csv",
-                                "cluster": 0,
-                                "sequence": 0,
-                                "extension": "csv",
-                                "labels": ["mykeyword1", "mykeyword2"],
-                                "tags": {
-                                    "manufacturer": "vestas",
-                                    "height": 500,
-                                    "is_recycled": true,
-                                    "number_of_blades": 3
-                                },
-                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                                "name": "file_1.csv"
-                            },
-                            {
-                                "path": "input/datasets/7ead7669/file_1.csv",
-                                "cluster": 0,
-                                "sequence": 1,
-                                "extension": "csv",
-                                "labels": [],
-                                "tags": {
-                                    "manufacturer": "vestas",
-                                    "height": 500,
-                                    "is_recycled": true,
-                                    "number_of_blades": 3
-                                },
-                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                                "name": "file_1.csv"
+                "input_manifest": {
+                    "datasets": [
+                        {
+                            "key": "met_mast_data",
+                            "purpose": "A dataset containing meteorological mast data",
+                            "file_tags_template": {
+                                "$ref": "https://refs.schema.octue.com/octue/my-file-type-tag-template/0.0.0.json"
                             }
-                        ]
-                    }
-                ]
+                        }
+                    ]
+                }
             }
         """
 
-        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
-        twine.validate_input_manifest(source=input_manifest)
+        twine = Twine(source=twine_with_input_manifest_with_remote_tag_template)
+        twine.validate_input_manifest(source=self.INPUT_MANIFEST_WITH_CORRECT_FILE_TAGS)
 
     def test_validate_input_manifest_with_required_tags_in_several_datasets(self):
         """Test that required tags from the file tags template are validated separately and correctly for each dataset."""

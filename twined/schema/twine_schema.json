@@ -18,8 +18,7 @@
             "type": "string"
           }
         }
-      },
-      "required": ["type", "properties"]
+      }
     },
     "manifest": {
       "type": "object",
