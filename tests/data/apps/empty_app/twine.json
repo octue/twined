@@ -11,8 +11,9 @@
 	},
 	"credentials": [
 	],
-	"input_manifest": [
-	],
+	"input_manifest": {
+		"datasets": []
+	},
 	"input_values_schema": {
 		"$schema": "http://json-schema.org/2019-09/schema#",
 		"title": "Input Values",
@@ -21,8 +22,9 @@
 		"properties": {
 		}
 	},
-	"output_manifest": [
-	],
+	"output_manifest": {
+		"datasets": []
+	},
 	"output_values_schema": {
 		"title": "Output Values",
 		"description": "The output values strand of an example twine",

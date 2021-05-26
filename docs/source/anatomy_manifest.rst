@@ -103,7 +103,7 @@ for examples.
 
          .. accordion-row:: Show twine containing this strand
 
-            .. literalinclude:: ../../examples/met_mast_scada_service/strands/input_manifest_filters.json
+            .. literalinclude:: ../../examples/met_mast_scada_service/strands/input_manifest.json
                 :language: javascript
 
          .. accordion-row:: Show a matching file manifest
@@ -120,7 +120,7 @@ for examples.
 
          .. accordion-row:: Show twine containing this strand
 
-            .. literalinclude:: ../../examples/met_mast_scada_service/strands/output_manifest_filters.json
+            .. literalinclude:: ../../examples/met_mast_scada_service/strands/output_manifest.json
                 :language: javascript
 
          .. accordion-row:: Show a matching file manifest
