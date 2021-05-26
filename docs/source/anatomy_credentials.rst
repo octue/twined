@@ -20,7 +20,7 @@ Defining the Credentials Strand
 ===============================
 
 This is the simplest of the strands, containing a list of credentials (whose ``NAMES_SHOULD_BE_SHOUTY_SNAKE_CASE``) with
-a reminder of the purpose. Defaults can also be provided, useful for running on local or closed networks.
+a reminder of the purpose.
 
 .. code-block:: javascript
 
@@ -35,9 +35,7 @@ a reminder of the purpose. Defaults can also be provided, useful for running on 
          "purpose": "Token for accessing a 3rd party API service"
        },
        {
-         "name": "SECRET_THE_THIRD",
-         "purpose": "Usually a big secret but sometimes has a convenient non-secret default, like a sandbox or local database",
-         "default": "postgres://pguser:pgpassword@localhost:5432/pgdb"
+         "name": "SECRET_THE_THIRD"
        }
      ]
    }
