@@ -113,77 +113,185 @@ specified in the twine in the ``file_tags_template`` property of each dataset of
 the corresponding manifest strand is then validated against its dataset's file tag template to ensure the required tags
 are present.
 
-.. accordion::
+.. tabs::
 
- .. accordion-row:: Show twine containing this strand with a file tag template
+    .. group-tab:: Manifest strand with file tag template
 
-    .. code-block:: javascript
+        The example below is for an input manifest, but the format is the same for configuration and output manifests.
 
-        {
-          "input_manifest": {
-            "datasets": [
-              {
-                "key": "met_mast_data",
-                "purpose": "A dataset containing meteorological mast data",
-                "file_tags_template": {
-                  "type": "object",
-                  "properties": {
-                    "manufacturer": {"type": "string"},
-                    "height": {"type": "number"},
-                    "is_recycled": {"type": "boolean"}
-                  },
-                  "required": ["manufacturer", "height", "is_recycled"]
-                }
-              }
-            ]
-          }
-        }
+        .. accordion::
 
- .. accordion-row:: Show a matching file manifest
+            .. accordion-row:: Show twine containing a manifest strand with a file tag template
 
-    .. code-block:: javascript
+                .. code-block:: javascript
 
-        {
-          "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-          "datasets": [
-            {
-              "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
-              "name": "met_mast_data",
-              "tags": {},
-              "labels": ["met", "mast", "wind"],
-              "files": [
-                {
-                  "path": "input/datasets/7ead7669/file_1.csv",
-                  "cluster": 0,
-                  "sequence": 0,
-                  "extension": "csv",
-                  "labels": ["mykeyword1", "mykeyword2"],
-                  "tags": {
-                    "manufacturer": "vestas",
-                    "height": 500,
-                    "is_recycled": true
-                  },
-                  "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                  "name": "file_1.csv"
-                },
-                {
-                  "path": "input/datasets/7ead7669/file_1.csv",
-                  "cluster": 0,
-                  "sequence": 1,
-                  "extension": "csv",
-                  "labels": [],
-                  "tags": {
-                    "manufacturer": "vestas",
-                    "height": 500,
-                    "is_recycled": true
-                  },
-                  "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                  "name": "file_1.csv"
-                }
-              ]
-            }
-          ]
-        }
+                   {
+                     "input_manifest": {
+                       "datasets": [
+                         {
+                           "key": "met_mast_data",
+                           "purpose": "A dataset containing meteorological mast data",
+                           "file_tags_template": {
+                             "type": "object",
+                             "properties": {
+                               "manufacturer": {"type": "string"},
+                               "height": {"type": "number"},
+                               "is_recycled": {"type": "boolean"}
+                             },
+                             "required": ["manufacturer", "height", "is_recycled"]
+                           }
+                         }
+                       ]
+                     }
+                   }
+
+            .. accordion-row:: Show a matching file manifest
+
+                .. code-block:: javascript
+
+                   {
+                     "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                     "datasets": [
+                       {
+                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                         "name": "met_mast_data",
+                         "tags": {},
+                         "labels": ["met", "mast", "wind"],
+                         "files": [
+                           {
+                             "path": "input/datasets/7ead7669/file_1.csv",
+                             "cluster": 0,
+                             "sequence": 0,
+                             "extension": "csv",
+                             "labels": ["mykeyword1", "mykeyword2"],
+                             "tags": {
+                               "manufacturer": "vestas",
+                               "height": 500,
+                               "is_recycled": true
+                             },
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                             "name": "file_1.csv"
+                           },
+                           {
+                             "path": "input/datasets/7ead7669/file_1.csv",
+                             "cluster": 0,
+                             "sequence": 1,
+                             "extension": "csv",
+                             "labels": [],
+                             "tags": {
+                               "manufacturer": "vestas",
+                               "height": 500,
+                               "is_recycled": true
+                             },
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                             "name": "file_1.csv"
+                           }
+                         ]
+                       }
+                     ]
+                   }
+
+    .. group-tab:: Manifest strand with a remote file tag template
+
+        A remote reference can also be given for a file tag template. If the tag template somewhere public, this is
+        useful for sharing the template between one or more teams working on the same type of data.
+
+        The example below is for an input manifest, but the format is the same for configuration and output manifests.
+        It also shows two different tag templates being specified for two different types of dataset required by the
+        manifest.
+
+        .. accordion::
+
+            .. accordion-row:: Show twine using a remote tag template
+
+                .. code-block:: javascript
+
+                    {
+                      "input_manifest": {
+                        "datasets": [
+                          {
+                            "key": "met_mast_data",
+                            "purpose": "A dataset containing meteorological mast data",
+                            "file_tags_template": {
+                              "$ref": "https://refs.schema.octue.com/octue/my-file-type-tag-template/0.0.0.json"
+                            }
+                          },
+                          {
+                            "key": "some_other_kind_of_dataset",
+                            "purpose": "A dataset containing something else",
+                            "file_tags_template": {
+                              "$ref": "https://refs.schema.octue.com/octue/another-file-type-tag-template/0.0.0.json"
+                            }
+                          }
+                        ]
+                      }
+                    }
+
+            .. accordion-row:: Show a matching file manifest
+
+                .. code-block:: javascript
+
+                   {
+                     "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                     "datasets": [
+                       {
+                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                         "name": "met_mast_data",
+                         "tags": {},
+                         "labels": ["met", "mast", "wind"],
+                         "files": [
+                           {
+                             "path": "input/datasets/7ead7669/file_1.csv",
+                             "cluster": 0,
+                             "sequence": 0,
+                             "extension": "csv",
+                             "labels": ["mykeyword1", "mykeyword2"],
+                             "tags": {
+                               "manufacturer": "vestas",
+                               "height": 500,
+                               "is_recycled": true
+                             },
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                             "name": "file_1.csv"
+                           },
+                           {
+                             "path": "input/datasets/7ead7669/file_1.csv",
+                             "cluster": 0,
+                             "sequence": 1,
+                             "extension": "csv",
+                             "labels": [],
+                             "tags": {
+                               "manufacturer": "vestas",
+                               "height": 500,
+                               "is_recycled": true
+                             },
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                             "name": "file_1.csv"
+                           }
+                         ]
+                       },
+                       {
+                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e29",
+                         "name": "some_other_kind_of_dataset",
+                         "tags": {},
+                         "labels": ["my-label"],
+                         "files": [
+                           {
+                             "path": "input/datasets/7eadpp9/interesting_file.dat",
+                             "cluster": 0,
+                             "sequence": 0,
+                             "extension": "dat",
+                             "labels": [],
+                             "tags": {
+                               "length": 864,
+                               "orientation_angle": 85
+                             },
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae9071",
+                             "name": "interesting_file.csv"
+                           },
+                       }
+                     ]
+                   }
 
 
 TODO - clean up or remove this section

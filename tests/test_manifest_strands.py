@@ -452,9 +452,8 @@ class TestManifestStrands(BaseTestCase):
                 "manufacturer": {"type": "string"},
                 "height": {"type": "number"},
                 "is_recycled": {"type": "boolean"},
-                "number_of_blades": {"type": "number"},
             },
-            "required": ["manufacturer", "height", "is_recycled", "number_of_blades"],
+            "required": ["manufacturer", "height", "is_recycled"],
         }
 
         twine = Twine(source=twine_with_input_manifest_with_remote_tag_template)
