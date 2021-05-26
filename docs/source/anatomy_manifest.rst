@@ -49,37 +49,12 @@ associated files) are required / produced.
 Describing Manifests
 ====================
 
-Manifest-based strands are a **description of what files are needed**, NOT a list of specific files or datasets. This is
-a tricky concept, but important, since services should be reusable and applicable to a range of similar datasets.
-
-The purpose of the manifest strands is to provide a helper to a wider system providing datafiles to digital twins.
-
-The manifest strands therefore use **tagging** - they contain a ``filters`` field, which should be valid
-`Apache Lucene <https://lucene.apache.org/>`_ search syntax. This is a powerful syntax, whose tagging features allow
-us to specify incredibly broad, or extremely narrow searches (even down to a known unique result). See the tabs below
-for examples.
-
-
-.. NOTE::
-
-   Tagging syntax is extremely powerful. Below, you'll see how this enables a digital twin to specify things like:
-
-   *"OK, I need this digital twin to always have access to a model file for a particular system, containing trained model data"*
-
-   *"Uh, so I need an ordered sequence of files, that are CSV files from a meteorological mast."*
-
-   This allows **twined** to check that the input files contain what is needed, enables quick and easy
-   extraction of subgroups or particular sequences of files within a dataset, and enables management systems
-   to map candidate datasets to twins that might be used to process them.
-
-
+Manifest-based strands are a **description of what files are needed**. The purpose of the manifest strands is to
+provide a helper to a wider system providing datafiles to digital twins.
 
 .. tabs::
 
    .. group-tab:: Configuration Manifest Strand
-
-      Here we construct an extremely tight filter, which connects this digital twin to
-      datasets from a specific system.
 
       .. accordion::
 
@@ -112,9 +87,6 @@ for examples.
                 :language: javascript
 
    .. group-tab:: Output Manifest Strand
-
-      Output figure files (with *.fig extension) containing figures enabling a visual check
-      of correlation between met mast and scada data.
 
       .. accordion::
 
