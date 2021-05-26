@@ -171,7 +171,8 @@ for examples.
                                  "metadata": {
                                  },
                                  "size_bytes": 59684813,
-                                 "tags": "lidar, helpful, information, like, sequence:1",  // Searchable, parsable and filterable
+                                 "tags": {"sequence": 1},
+                                 "labels": ["lidar", "helpful", "information", "like"],  // Searchable, parsable and filterable
                              },
                              {
                                  "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
@@ -181,7 +182,8 @@ for examples.
                                  "metadata": {
                                  },
                                  "size_bytes": 59684813,
-                                 "tags": "lidar, helpful, information, like, sequence:2",  // Searchable, parsable and filterable
+                                 "tags": {"sequence": 2},
+                                 "labels": ["lidar", "helpful", "information", "like"]  // Searchable, parsable and filterable
                              },
                              {
                                  "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
@@ -191,7 +193,8 @@ for examples.
                                  "metadata": {
                                  },
                                  "size_bytes": 484813,
-                                 "tags": "report",  // Searchable, parsable and filterable
+                                 "tags": {},
+                                 "labels": ["report"]  // Searchable, parsable and filterable
                              }
                          ]
                      },

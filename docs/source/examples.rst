@@ -164,7 +164,8 @@ copied straight from the unit test cases, so you can always check there to see h
          		{
          			"key": "production_data",
          			"purpose": "A dataset containing production data",
-         			"tags": "production, wind"
+         			"tags": {"cleaned": True},
+                    "labels": ["production", "wind"]
          		}
          	],
          	"output_values_schema": {
