@@ -35,7 +35,8 @@ a reminder of the purpose.
          "purpose": "Token for accessing a 3rd party API service"
        },
        {
-         "name": "SECRET_THE_THIRD"
+         "name": "SECRET_THE_THIRD",
+         "purpose": "Another secret, like a password for a sandbox or local database"
        }
      ]
    }
