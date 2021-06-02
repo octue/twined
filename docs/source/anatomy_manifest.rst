@@ -335,7 +335,7 @@ It's the job of **twined** to make sure of two things:
                              "metadata": {
                              },
                              "size_bytes": 59684813,
-                             "tags": {"sequence": 1},
+                             "tags": {"special_number": 1},
                              "labels": ["lidar", "helpful", "information", "like"],  // Searchable, parsable and filterable
                          },
                          {
@@ -346,7 +346,7 @@ It's the job of **twined** to make sure of two things:
                              "metadata": {
                              },
                              "size_bytes": 59684813,
-                             "tags": {"sequence": 2},
+                             "tags": {"special_number": 2},
                              "labels": ["lidar", "helpful", "information", "like"]  // Searchable, parsable and filterable
                          },
                          {
