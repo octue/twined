@@ -1,4 +1,19 @@
 {
+  "$defs": {
+    "tags": {
+      "description": "Key-value tags associated with the object.",
+      "type": "object"
+    },
+    "labels": {
+      "description": "Textual labels associated with the object",
+      "type": "array",
+      "items": [
+        {
+          "type": "string"
+        }
+      ]
+    }
+  },
   "type": "object",
   "properties": {
     "id": {
@@ -18,17 +33,9 @@
             "description": "Name of the dataset",
             "type": "string"
           },
-          "tags": {
-            "description": "Textual tags associated with the dataset",
-            "type": "array",
-            "items": [
-              {
-                "type": "string"
-              }
-            ]
-          },
+          "tags": {"$ref": "#/$defs/tags"},
+          "labels": {"$ref": "#/$defs/labels"},
           "files": {
-            "description": "Textual tags associated with the manifest",
             "type": "array",
             "items": {
               "type": "object",
@@ -57,29 +64,19 @@
                   "description": "A posix based timestamp associated with the file. This may, but need not be, the created or modified time. ",
                   "type": "number"
                 },
-                "tags": {
-                  "description": "Textual tags associated with the file",
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "string"
-                    }
-                  ]
-                }
+                "tags": {"$ref": "#/$defs/tags"},
+                "labels": {"$ref": "#/$defs/labels"}
               },
               "required": [
                 "id",
                 "path",
-                "tags"
+                "tags",
+                "labels"
               ]
             }
           }
         },
-        "required": [
-          "id",
-          "tags",
-          "files"
-        ]
+        "required": ["id", "name", "tags", "labels", "files"]
       }
     }
   },

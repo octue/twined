@@ -88,6 +88,46 @@ class Twine:
 
         return data
 
+    def _get_schema(self, strand):
+        """Get the schema for the given strand.
+
+        Can be used to validate:
+            - the twine file contents itself against the present version twine spec
+            - children data against the required schema for the present version twine spec
+            - values data for compliance with schema written in the twine (for strands like input_values_schema)
+
+        :param str strand:
+        :return dict:
+        """
+        if strand == "twine":
+            # The data is a twine. A twine *contains* schema, but we also need to verify that it matches a certain
+            # schema itself. The twine schema is distributed with this packaged to ensure version consistency...
+            schema_path = "schema/twine_schema.json"
+
+        elif strand in CHILDREN_STRANDS:
+            # The data is a list of children. The "children" strand of the twine describes matching criteria for
+            # the children, not the schema of the "children" data, which is distributed with this package to ensure
+            # version consistency...
+            schema_path = "schema/children_schema.json"
+
+        elif strand in MANIFEST_STRANDS:
+            # The data is a manifest of files. The "*_manifest" strands of the twine describe matching criteria used to
+            # filter files appropriate for consumption by the digital twin, not the schema of the manifest data, which
+            # is distributed with this package to ensure version consistency...
+            schema_path = "schema/manifest_schema.json"
+
+        else:
+            if strand not in SCHEMA_STRANDS:
+                raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
+            schema_key = strand + "_schema"
+
+            try:
+                return getattr(self, schema_key)
+            except AttributeError:
+                raise exceptions.StrandNotFound(f"Cannot validate - no {schema_key} strand in the twine")
+
+        return jsonlib.loads(pkg_resources.resource_string("twined", schema_path))
+
     def _validate_against_schema(self, strand, data):
         """Validates data against a schema, raises exceptions of type Invalid<strand>Json if not compliant.
 
@@ -95,32 +135,12 @@ class Twine:
             - the twine file contents itself against the present version twine spec
             - children data against the required schema for the present version twine spec
             - values data for compliance with schema written in the twine (for strands like input_values_schema)
+
+        :param str strand:
+        :param dict data:
+        :return None:
         """
-        if strand == "twine":
-            # The data is a twine. A twine *contains* schema, but we also need to verify that it matches a certain
-            # schema itself. The twine schema is distributed with this packaged to ensure version consistency...
-            schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/twine_schema.json"))
-
-        elif strand in CHILDREN_STRANDS:
-            # The data is a list of children. The "children" strand of the twine describes matching criteria for
-            # the children, not the schema of the "children" data, which is distributed with this package to ensure
-            # version consistency...
-            schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/children_schema.json"))
-
-        elif strand in MANIFEST_STRANDS:
-            # The data is a manifest of files. The "*_manifest" strands of the twine describe matching criteria used to
-            # filter files appropriate for consumption by the digital twin, not the schema of the manifest data, which
-            # is distributed with this package to ensure version consistency...
-            schema = jsonlib.loads(pkg_resources.resource_string("twined", "schema/manifest_schema.json"))
-
-        else:
-            if strand not in SCHEMA_STRANDS:
-                raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
-            schema_key = strand + "_schema"
-            try:
-                schema = getattr(self, schema_key)
-            except AttributeError:
-                raise exceptions.StrandNotFound(f"Cannot validate - no {schema_key} strand in the twine")
+        schema = self._get_schema(strand)
 
         try:
             jsonschema_validate(instance=data, schema=schema)
@@ -159,12 +179,49 @@ class Twine:
             data = data.serialise()
 
         self._validate_against_schema(kind, data)
+        self._validate_dataset_file_tags(manifest_kind=kind, manifest=data)
 
         if cls and inbound:
             # TODO verify that all the required keys etc are there
             return cls(**data)
 
         return data
+
+    def _validate_dataset_file_tags(self, manifest_kind, manifest):
+        """Validate the tags of the files of each dataset in the manifest against the file tags template in the
+        corresponding dataset field in the given manifest field of the twine.
+
+        :param str manifest_kind:
+        :param dict manifest:
+        :return None:
+        """
+        # This is the manifest schema included in the twine.json file, not the schema for manifest.json files.
+        manifest_schema = getattr(self, manifest_kind)
+
+        for dataset_schema in manifest_schema["datasets"]:
+            datasets = [dataset for dataset in manifest["datasets"] if dataset["name"] == dataset_schema["key"]]
+
+            if not datasets:
+                continue
+
+            if len(datasets) > 1:
+                raise exceptions.DatasetNameIsNotUnique(
+                    f"There is more than one dataset named {dataset_schema['key']!r} - ensure each dataset within a "
+                    f"manifest is uniquely named."
+                )
+
+            dataset = datasets.pop(0)
+
+            file_tags_template = dataset_schema.get("file_tags_template")
+
+            if not file_tags_template:
+                continue
+
+            for file in dataset["files"]:
+                try:
+                    jsonschema_validate(instance=file["tags"], schema=file_tags_template)
+                except ValidationError as e:
+                    raise exceptions.invalid_contents_map[manifest_kind](str(e))
 
     @property
     def available_strands(self):

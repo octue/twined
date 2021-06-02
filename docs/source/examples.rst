@@ -81,8 +81,9 @@ copied straight from the unit test cases, so you can always check there to see h
                      }
                  }
              },
-             "output_manifest": [
-             ],
+             "output_manifest": {
+                "datasets": []
+             },
              "output_values_schema": {
                  "title": "Output Values schema for the foundation cost twin",
                  "description": "The response supplied to a change in input values will always conform to this schema.",
@@ -125,12 +126,14 @@ copied straight from the unit test cases, so you can always check there to see h
          			"purpose": "Token for accessing a 3rd party weather API service"
          		}
          	],
-         	"input_manifest": [
-         		{
-         			"key": "wind_resource_data",
-         			"purpose": "A dataset containing Wind Resource Grid files"
-         		}
-         	],
+         	"input_manifest": {
+                "datasets": [
+                    {
+                        "key": "wind_resource_data",
+                        "purpose": "A dataset containing Wind Resource Grid files"
+                    }
+                ]
+            },
          	"input_values_schema": {
          		"$schema": "http://json-schema.org/2019-09/schema#",
          		"title": "Input Values for the weather service twin",
@@ -160,13 +163,16 @@ copied straight from the unit test cases, so you can always check there to see h
          			}
          		}
          	},
-         	"output_manifest": [
-         		{
-         			"key": "production_data",
-         			"purpose": "A dataset containing production data",
-         			"tags": "production, wind"
-         		}
-         	],
+         	"output_manifest": {
+                "datasets": [
+                    {
+                        "key": "production_data",
+                        "purpose": "A dataset containing production data",
+                        "tags": {"cleaned": true},
+                        "labels": ["production", "wind"]
+                    }
+                ]
+            },
          	"output_values_schema": {
          		"$schema": "http://json-schema.org/2019-09/schema#",
          		"title": "Output Values for the metocean service twin",

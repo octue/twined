@@ -67,6 +67,7 @@
 			}
 		}
 	},
-	"output_manifest": [
-	]
+	"output_manifest": {
+		"datasets": []
+	}
 }
