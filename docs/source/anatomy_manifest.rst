@@ -49,37 +49,12 @@ associated files) are required / produced.
 Describing Manifests
 ====================
 
-Manifest-based strands are a **description of what files are needed**, NOT a list of specific files or datasets. This is
-a tricky concept, but important, since services should be reusable and applicable to a range of similar datasets.
-
-The purpose of the manifest strands is to provide a helper to a wider system providing datafiles to digital twins.
-
-The manifest strands therefore use **tagging** - they contain a ``filters`` field, which should be valid
-`Apache Lucene <https://lucene.apache.org/>`_ search syntax. This is a powerful syntax, whose tagging features allow
-us to specify incredibly broad, or extremely narrow searches (even down to a known unique result). See the tabs below
-for examples.
-
-
-.. NOTE::
-
-   Tagging syntax is extremely powerful. Below, you'll see how this enables a digital twin to specify things like:
-
-   *"OK, I need this digital twin to always have access to a model file for a particular system, containing trained model data"*
-
-   *"Uh, so I need an ordered sequence of files, that are CSV files from a meteorological mast."*
-
-   This allows **twined** to check that the input files contain what is needed, enables quick and easy
-   extraction of subgroups or particular sequences of files within a dataset, and enables management systems
-   to map candidate datasets to twins that might be used to process them.
-
-
+Manifest-based strands are a **description of what files are needed**. The purpose of the manifest strands is to
+provide a helper to a wider system providing datafiles to digital twins.
 
 .. tabs::
 
    .. group-tab:: Configuration Manifest Strand
-
-      Here we construct an extremely tight filter, which connects this digital twin to
-      datasets from a specific system.
 
       .. accordion::
 
@@ -103,7 +78,7 @@ for examples.
 
          .. accordion-row:: Show twine containing this strand
 
-            .. literalinclude:: ../../examples/met_mast_scada_service/strands/input_manifest_filters.json
+            .. literalinclude:: ../../examples/met_mast_scada_service/strands/input_manifest.json
                 :language: javascript
 
          .. accordion-row:: Show a matching file manifest
@@ -113,14 +88,11 @@ for examples.
 
    .. group-tab:: Output Manifest Strand
 
-      Output figure files (with *.fig extension) containing figures enabling a visual check
-      of correlation between met mast and scada data.
-
       .. accordion::
 
          .. accordion-row:: Show twine containing this strand
 
-            .. literalinclude:: ../../examples/met_mast_scada_service/strands/output_manifest_filters.json
+            .. literalinclude:: ../../examples/met_mast_scada_service/strands/output_manifest.json
                 :language: javascript
 
          .. accordion-row:: Show a matching file manifest
@@ -128,75 +100,270 @@ for examples.
             .. literalinclude:: ../../examples/met_mast_scada_service/data/output_manifest.json
                 :language: javascript
 
-..
-
-    TODO - clean up or remove this section
-
-    .. _how_filtering_works:
-
-    How Filtering Works
-    ===================
-
-    It's the job of **twined** to make sure of two things:
-
-    1. make sure the *twine* file itself is valid,
 
 
-          **File data (input, output)**
+.. _file_tag_templates:
 
-          Files are not streamed directly to the digital twin (this would require extreme bandwidth in whatever system is
-          orchestrating all the twins). Instead, files should be made available on the local storage system; i.e. a volume
-          mounted to whatever container or VM the digital twin runs in.
+File tag templates
+==================
 
-          Groups of files are described by a ``manifest``, where a manifest is (in essence) a catalogue of files in a
-          dataset.
+Datafiles can be tagged with key-value pairs of relevant metadata that can be used in analyses. Certain datasets might
+need one set of metadata on each file, while others might need a different set. The required (or optional) file tags can be
+specified in the twine in the ``file_tags_template`` property of each dataset of any ``manifest`` strand. Each file in
+the corresponding manifest strand is then validated against its dataset's file tag template to ensure the required tags
+are present.
 
-          A digital twin might receive multiple manifests, if it uses multiple datasets. For example, it could use a 3D
-          point cloud LiDAR dataset, and a meteorological dataset.
+.. tabs::
 
-          .. code-block:: javascript
+    .. group-tab:: Manifest strand with file tag template
 
-             {
-                 "manifests": [
-                     {
-                         "type": "dataset",
-                         "id": "3c15c2ba-6a32-87e0-11e9-3baa66a632fe",  // UUID of the manifest
-                         "files": [
-                             {
-                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",  // UUID of that file
-                                 "sha1": "askjnkdfoisdnfkjnkjsnd"  // for quality control to check correctness of file contents
-                                 "name": "Lidar - 4 to 10 Dec.csv",
-                                 "path": "local/file/path/to/folder/containing/it/",
-                                 "type": "csv",
-                                 "metadata": {
-                                 },
-                                 "size_bytes": 59684813,
-                                 "tags": "lidar, helpful, information, like, sequence:1",  // Searchable, parsable and filterable
+        The example below is for an input manifest, but the format is the same for configuration and output manifests.
+
+        .. accordion::
+
+            .. accordion-row:: Show twine containing a manifest strand with a file tag template
+
+                .. code-block:: javascript
+
+                   {
+                     "input_manifest": {
+                       "datasets": [
+                         {
+                           "key": "met_mast_data",
+                           "purpose": "A dataset containing meteorological mast data",
+                           "file_tags_template": {
+                             "type": "object",
+                             "properties": {
+                               "manufacturer": {"type": "string"},
+                               "height": {"type": "number"},
+                               "is_recycled": {"type": "boolean"}
                              },
-                             {
-                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                                 "name": "Lidar - 11 to 18 Dec.csv",
-                                 "path": "local/file/path/to/folder/containing/it/",
-                                 "type": "csv",
-                                 "metadata": {
-                                 },
-                                 "size_bytes": 59684813,
-                                 "tags": "lidar, helpful, information, like, sequence:2",  // Searchable, parsable and filterable
-                             },
-                             {
-                                 "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                                 "name": "Lidar report.pdf",
-                                 "path": "local/file/path/to/folder/containing/it/",
-                                 "type": "pdf",
-                                 "metadata": {
-                                 },
-                                 "size_bytes": 484813,
-                                 "tags": "report",  // Searchable, parsable and filterable
-                             }
-                         ]
-                     },
-                     {
-                         // ... another dataset manifest ...
+                             "required": ["manufacturer", "height", "is_recycled"]
+                           }
+                         }
+                       ]
                      }
-                 ]
-             }
+                   }
+
+            .. accordion-row:: Show a matching file manifest
+
+                .. code-block:: javascript
+
+                   {
+                     "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                     "datasets": [
+                       {
+                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                         "name": "met_mast_data",
+                         "tags": {},
+                         "labels": ["met", "mast", "wind"],
+                         "files": [
+                           {
+                             "path": "input/datasets/7ead7669/file_1.csv",
+                             "cluster": 0,
+                             "sequence": 0,
+                             "extension": "csv",
+                             "labels": ["mykeyword1", "mykeyword2"],
+                             "tags": {
+                               "manufacturer": "vestas",
+                               "height": 500,
+                               "is_recycled": true
+                             },
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                             "name": "file_1.csv"
+                           },
+                           {
+                             "path": "input/datasets/7ead7669/file_1.csv",
+                             "cluster": 0,
+                             "sequence": 1,
+                             "extension": "csv",
+                             "labels": [],
+                             "tags": {
+                               "manufacturer": "vestas",
+                               "height": 500,
+                               "is_recycled": true
+                             },
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                             "name": "file_1.csv"
+                           }
+                         ]
+                       }
+                     ]
+                   }
+
+    .. group-tab:: Manifest strand with a remote file tag template
+
+        A remote reference can also be given for a file tag template. If the tag template somewhere public, this is
+        useful for sharing the template between one or more teams working on the same type of data.
+
+        The example below is for an input manifest, but the format is the same for configuration and output manifests.
+        It also shows two different tag templates being specified for two different types of dataset required by the
+        manifest.
+
+        .. accordion::
+
+            .. accordion-row:: Show twine using a remote tag template
+
+                .. code-block:: javascript
+
+                    {
+                      "input_manifest": {
+                        "datasets": [
+                          {
+                            "key": "met_mast_data",
+                            "purpose": "A dataset containing meteorological mast data",
+                            "file_tags_template": {
+                              "$ref": "https://refs.schema.octue.com/octue/my-file-type-tag-template/0.0.0.json"
+                            }
+                          },
+                          {
+                            "key": "some_other_kind_of_dataset",
+                            "purpose": "A dataset containing something else",
+                            "file_tags_template": {
+                              "$ref": "https://refs.schema.octue.com/octue/another-file-type-tag-template/0.0.0.json"
+                            }
+                          }
+                        ]
+                      }
+                    }
+
+            .. accordion-row:: Show a matching file manifest
+
+                .. code-block:: javascript
+
+                   {
+                     "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                     "datasets": [
+                       {
+                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
+                         "name": "met_mast_data",
+                         "tags": {},
+                         "labels": ["met", "mast", "wind"],
+                         "files": [
+                           {
+                             "path": "input/datasets/7ead7669/file_1.csv",
+                             "cluster": 0,
+                             "sequence": 0,
+                             "extension": "csv",
+                             "labels": ["mykeyword1", "mykeyword2"],
+                             "tags": {
+                               "manufacturer": "vestas",
+                               "height": 500,
+                               "is_recycled": true
+                             },
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                             "name": "file_1.csv"
+                           },
+                           {
+                             "path": "input/datasets/7ead7669/file_1.csv",
+                             "cluster": 0,
+                             "sequence": 1,
+                             "extension": "csv",
+                             "labels": [],
+                             "tags": {
+                               "manufacturer": "vestas",
+                               "height": 500,
+                               "is_recycled": true
+                             },
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                             "name": "file_1.csv"
+                           }
+                         ]
+                       },
+                       {
+                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e29",
+                         "name": "some_other_kind_of_dataset",
+                         "tags": {},
+                         "labels": ["my-label"],
+                         "files": [
+                           {
+                             "path": "input/datasets/7eadpp9/interesting_file.dat",
+                             "cluster": 0,
+                             "sequence": 0,
+                             "extension": "dat",
+                             "labels": [],
+                             "tags": {
+                               "length": 864,
+                               "orientation_angle": 85
+                             },
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae9071",
+                             "name": "interesting_file.csv"
+                           },
+                       }
+                     ]
+                   }
+
+
+TODO - clean up or remove this section
+
+.. _how_filtering_works:
+
+How Filtering Works
+===================
+
+It's the job of **twined** to make sure of two things:
+
+1. make sure the *twine* file itself is valid,
+
+
+      **File data (input, output)**
+
+      Files are not streamed directly to the digital twin (this would require extreme bandwidth in whatever system is
+      orchestrating all the twins). Instead, files should be made available on the local storage system; i.e. a volume
+      mounted to whatever container or VM the digital twin runs in.
+
+      Groups of files are described by a ``manifest``, where a manifest is (in essence) a catalogue of files in a
+      dataset.
+
+      A digital twin might receive multiple manifests, if it uses multiple datasets. For example, it could use a 3D
+      point cloud LiDAR dataset, and a meteorological dataset.
+
+      .. code-block:: javascript
+
+         {
+             "manifests": [
+                 {
+                     "type": "dataset",
+                     "id": "3c15c2ba-6a32-87e0-11e9-3baa66a632fe",  // UUID of the manifest
+                     "files": [
+                         {
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",  // UUID of that file
+                             "sha1": "askjnkdfoisdnfkjnkjsnd"  // for quality control to check correctness of file contents
+                             "name": "Lidar - 4 to 10 Dec.csv",
+                             "path": "local/file/path/to/folder/containing/it/",
+                             "type": "csv",
+                             "metadata": {
+                             },
+                             "size_bytes": 59684813,
+                             "tags": {"special_number": 1},
+                             "labels": ["lidar", "helpful", "information", "like"],  // Searchable, parsable and filterable
+                         },
+                         {
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                             "name": "Lidar - 11 to 18 Dec.csv",
+                             "path": "local/file/path/to/folder/containing/it/",
+                             "type": "csv",
+                             "metadata": {
+                             },
+                             "size_bytes": 59684813,
+                             "tags": {"special_number": 2},
+                             "labels": ["lidar", "helpful", "information", "like"]  // Searchable, parsable and filterable
+                         },
+                         {
+                             "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
+                             "name": "Lidar report.pdf",
+                             "path": "local/file/path/to/folder/containing/it/",
+                             "type": "pdf",
+                             "metadata": {
+                             },
+                             "size_bytes": 484813,
+                             "tags": {},
+                             "labels": ["report"]  // Searchable, parsable and filterable
+                         }
+                     ]
+                 },
+                 {
+                     // ... another dataset manifest ...
+                 }
+             ]
+         }

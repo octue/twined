@@ -49,7 +49,7 @@ class TestTwine(BaseTestCase):
         invalid_json_twine = """
             {
                 "children": [
-                "configuration_schema": {
+                "configuration_values_schema": {
                     "$schema": "http://json-schema.org/2019-09/schema#",
                     "title": "The example configuration form",
                     "description": "The configuration strand of an example twine",

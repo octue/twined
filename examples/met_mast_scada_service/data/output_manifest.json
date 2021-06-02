@@ -5,14 +5,16 @@
       "id": "4564deca-5654-42e8-aadf-70690b393a30",
       "name": "visual cross check data",
       "organisation": "megacorp",
-      "tags": "figure, met, mast, scada, check, location:108346",
+      "tags": {"location": 108346},
+      "labels": ["figure", "met", "mast", "scada", "check"],
       "files": [
         {
           "path": "datasets/7ead7669/cross_check.fig",
           "cluster": 0,
           "sequence": 0,
           "extension": "fig",
-          "tags": "",
+          "tags": {},
+          "labels": [],
           "posix_timestamp": 1551394800,
           "id": "38f77fe2-c8c0-49d1-a08c-0928d53a742f",
           "last_modified": "2019-02-28T23:00:00.000000Z",

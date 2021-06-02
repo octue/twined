@@ -1,5 +1,5 @@
 {
-	"configuration_schema": {
+	"configuration_values_schema": {
 		"$schema": "http://json-schema.org/2019-09/schema#",
 		"title": "Configuration for a simple app",
 		"description": "The app creates a mandelbrot plot",
@@ -67,6 +67,7 @@
 			}
 		}
 	},
-	"output_manifest": [
-	]
+	"output_manifest": {
+		"datasets": []
+	}
 }

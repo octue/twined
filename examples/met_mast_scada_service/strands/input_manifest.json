@@ -1,12 +1,16 @@
 {
   // Manifest strands contain lists, with one entry for each required dataset
-  "configuration_manifest": {
+  "input_manifest": {
     "datasets": [
       {
         // Once the inputs are validated, your analysis program can use this key to access the dataset
-        "key": "trained_model",
+        "key": "met_mast_data",
         // General notes, which are helpful as a reminder to users of the service
-        "purpose": "The trained classifier"
+        "purpose": "A dataset containing meteorological mast data"
+      },
+      {
+        "key": "scada_data",
+        "purpose": "A dataset containing scada data"
       }
     ]
   }
