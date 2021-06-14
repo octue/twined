@@ -1,4 +1,4 @@
-name: Release the package on merge of release/x.y.z into main
+name: Release the package on merge into main
 
 # Only trigger when a pull request into main branch is closed.
 on:
@@ -10,7 +10,7 @@ on:
 jobs:
   release:
     # This job will only run if the PR has been merged (and not closed without merging).
-    if: github.event.pull_request.merged == true && startsWith( github.head_ref, 'release/' )
+    if: "github.event.pull_request.merged == true && !contains(github.event.pull_request.head.message, 'skip_ci_release')"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

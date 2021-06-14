@@ -10,22 +10,30 @@ on: [push]
 
 jobs:
 
-  check-version-consistency:
+  check-semantic-version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          # Set fetch-depth to 0 to fetch all tags (necessary for git-mkver to determine the correct semantic version).
+          fetch-depth: 0
       - uses: actions/setup-python@v2
-      - run: python .github/workflows/scripts/check-version-consistency.py
+      - name: Install git-mkver
+        run: |
+          curl -L https://github.com/idc101/git-mkver/releases/download/v1.2.1/git-mkver-linux-amd64-1.2.1.tar.gz \
+          | tar xvz \
+          && sudo mv git-mkver /usr/local/bin
+      - name: Check version
+        run: python .github/workflows/scripts/check-semantic-version.py
 
-  tests:
-    runs-on: ubuntu-latest
+  run-tests:
     if: "!contains(github.event.head_commit.message, 'skip_ci_tests')"
+    runs-on: ubuntu-latest
     env:
       USING_COVERAGE: '3.8'
     strategy:
       matrix:
         python: [3.8]
-        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -33,10 +41,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - name: Install Tox and any other packages
+      - name: Install tox
         run: pip install tox
-      - name: Run Tox
-        run: tox -e py
+      - name: Run tests
+        run: tox
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
@@ -45,13 +53,13 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
-    if: contains(github.ref, 'main') || contains(github.ref, 'release/')
+    if: "!contains(github.event.head_commit.message, 'skip_ci_publish')"
     runs-on: ubuntu-latest
-    needs: tests
+    needs: [check-semantic-version, run-tests]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
@@ -60,7 +68,6 @@ jobs:
           python3 -m pip install --upgrade setuptools wheel
           python3 setup.py sdist bdist_wheel
       - name: Test package is publishable with PyPI test server
-        if: contains(github.ref, 'release/')
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
