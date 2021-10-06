@@ -11,6 +11,7 @@ on: [push]
 jobs:
 
   check-semantic-version:
+    if: "!contains(github.event.head_commit.message, 'skipci')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +30,7 @@ jobs:
         run: check-semantic-version setup.py
 
   run-tests:
-    if: "!contains(github.event.head_commit.message, 'skip_ci_tests')"
+    if: "!contains(github.event.head_commit.message, 'skipci')"
     runs-on: ubuntu-latest
     env:
       USING_COVERAGE: '3.8'
@@ -55,7 +56,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
-    if: "!contains(github.event.head_commit.message, 'skip_ci_publish')"
+    if: "!contains(github.event.head_commit.message, 'skipci')"
     runs-on: ubuntu-latest
     needs: [check-semantic-version, run-tests]
     steps:
