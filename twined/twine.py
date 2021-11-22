@@ -330,6 +330,18 @@ class Twine:
         """Validates the output manifest, passed as either a file or a json string"""
         return self._validate_manifest("output_manifest", source, **kwargs)
 
+    def validate_monitor_update(self, source):
+        """Validate a monitor update against the monitors strand."""
+        strand = "monitors"
+        data = self._load_json("monitor_update", source)
+
+        try:
+            jsonschema_validate(instance=data, schema=self.monitors)
+            logger.debug("Validated %s against schema.", strand)
+
+        except ValidationError as e:
+            raise exceptions.invalid_contents_map[strand](str(e))
+
     @staticmethod
     def _get_cls(name, cls):
         """Getter that will return cls[name] if cls is a dict or cls otherwise"""
