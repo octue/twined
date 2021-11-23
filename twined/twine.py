@@ -313,6 +313,10 @@ class Twine:
         """Validates that the output values, passed as either a file or a json string, are correct"""
         return self._validate_values("output_values", source, **kwargs)
 
+    def validate_monitor_values(self, source, **kwargs):
+        """Validate monitor values against the monitors schema strand."""
+        return self._validate_values(kind="monitors", source=source, **kwargs)
+
     def validate_configuration_manifest(self, source, **kwargs):
         """Validates the input manifest, passed as either a file or a json string"""
         return self._validate_manifest("configuration_manifest", source, **kwargs)
@@ -324,10 +328,6 @@ class Twine:
     def validate_output_manifest(self, source, **kwargs):
         """Validates the output manifest, passed as either a file or a json string"""
         return self._validate_manifest("output_manifest", source, **kwargs)
-
-    def validate_monitor_values(self, source):
-        """Validate a monitor update against the monitors strand."""
-        return self._validate_values(kind="monitors", source=source)
 
     @staticmethod
     def _get_cls(name, cls):
