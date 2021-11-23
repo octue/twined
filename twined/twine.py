@@ -12,11 +12,7 @@ from .utils import load_json, trim_suffix
 logger = logging.getLogger(__name__)
 
 
-SCHEMA_STRANDS = (
-    "input_values",
-    "configuration_values",
-    "output_values",
-)
+SCHEMA_STRANDS = ("input_values", "configuration_values", "output_values", "monitors")
 
 MANIFEST_STRANDS = (
     "configuration_manifest",
@@ -28,14 +24,11 @@ CREDENTIAL_STRANDS = ("credentials",)
 
 CHILDREN_STRANDS = ("children",)
 
-MONITOR_STRANDS = ("monitors",)
-
 ALL_STRANDS = (
     *SCHEMA_STRANDS,
     *MANIFEST_STRANDS,
     *CREDENTIAL_STRANDS,
     *CHILDREN_STRANDS,
-    *MONITOR_STRANDS,
 )
 
 
@@ -119,6 +112,8 @@ class Twine:
         else:
             if strand not in SCHEMA_STRANDS:
                 raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
+
+            # Get schema from twine.json file.
             schema_key = strand + "_schema"
 
             try:
@@ -332,15 +327,7 @@ class Twine:
 
     def validate_monitor_update(self, source):
         """Validate a monitor update against the monitors strand."""
-        strand = "monitors"
-        data = self._load_json("monitor_update", source)
-
-        try:
-            jsonschema_validate(instance=data, schema=self.monitors)
-            logger.debug("Validated %s against schema.", strand)
-
-        except ValidationError as e:
-            raise exceptions.invalid_contents_map[strand](str(e))
+        return self._validate_values(kind="monitors", source=source)
 
     @staticmethod
     def _get_cls(name, cls):

@@ -5,7 +5,7 @@ from .base import BaseTestCase
 class TestMonitorsTwine(BaseTestCase):
     STRAND_WITH_MONITORS_SCHEMA = """
         {
-            "monitors": {
+            "monitors_schema": {
                 "type": "object",
                 "properties": {
                     "my_property": {
