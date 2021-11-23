@@ -21,7 +21,7 @@ class TestMonitorsTwine(BaseTestCase):
         """Test that an error is raised if an invalid monitor update is validated."""
         twine = Twine(source=self.STRAND_WITH_MONITORS_SCHEMA)
 
-        with self.assertRaises(exceptions.InvalidMonitorsUpdate):
+        with self.assertRaises(exceptions.InvalidValuesContents):
             twine.validate_monitor_values([])
 
     def test_validate_monitors_with_valid_monitor_update(self):

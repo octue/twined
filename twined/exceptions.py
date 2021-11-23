@@ -105,10 +105,6 @@ class InvalidValuesContents(InvalidValues, ValidationError):
     """Raised when the JSON in the file is not valid according to its matching schema."""
 
 
-class InvalidMonitorsUpdate(InvalidValues, ValidationError):
-    pass
-
-
 # --------------------- Exceptions relating to validation of manifests ------------------------
 
 
@@ -160,6 +156,7 @@ invalid_json_map = {
     "configuration_values": InvalidValuesJson,
     "input_values": InvalidValuesJson,
     "output_values": InvalidValuesJson,
+    "monitors": InvalidValuesJson,
     "configuration_manifest": InvalidManifestJson,
     "input_manifest": InvalidManifestJson,
     "output_manifest": InvalidManifestJson,
@@ -172,8 +169,8 @@ invalid_contents_map = {
     "configuration_values": InvalidValuesContents,
     "input_values": InvalidValuesContents,
     "output_values": InvalidValuesContents,
+    "monitors": InvalidValuesContents,
     "configuration_manifest": InvalidManifestContents,
     "input_manifest": InvalidManifestContents,
     "output_manifest": InvalidManifestContents,
-    "monitors": InvalidMonitorsUpdate,
 }
