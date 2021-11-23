@@ -22,9 +22,9 @@ class TestMonitorsTwine(BaseTestCase):
         twine = Twine(source=self.STRAND_WITH_MONITORS_SCHEMA)
 
         with self.assertRaises(exceptions.InvalidMonitorsUpdate):
-            twine.validate_monitor_update([])
+            twine.validate_monitor_values([])
 
     def test_validate_monitors_with_valid_monitor_update(self):
         """Test that a valid monitor update validates successfully."""
         twine = Twine(source=self.STRAND_WITH_MONITORS_SCHEMA)
-        twine.validate_monitor_update({"my_property": 3.7})
+        twine.validate_monitor_values({"my_property": 3.7})

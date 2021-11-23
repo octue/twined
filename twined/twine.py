@@ -325,7 +325,7 @@ class Twine:
         """Validates the output manifest, passed as either a file or a json string"""
         return self._validate_manifest("output_manifest", source, **kwargs)
 
-    def validate_monitor_update(self, source):
+    def validate_monitor_values(self, source):
         """Validate a monitor update against the monitors strand."""
         return self._validate_values(kind="monitors", source=source)
 
