@@ -12,7 +12,7 @@ from .utils import load_json, trim_suffix
 logger = logging.getLogger(__name__)
 
 
-SCHEMA_STRANDS = ("input_values", "configuration_values", "output_values", "monitors")
+SCHEMA_STRANDS = ("input_values", "configuration_values", "output_values", "monitor_message")
 
 MANIFEST_STRANDS = (
     "configuration_manifest",
@@ -313,9 +313,9 @@ class Twine:
         """Validates that the output values, passed as either a file or a json string, are correct"""
         return self._validate_values("output_values", source, **kwargs)
 
-    def validate_monitor_values(self, source, **kwargs):
-        """Validate monitor values against the monitors schema strand."""
-        return self._validate_values(kind="monitors", source=source, **kwargs)
+    def validate_monitor_message(self, source, **kwargs):
+        """Validate monitor message against the monitor message schema strand."""
+        return self._validate_values(kind="monitor_message", source=source, **kwargs)
 
     def validate_configuration_manifest(self, source, **kwargs):
         """Validates the input manifest, passed as either a file or a json string"""

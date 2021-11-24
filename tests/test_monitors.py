@@ -2,10 +2,10 @@ from twined import Twine, exceptions
 from .base import BaseTestCase
 
 
-class TestMonitorsTwine(BaseTestCase):
-    STRAND_WITH_MONITORS_SCHEMA = """
+class TestMonitorMessageTwine(BaseTestCase):
+    STRAND_WITH_MONITOR_MESSAGE_SCHEMA = """
         {
-            "monitors_schema": {
+            "monitor_message_schema": {
                 "type": "object",
                 "properties": {
                     "my_property": {
@@ -17,14 +17,14 @@ class TestMonitorsTwine(BaseTestCase):
         }
     """
 
-    def test_validate_monitors_raises_error_if_monitors_schema_not_met(self):
+    def test_validate_monitor_message_raises_error_if_monitor_message_schema_not_met(self):
         """Test that an error is raised if an invalid monitor update is validated."""
-        twine = Twine(source=self.STRAND_WITH_MONITORS_SCHEMA)
+        twine = Twine(source=self.STRAND_WITH_MONITOR_MESSAGE_SCHEMA)
 
         with self.assertRaises(exceptions.InvalidValuesContents):
-            twine.validate_monitor_values([])
+            twine.validate_monitor_message([])
 
-    def test_validate_monitors_with_valid_monitor_update(self):
+    def test_validate_monitor_message_with_valid_monitor_update(self):
         """Test that a valid monitor update validates successfully."""
-        twine = Twine(source=self.STRAND_WITH_MONITORS_SCHEMA)
-        twine.validate_monitor_values({"my_property": 3.7})
+        twine = Twine(source=self.STRAND_WITH_MONITOR_MESSAGE_SCHEMA)
+        twine.validate_monitor_message({"my_property": 3.7})
