@@ -12,11 +12,7 @@ from .utils import load_json, trim_suffix
 logger = logging.getLogger(__name__)
 
 
-SCHEMA_STRANDS = (
-    "input_values",
-    "configuration_values",
-    "output_values",
-)
+SCHEMA_STRANDS = ("input_values", "configuration_values", "output_values", "monitor_message")
 
 MANIFEST_STRANDS = (
     "configuration_manifest",
@@ -28,14 +24,11 @@ CREDENTIAL_STRANDS = ("credentials",)
 
 CHILDREN_STRANDS = ("children",)
 
-MONITOR_STRANDS = ("monitors",)
-
 ALL_STRANDS = (
     *SCHEMA_STRANDS,
     *MANIFEST_STRANDS,
     *CREDENTIAL_STRANDS,
     *CHILDREN_STRANDS,
-    *MONITOR_STRANDS,
 )
 
 
@@ -119,6 +112,8 @@ class Twine:
         else:
             if strand not in SCHEMA_STRANDS:
                 raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
+
+            # Get schema from twine.json file.
             schema_key = strand + "_schema"
 
             try:
@@ -317,6 +312,10 @@ class Twine:
     def validate_output_values(self, source, **kwargs):
         """Validates that the output values, passed as either a file or a json string, are correct"""
         return self._validate_values("output_values", source, **kwargs)
+
+    def validate_monitor_message(self, source, **kwargs):
+        """Validate monitor message against the monitor message schema strand."""
+        return self._validate_values(kind="monitor_message", source=source, **kwargs)
 
     def validate_configuration_manifest(self, source, **kwargs):
         """Validates the input manifest, passed as either a file or a json string"""

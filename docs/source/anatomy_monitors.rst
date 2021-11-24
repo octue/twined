@@ -1,13 +1,11 @@
 .. _monitors_strand:
 
-===============
-Monitors Strand
-===============
+======================
+Monitor Message Strand
+======================
 
-The ``configuration_values_schema``, ``input_values_schema`` and ``output_values_schema`` strands are *values-based*,
-meaning the data that matches these strands is in JSON form.
-
-Each of these strands is a *json schema* which describes that data.
+The ``monitor_message_schema`` strand is *values-based* meaning the data that matches the strand is in JSON form. It is
+a *json schema* which describes a monitor message.
 
 .. tabs::
 
@@ -40,5 +38,18 @@ Let's look at basic examples for twines containing each of these strands:
 
       **Monitor data (output)**
 
-      **Log data (output)**
+      .. code-block:: javascript
 
+          {
+            "monitor_message_schema": {
+              "type": "object",
+              "properties": {
+                "my_property": {
+                "type": "number"
+                }
+              },
+              "required": ["my_property"]
+            }
+          }
+
+      **Log data (output)**
