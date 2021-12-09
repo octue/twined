@@ -12,7 +12,7 @@ ALLOWED_KINDS = ("file-like", "filename", "string", "object")
 
 
 def load_json(source, *args, **kwargs):
-    """Loads json, automatically detecting whether the input is a valid filename, a string containing json data,
+    """Load JSON, automatically detecting whether the input is a valid filename, a string containing json data,
     or a python dict already (in which case the result is returned directly).
 
     That makes this function suitable for use in a pipeline where it's not clear whether data has been loaded yet, or

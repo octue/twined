@@ -19,10 +19,14 @@ class TwinedEncoder(json.JSONEncoder):
     some_json = {"a": np.array([0, 1])}
     json.dumps(some_json, cls=TwinedEncoder)
     ```
-
     """
 
     def default(self, obj):
+        """Convert the given object to python primitives.
+
+        :param any obj:
+        :return any:
+        """
         if _numpy_spec is not None:
             import numpy
 

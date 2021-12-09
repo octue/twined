@@ -40,19 +40,16 @@ class Twine:
 
     Note: Instantiating the twine does not validate that any inputs to an application are correct - it merely
     checks that the twine itself is correct.
-
     """
 
     def __init__(self, **kwargs):
-        """Constructor for the twine class"""
         for name, strand in self._load_twine(**kwargs).items():
             setattr(self, name, strand)
 
         self._available_strands = tuple(trim_suffix(name, "_schema") for name in vars(self))
 
     def _load_twine(self, source=None):
-        """Load twine from a *.json filename, file-like or a json string and validates twine contents"""
-
+        """Load twine from a *.json filename, file-like or a json string and validates twine contents."""
         if source is None:
             # If loading an unspecified twine, return an empty one rather than raising error (like in _load_data())
             raw = {}
@@ -65,8 +62,7 @@ class Twine:
         return raw
 
     def _load_json(self, kind, source, **kwargs):
-        """Loads data from either a *.json file, an open file pointer or a json string. Directly returns any other data"""
-
+        """Load data from either a *.json file, an open file pointer or a json string. Directly returns any other data."""
         if source is None:
             raise exceptions.invalid_json_map[kind](f"Cannot load {kind} - no data source specified.")
 
@@ -124,7 +120,7 @@ class Twine:
         return jsonlib.loads(pkg_resources.resource_string("twined", schema_path))
 
     def _validate_against_schema(self, strand, data):
-        """Validates data against a schema, raises exceptions of type Invalid<strand>Json if not compliant.
+        """Validate data against a schema, raises exceptions of type Invalid<strand>Json if not compliant.
 
         Can be used to validate:
             - the twine file contents itself against the present version twine spec
@@ -145,7 +141,7 @@ class Twine:
             raise exceptions.invalid_contents_map[strand](str(e))
 
     def _validate_twine_version(self, twine_file_twined_version):
-        """Validates that the installed version is consistent with an optional version specification in the twine file"""
+        """Validate that the installed version is consistent with an optional version specification in the twine file."""
         installed_twined_version = pkg_resources.get_distribution("twined").version
         logger.debug(
             "Twine versions... %s installed, %s specified in twine", installed_twined_version, twine_file_twined_version
@@ -156,7 +152,7 @@ class Twine:
             )
 
     def _validate_values(self, kind, source, cls=None, **kwargs):
-        """Common values validator method"""
+        """Validate values against the twine schema."""
         data = self._load_json(kind, source, **kwargs)
         self._validate_against_schema(kind, data)
         if cls:
@@ -164,7 +160,7 @@ class Twine:
         return data
 
     def _validate_manifest(self, kind, source, cls=None, **kwargs):
-        """Common manifest validator method"""
+        """Validate manifest against the twine schema."""
         data = self._load_json(kind, source, **kwargs)
 
         # TODO elegant way of cleaning up this nasty serialisation hack to manage conversion of outbound manifests to primitive
@@ -224,7 +220,7 @@ class Twine:
         return self._available_strands
 
     def validate_children(self, source, **kwargs):
-        """Validates that the children values, passed as either a file or a json string, are correct"""
+        """Validate that the children values, passed as either a file or a json string, are correct."""
         # TODO cache this loaded data keyed on a hashed version of kwargs
         children = self._load_json("children", source, **kwargs)
         self._validate_against_schema("children", children)
@@ -302,15 +298,15 @@ class Twine:
         return self.credentials
 
     def validate_configuration_values(self, source, **kwargs):
-        """Validates that the configuration values, passed as either a file or a json string, are correct"""
+        """Validate that the configuration values, passed as either a file or a json string, are correct."""
         return self._validate_values("configuration_values", source, **kwargs)
 
     def validate_input_values(self, source, **kwargs):
-        """Validates that the input values, passed as either a file or a json string, are correct"""
+        """Validate that the input values, passed as either a file or a json string, are correct."""
         return self._validate_values("input_values", source, **kwargs)
 
     def validate_output_values(self, source, **kwargs):
-        """Validates that the output values, passed as either a file or a json string, are correct"""
+        """Validate that the output values, passed as either a file or a json string, are correct."""
         return self._validate_values("output_values", source, **kwargs)
 
     def validate_monitor_message(self, source, **kwargs):
@@ -318,15 +314,15 @@ class Twine:
         return self._validate_values(kind="monitor_message", source=source, **kwargs)
 
     def validate_configuration_manifest(self, source, **kwargs):
-        """Validates the input manifest, passed as either a file or a json string"""
+        """Validate the input manifest, passed as either a file or a json string."""
         return self._validate_manifest("configuration_manifest", source, **kwargs)
 
     def validate_input_manifest(self, source, **kwargs):
-        """Validates the input manifest, passed as either a file or a json string"""
+        """Validate the input manifest, passed as either a file or a json string."""
         return self._validate_manifest("input_manifest", source, **kwargs)
 
     def validate_output_manifest(self, source, **kwargs):
-        """Validates the output manifest, passed as either a file or a json string"""
+        """Validate the output manifest, passed as either a file or a json string."""
         return self._validate_manifest("output_manifest", source, **kwargs)
 
     @staticmethod
@@ -350,22 +346,11 @@ class Twine:
             )
         ```
 
-        :parameter allow_missing: If strand is present in the twine, but the source is equal to None, allow validation
-        to continue.
-        :type allow_missing: bool
-
-        :parameter allow_extra: If strand is present in the sources, but not in the twine, allow validation to continue
-        (only strands in the twine will be validated and converted, others will be returned as-is)
-        :type allow_extra: bool
-
-        :parameter cls: optional dict of classes keyed on strand name (alternatively, one single class which will be
-        applied to strands) which will be instantiated with the validated source data.
-        :type cls: dict or any
-
-        :return: dict of validated and initialised sources
-        :rtype: dict
+        :param bool allow_missing: If strand is present in the twine, but the source is equal to None, allow validation to continue.
+        :param bool allow_extra: If strand is present in the sources, but not in the twine, allow validation to continue (only strands in the twine will be validated and converted, others will be returned as-is)
+        :param any cls: optional dict of classes keyed on strand name (alternatively, one single class which will be applied to strands) which will be instantiated with the validated source data.
+        :return dict: dict of validated and initialised sources
         """
-
         # pop any strand name:data pairs out of kwargs and into their own dict
         source_kwargs = tuple(name for name in kwargs.keys() if name in ALL_STRANDS)
         sources = dict((name, kwargs.pop(name)) for name in source_kwargs)
@@ -401,11 +386,11 @@ class Twine:
         return sources
 
     def validate_strand(self, name, source, **kwargs):
-        """Validates a single strand by name"""
+        """Validate a single strand by name."""
         return self.validate({name: source}, **kwargs)[name]
 
     def prepare(self, *args, cls=None, **kwargs):
-        """Prepares instance for strand data using a class map"""
+        """Prepare instance for strand data using a class map."""
         prepared = {}
         for arg in args:
             if arg not in ALL_STRANDS:

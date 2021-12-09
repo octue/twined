@@ -63,6 +63,7 @@ class TestCredentialsTwine(BaseTestCase):
             Twine(source=invalid_credentials_dict_not_array_twine)
 
     def test_fails_on_name_whitespace(self):
+        """Test that a credential with spaces in its name causes an error to be raised when validated."""
         invalid_credentials_space_in_name_twine = """
             {
                 "credentials": [
@@ -111,7 +112,7 @@ class TestCredentialsValidation(BaseTestCase):
             twine.validate_credentials()
 
     def test_credentials(self):
-        """ Test that the environment will override a default value for a credential."""
+        """Test that the environment will override a default value for a credential."""
         twine = Twine(source=self.VALID_CREDENTIALS_TWINE)
         with mock.patch.dict(
             os.environ,
