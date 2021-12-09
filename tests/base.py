@@ -56,6 +56,10 @@ class BaseTestCase(unittest.TestCase):
     """
 
     def setUp(self):
+        """Add the tests data directory to the test class as an attribute.
+
+        :return None:
+        """
         self.path = os.path.join(os.path.dirname(__file__), "data")
         super().setUp()
 

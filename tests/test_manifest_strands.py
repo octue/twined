@@ -478,7 +478,7 @@ class TestManifestStrands(BaseTestCase):
 
     def test_validate_input_manifest_with_required_tags_in_several_datasets(self):
         """Test that required tags from the file tags template are validated separately and correctly for each dataset."""
-        TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS_FOR_MULTIPLE_DATASETS = """
+        twine_with_input_manifest_with_required_tags_for_multiple_datasets = """
             {
                 "input_manifest": {
                     "datasets": [
@@ -566,7 +566,7 @@ class TestManifestStrands(BaseTestCase):
             }
         """
 
-        twine = Twine(source=TWINE_WITH_INPUT_MANIFEST_WITH_REQUIRED_TAGS_FOR_MULTIPLE_DATASETS)
+        twine = Twine(source=twine_with_input_manifest_with_required_tags_for_multiple_datasets)
         twine.validate_input_manifest(source=input_manifest)
 
     def test_error_raised_if_multiple_datasets_have_same_name(self):
