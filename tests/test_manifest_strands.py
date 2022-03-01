@@ -1,6 +1,5 @@
 import copy
 import os
-import unittest
 from unittest.mock import patch
 from jsonschema.validators import RefResolver
 
@@ -14,32 +13,28 @@ class TestManifestStrands(BaseTestCase):
     VALID_MANIFEST_STRAND = """
         {
             "configuration_manifest": {
-                "datasets": [
-                    {
-                        "key": "configuration_files_data",
+                "datasets": {
+                    "configuration_files_data": {
                         "purpose": "A dataset containing files used in configuration"
                     }
-                ]
+                }
             },
             "input_manifest": {
-                "datasets": [
-                    {
-                        "key": "met_mast_data",
+                "datasets": {
+                    "met_mast_data": {
                         "purpose": "A dataset containing meteorological mast data"
                     },
-                    {
-                        "key": "scada_data",
+                    "scada_data": {
                         "purpose": "A dataset containing scada data"
                     }
-                ]
+                }
             },
             "output_manifest": {
-                "datasets": [
-                    {
-                        "key": "output_files_data",
+                "datasets": {
+                    "output_files_data": {
                         "purpose": "A dataset containing output results"
                     }
-                ]
+                }
             }
         }
     """
@@ -47,9 +42,8 @@ class TestManifestStrands(BaseTestCase):
     TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE = """
         {
             "input_manifest": {
-                "datasets": [
-                    {
-                        "key": "met_mast_data",
+                "datasets": {
+                    "met_mast_data": {
                         "purpose": "A dataset containing meteorological mast data",
                         "file_tags_template": {
                             "type": "object",
@@ -75,7 +69,7 @@ class TestManifestStrands(BaseTestCase):
                             ]
                         }
                     }
-                ]
+                }
             }
         }
     """
@@ -83,8 +77,8 @@ class TestManifestStrands(BaseTestCase):
     INPUT_MANIFEST_WITH_CORRECT_FILE_TAGS = """
         {
             "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-            "datasets": [
-                {
+            "datasets": {
+                "met_mast_data": {
                     "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
                     "name": "met_mast_data",
                     "tags": {},
@@ -122,7 +116,7 @@ class TestManifestStrands(BaseTestCase):
                         }
                     ]
                 }
-            ]
+            }
         }
     """
 
@@ -145,8 +139,8 @@ class TestManifestStrands(BaseTestCase):
         valid_configuration_manifest = """
             {
                 "id": "3ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "configuration_files_data": {
                         "id": "34ad7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "configuration_files_data",
                         "tags": {},
@@ -182,15 +176,15 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
         valid_input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "met_mast_data": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "met_mast_data",
                         "tags": {},
@@ -226,15 +220,15 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
         valid_output_manifest = """
             {
                 "id": "2ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "output_files_data": {
                         "id": "1ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "output_files_data",
                         "tags": {},
@@ -270,7 +264,7 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
@@ -348,8 +342,8 @@ class TestManifestStrands(BaseTestCase):
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "met_mast_data": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "met_mast_data",
                         "tags": {},
@@ -367,7 +361,7 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
@@ -383,8 +377,8 @@ class TestManifestStrands(BaseTestCase):
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "met_mast_data": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "met_mast_data",
                         "tags": {},
@@ -402,7 +396,7 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
@@ -431,15 +425,14 @@ class TestManifestStrands(BaseTestCase):
             """
             {
                 "input_manifest": {
-                    "datasets": [
-                        {
-                            "key": "met_mast_data",
+                    "datasets": {
+                        "met_mast_data": {
                             "purpose": "A dataset containing meteorological mast data",
                             "file_tags_template": {
                                 "$ref": "%s"
                             }
                         }
-                    ]
+                    }
                 }
             }
             """
@@ -481,9 +474,8 @@ class TestManifestStrands(BaseTestCase):
         twine_with_input_manifest_with_required_tags_for_multiple_datasets = """
             {
                 "input_manifest": {
-                    "datasets": [
-                        {
-                            "key": "first_dataset",
+                    "datasets": {
+                        "first_dataset": {
                             "purpose": "A dataset containing meteorological mast data",
                             "file_tags_template": {
                                 "type": "object",
@@ -497,8 +489,7 @@ class TestManifestStrands(BaseTestCase):
                                 }
                             }
                         },
-                        {
-                            "key": "second_dataset",
+                        "second_dataset": {
                             "file_tags_template": {
                                 "type": "object",
                                 "properties": {
@@ -511,7 +502,7 @@ class TestManifestStrands(BaseTestCase):
                                 }
                             }
                         }
-                    ]
+                    }
                 }
             }
         """
@@ -519,8 +510,8 @@ class TestManifestStrands(BaseTestCase):
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "first_dataset": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
                         "name": "first_dataset",
                         "tags": {},
@@ -541,7 +532,7 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     },
-                    {
+                    "second_dataset": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e18",
                         "name": "second_dataset",
                         "tags": {},
@@ -562,7 +553,7 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
@@ -574,16 +565,40 @@ class TestManifestStrands(BaseTestCase):
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "met_mast_data": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
                         "name": "met_mast_data",
                         "tags": {},
                         "labels": [],
                         "files": []
                     },
-                    {
+                    "met_mast_data": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e18",
+                        "name": "met_mast_data",
+                        "tags": {},
+                        "labels": [],
+                        "files": []
+                    }
+                }
+            }
+        """
+
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
+
+        with self.assertRaises(KeyError):
+            twine.validate_input_manifest(source=input_manifest)
+
+    def test_deprecation_warning_issued_and_datasets_format_translated_if_datasets_given_as_list(self):
+        """Test that, if datasets are given as a list (the old format), a deprecation warning is issued and the list
+        is translated to a dictionary (the new format).
+        """
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
                         "name": "met_mast_data",
                         "tags": {},
                         "labels": [],
@@ -595,9 +610,18 @@ class TestManifestStrands(BaseTestCase):
 
         twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
 
-        with self.assertRaises(exceptions.DatasetNameIsNotUnique):
-            twine.validate_input_manifest(source=input_manifest)
+        with self.assertWarns(DeprecationWarning):
+            manifest = twine.validate_input_manifest(source=input_manifest)
 
-
-if __name__ == "__main__":
-    unittest.main()
+        self.assertEqual(
+            manifest["datasets"],
+            {
+                "met_mast_data": {
+                    "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
+                    "name": "met_mast_data",
+                    "tags": {},
+                    "labels": [],
+                    "files": [],
+                }
+            },
+        )

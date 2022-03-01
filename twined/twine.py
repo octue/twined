@@ -1,6 +1,7 @@
 import json as jsonlib
 import logging
 import os
+import warnings
 import pkg_resources
 from dotenv import load_dotenv
 from jsonschema import ValidationError, validate as jsonschema_validate
@@ -52,14 +53,27 @@ class Twine:
         """Load twine from a *.json filename, file-like or a json string and validates twine contents."""
         if source is None:
             # If loading an unspecified twine, return an empty one rather than raising error (like in _load_data())
-            raw = {}
+            raw_twine = {}
             logger.warning("No twine source specified. Loading empty twine.")
         else:
-            raw = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string", "object"))
+            raw_twine = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string", "object"))
 
-        self._validate_against_schema("twine", raw)
-        self._validate_twine_version(twine_file_twined_version=raw.get("twined_version", None))
-        return raw
+        for strand in set(MANIFEST_STRANDS) & raw_twine.keys():
+            if isinstance(raw_twine[strand]["datasets"], list):
+                raw_twine[strand]["datasets"] = {dataset["key"]: dataset for dataset in raw_twine[strand]["datasets"]}
+
+                warnings.warn(
+                    message=(
+                        f"Datasets in the {strand!r} strand of the `twine.json` file should be provided as a "
+                        "dictionary mapping their name to themselves. Support for providing a list of datasets will be "
+                        "phased out soon."
+                    ),
+                    category=DeprecationWarning,
+                )
+
+        self._validate_against_schema("twine", raw_twine)
+        self._validate_twine_version(twine_file_twined_version=raw_twine.get("twined_version", None))
+        return raw_twine
 
     def _load_json(self, kind, source, **kwargs):
         """Load data from either a *.json file, an open file pointer or a json string. Directly returns any other data."""
@@ -165,9 +179,19 @@ class Twine:
 
         # TODO elegant way of cleaning up this nasty serialisation hack to manage conversion of outbound manifests to primitive
         inbound = True
-        if hasattr(data, "serialise"):
+        if hasattr(data, "to_primitive"):
             inbound = False
-            data = data.serialise()
+            data = data.to_primitive()
+
+        if isinstance(data["datasets"], list):
+            data["datasets"] = {dataset["name"]: dataset for dataset in data["datasets"]}
+            warnings.warn(
+                message=(
+                    "Datasets belonging to a manifest should be provided as a dictionary mapping their name to"
+                    "themselves. Support for providing a list of datasets will be phased out soon."
+                ),
+                category=DeprecationWarning,
+            )
 
         self._validate_against_schema(kind, data)
         self._validate_dataset_file_tags(manifest_kind=kind, manifest=data)
@@ -189,19 +213,11 @@ class Twine:
         # This is the manifest schema included in the twine.json file, not the schema for manifest.json files.
         manifest_schema = getattr(self, manifest_kind)
 
-        for dataset_schema in manifest_schema["datasets"]:
-            datasets = [dataset for dataset in manifest["datasets"] if dataset["name"] == dataset_schema["key"]]
+        for dataset_name, dataset_schema in manifest_schema["datasets"].items():
+            dataset = manifest["datasets"].get(dataset_name)
 
-            if not datasets:
+            if not dataset:
                 continue
-
-            if len(datasets) > 1:
-                raise exceptions.DatasetNameIsNotUnique(
-                    f"There is more than one dataset named {dataset_schema['key']!r} - ensure each dataset within a "
-                    f"manifest is uniquely named."
-                )
-
-            dataset = datasets.pop(0)
 
             file_tags_template = dataset_schema.get("file_tags_template")
 
