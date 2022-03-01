@@ -165,9 +165,9 @@ class Twine:
 
         # TODO elegant way of cleaning up this nasty serialisation hack to manage conversion of outbound manifests to primitive
         inbound = True
-        if hasattr(data, "serialise"):
+        if hasattr(data, "to_primitive"):
             inbound = False
-            data = data.serialise()
+            data = data.to_primitive()
 
         self._validate_against_schema(kind, data)
         self._validate_dataset_file_tags(manifest_kind=kind, manifest=data)
