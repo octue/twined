@@ -62,7 +62,7 @@ class TestTwine(BaseTestCase):
         with self.assertRaises(exceptions.InvalidTwineJson):
             Twine(source=invalid_json_twine)
 
-    def test_error_raised_if_datasets_not_given_as_dictionary_in_manifest_strands(self):
+    def test_deprecation_warning_issued_if_datasets_not_given_as_dictionary_in_manifest_strands(self):
         """Test that, if datasets are given as a list in the manifest strands, a deprecation warning is issued and the
         list (the old form) is converted to a dictionary (the new form).
         """

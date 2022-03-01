@@ -42,7 +42,7 @@
           "description": "A list of entries, each describing a dataset that should be attached to / made available to the digital twin",
           "patternProperties": {
             ".+": {
-              "description": "A dataset description mapped to a textual key uniquely identifying the dataset within the application/twin",
+              "description": "A dataset representation whose property name/key uniquely identifies the dataset to the service",
               "type": "object",
               "properties": {
                 "purpose": {
