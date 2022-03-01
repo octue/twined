@@ -589,8 +589,10 @@ class TestManifestStrands(BaseTestCase):
         with self.assertRaises(KeyError):
             twine.validate_input_manifest(source=input_manifest)
 
-    def test_error_raised_if_datasets_not_given_as_dictionary(self):
-        """Test that an error is raised if datasets are not given as a dictionary."""
+    def test_deprecation_warning_issued_and_datasets_format_translated_if_datasets_given_as_list(self):
+        """Test that, if datasets are given as a list (the old format), a deprecation warning is issued and the list
+        is translated to a dictionary (the new format).
+        """
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
@@ -608,5 +610,18 @@ class TestManifestStrands(BaseTestCase):
 
         twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
 
-        with self.assertRaises(exceptions.InvalidManifestContents):
-            twine.validate_input_manifest(source=input_manifest)
+        with self.assertWarns(DeprecationWarning):
+            manifest = twine.validate_input_manifest(source=input_manifest)
+
+        self.assertEqual(
+            manifest["datasets"],
+            {
+                "met_mast_data": {
+                    "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
+                    "name": "met_mast_data",
+                    "tags": {},
+                    "labels": [],
+                    "files": [],
+                }
+            },
+        )

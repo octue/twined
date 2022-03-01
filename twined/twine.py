@@ -1,6 +1,7 @@
 import json as jsonlib
 import logging
 import os
+import warnings
 import pkg_resources
 from dotenv import load_dotenv
 from jsonschema import ValidationError, validate as jsonschema_validate
@@ -168,6 +169,16 @@ class Twine:
         if hasattr(data, "to_primitive"):
             inbound = False
             data = data.to_primitive()
+
+        if isinstance(data["datasets"], list):
+            data["datasets"] = {dataset["name"]: dataset for dataset in data["datasets"]}
+            warnings.warn(
+                message=(
+                    "Datasets belonging to a manifest should be provided as a dictionary mapping their name to"
+                    "themselves. Support for providing a list of datasets will be phased out soon."
+                ),
+                category=DeprecationWarning,
+            )
 
         self._validate_against_schema(kind, data)
         self._validate_dataset_file_tags(manifest_kind=kind, manifest=data)
