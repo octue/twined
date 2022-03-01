@@ -124,10 +124,6 @@ class InvalidManifestContents(InvalidManifest, ValidationError):
     """Raised when the manifest files are missing or do not match tags, sequences, clusters, extensions etc as required"""
 
 
-class DatasetNameIsNotUnique(InvalidManifest):
-    """Raise when a dataset's name is not unique within its manifest."""
-
-
 # --------------------- Exceptions relating to access of data using the Twine instance ------------------------
 
 # TODO This is related to filtering files from a manifest. Determine whether this belongs here,

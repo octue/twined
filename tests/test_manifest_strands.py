@@ -83,8 +83,8 @@ class TestManifestStrands(BaseTestCase):
     INPUT_MANIFEST_WITH_CORRECT_FILE_TAGS = """
         {
             "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-            "datasets": [
-                {
+            "datasets": {
+                "met_mast_data": {
                     "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
                     "name": "met_mast_data",
                     "tags": {},
@@ -122,7 +122,7 @@ class TestManifestStrands(BaseTestCase):
                         }
                     ]
                 }
-            ]
+            }
         }
     """
 
@@ -145,8 +145,8 @@ class TestManifestStrands(BaseTestCase):
         valid_configuration_manifest = """
             {
                 "id": "3ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "configuration_files_data": {
                         "id": "34ad7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "configuration_files_data",
                         "tags": {},
@@ -182,15 +182,15 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
         valid_input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "met_mast_data": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "met_mast_data",
                         "tags": {},
@@ -226,15 +226,15 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
         valid_output_manifest = """
             {
                 "id": "2ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "output_files_data": {
                         "id": "1ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "output_files_data",
                         "tags": {},
@@ -270,7 +270,7 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
@@ -348,8 +348,8 @@ class TestManifestStrands(BaseTestCase):
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "met_mast_data": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "met_mast_data",
                         "tags": {},
@@ -367,7 +367,7 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
@@ -383,8 +383,8 @@ class TestManifestStrands(BaseTestCase):
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "met_mast_data": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
                         "name": "met_mast_data",
                         "tags": {},
@@ -402,7 +402,7 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
@@ -519,8 +519,8 @@ class TestManifestStrands(BaseTestCase):
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "first_dataset": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
                         "name": "first_dataset",
                         "tags": {},
@@ -541,7 +541,7 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     },
-                    {
+                    "second_dataset": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e18",
                         "name": "second_dataset",
                         "tags": {},
@@ -562,7 +562,7 @@ class TestManifestStrands(BaseTestCase):
                             }
                         ]
                     }
-                ]
+                }
             }
         """
 
@@ -574,28 +574,28 @@ class TestManifestStrands(BaseTestCase):
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    {
+                "datasets": {
+                    "met_mast_data": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
                         "name": "met_mast_data",
                         "tags": {},
                         "labels": [],
                         "files": []
                     },
-                    {
+                    "met_mast_data": {
                         "id": "7ead7669-8162-4f64-8cd5-4abe92509e18",
                         "name": "met_mast_data",
                         "tags": {},
                         "labels": [],
                         "files": []
                     }
-                ]
+                }
             }
         """
 
         twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
 
-        with self.assertRaises(exceptions.DatasetNameIsNotUnique):
+        with self.assertRaises(KeyError):
             twine.validate_input_manifest(source=input_manifest)
 
 

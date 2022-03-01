@@ -190,18 +190,10 @@ class Twine:
         manifest_schema = getattr(self, manifest_kind)
 
         for dataset_schema in manifest_schema["datasets"]:
-            datasets = [dataset for dataset in manifest["datasets"] if dataset["name"] == dataset_schema["key"]]
+            dataset = manifest["datasets"].get(dataset_schema["key"])
 
-            if not datasets:
+            if not dataset:
                 continue
-
-            if len(datasets) > 1:
-                raise exceptions.DatasetNameIsNotUnique(
-                    f"There is more than one dataset named {dataset_schema['key']!r} - ensure each dataset within a "
-                    f"manifest is uniquely named."
-                )
-
-            dataset = datasets.pop(0)
 
             file_tags_template = dataset_schema.get("file_tags_template")
 
