@@ -32,16 +32,14 @@
 		}
 	],
 	"input_manifest": {
-		"datasets": [
-			{
-				"key": "met_mast_data",
+		"datasets": {
+			"met_mast_data": {
 				"purpose": "A dataset containing meteorological mast data"
 			},
-			{
-				"key": "scada_data",
+			"scada_data": {
 				"purpose": "A dataset containing scada data"
 			}
-		]
+		}
 	},
 	"input_values_schema": {
 		"$schema": "http://json-schema.org/2019-09/schema#",
@@ -57,12 +55,11 @@
 		}
 	},
 	"output_manifest": {
-		"datasets": [
-			{
-				"key": "production_data",
+		"datasets": {
+			"production_data": {
 				"purpose": "A dataset containing production data"
 			}
-		]
+		}
 	},
 	"output_values_schema": {
 		"title": "Output Values",

@@ -13,32 +13,28 @@ class TestManifestStrands(BaseTestCase):
     VALID_MANIFEST_STRAND = """
         {
             "configuration_manifest": {
-                "datasets": [
-                    {
-                        "key": "configuration_files_data",
+                "datasets": {
+                    "configuration_files_data": {
                         "purpose": "A dataset containing files used in configuration"
                     }
-                ]
+                }
             },
             "input_manifest": {
-                "datasets": [
-                    {
-                        "key": "met_mast_data",
+                "datasets": {
+                    "met_mast_data": {
                         "purpose": "A dataset containing meteorological mast data"
                     },
-                    {
-                        "key": "scada_data",
+                    "scada_data": {
                         "purpose": "A dataset containing scada data"
                     }
-                ]
+                }
             },
             "output_manifest": {
-                "datasets": [
-                    {
-                        "key": "output_files_data",
+                "datasets": {
+                    "output_files_data": {
                         "purpose": "A dataset containing output results"
                     }
-                ]
+                }
             }
         }
     """
@@ -46,9 +42,8 @@ class TestManifestStrands(BaseTestCase):
     TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE = """
         {
             "input_manifest": {
-                "datasets": [
-                    {
-                        "key": "met_mast_data",
+                "datasets": {
+                    "met_mast_data": {
                         "purpose": "A dataset containing meteorological mast data",
                         "file_tags_template": {
                             "type": "object",
@@ -74,7 +69,7 @@ class TestManifestStrands(BaseTestCase):
                             ]
                         }
                     }
-                ]
+                }
             }
         }
     """
@@ -430,15 +425,14 @@ class TestManifestStrands(BaseTestCase):
             """
             {
                 "input_manifest": {
-                    "datasets": [
-                        {
-                            "key": "met_mast_data",
+                    "datasets": {
+                        "met_mast_data": {
                             "purpose": "A dataset containing meteorological mast data",
                             "file_tags_template": {
                                 "$ref": "%s"
                             }
                         }
-                    ]
+                    }
                 }
             }
             """
@@ -480,9 +474,8 @@ class TestManifestStrands(BaseTestCase):
         twine_with_input_manifest_with_required_tags_for_multiple_datasets = """
             {
                 "input_manifest": {
-                    "datasets": [
-                        {
-                            "key": "first_dataset",
+                    "datasets": {
+                        "first_dataset": {
                             "purpose": "A dataset containing meteorological mast data",
                             "file_tags_template": {
                                 "type": "object",
@@ -496,8 +489,7 @@ class TestManifestStrands(BaseTestCase):
                                 }
                             }
                         },
-                        {
-                            "key": "second_dataset",
+                        "second_dataset": {
                             "file_tags_template": {
                                 "type": "object",
                                 "properties": {
@@ -510,7 +502,7 @@ class TestManifestStrands(BaseTestCase):
                                 }
                             }
                         }
-                    ]
+                    }
                 }
             }
         """

@@ -1,5 +1,4 @@
 import os
-import unittest
 
 from twined import Twine, exceptions
 from .base import BaseTestCase
@@ -63,6 +62,25 @@ class TestTwine(BaseTestCase):
         with self.assertRaises(exceptions.InvalidTwineJson):
             Twine(source=invalid_json_twine)
 
+    def test_error_raised_if_datasets_not_given_as_dictionary_in_manifest_strands(self):
+        """Test that an error is raised if datasets are not given as a dictionary in the manifest strands."""
+        for manifest_strand in ("configuration_manifest", "input_manifest", "output_manifest"):
+            with self.subTest(manifest_strand=manifest_strand):
+                invalid_twine = (
+                    """
+                {
+                    "%s": {
+                        "datasets": [
+                            {
+                                "key": "met_mast_data",
+                                "purpose": "A dataset containing meteorological mast data"
+                            }
+                        ]
+                    }
+                }
+                """
+                    % manifest_strand
+                )
 
-if __name__ == "__main__":
-    unittest.main()
+                with self.assertRaises(exceptions.InvalidTwineContents):
+                    Twine(source=invalid_twine)

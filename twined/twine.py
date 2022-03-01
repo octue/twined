@@ -189,8 +189,8 @@ class Twine:
         # This is the manifest schema included in the twine.json file, not the schema for manifest.json files.
         manifest_schema = getattr(self, manifest_kind)
 
-        for dataset_schema in manifest_schema["datasets"]:
-            dataset = manifest["datasets"].get(dataset_schema["key"])
+        for dataset_name, dataset_schema in manifest_schema["datasets"].items():
+            dataset = manifest["datasets"].get(dataset_name)
 
             if not dataset:
                 continue

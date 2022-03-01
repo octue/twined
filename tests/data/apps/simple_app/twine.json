@@ -68,6 +68,6 @@
 		}
 	},
 	"output_manifest": {
-		"datasets": []
+		"datasets": {}
 	}
 }
