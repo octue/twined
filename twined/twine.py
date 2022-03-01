@@ -53,14 +53,27 @@ class Twine:
         """Load twine from a *.json filename, file-like or a json string and validates twine contents."""
         if source is None:
             # If loading an unspecified twine, return an empty one rather than raising error (like in _load_data())
-            raw = {}
+            raw_twine = {}
             logger.warning("No twine source specified. Loading empty twine.")
         else:
-            raw = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string", "object"))
+            raw_twine = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string", "object"))
 
-        self._validate_against_schema("twine", raw)
-        self._validate_twine_version(twine_file_twined_version=raw.get("twined_version", None))
-        return raw
+        for strand in set(MANIFEST_STRANDS) & raw_twine.keys():
+            if isinstance(raw_twine[strand]["datasets"], list):
+                raw_twine[strand]["datasets"] = {dataset["key"]: dataset for dataset in raw_twine[strand]["datasets"]}
+
+                warnings.warn(
+                    message=(
+                        f"Datasets in the {strand!r} strand of the `twine.json` file should be provided as a "
+                        "dictionary mapping their name to themselves. Support for providing a list of datasets will be "
+                        "phased out soon."
+                    ),
+                    category=DeprecationWarning,
+                )
+
+        self._validate_against_schema("twine", raw_twine)
+        self._validate_twine_version(twine_file_twined_version=raw_twine.get("twined_version", None))
+        return raw_twine
 
     def _load_json(self, kind, source, **kwargs):
         """Load data from either a *.json file, an open file pointer or a json string. Directly returns any other data."""

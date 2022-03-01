@@ -1,6 +1,6 @@
 import os
 
-from twined import Twine, exceptions
+from twined import MANIFEST_STRANDS, Twine, exceptions
 from .base import BaseTestCase
 
 
@@ -63,8 +63,10 @@ class TestTwine(BaseTestCase):
             Twine(source=invalid_json_twine)
 
     def test_error_raised_if_datasets_not_given_as_dictionary_in_manifest_strands(self):
-        """Test that an error is raised if datasets are not given as a dictionary in the manifest strands."""
-        for manifest_strand in ("configuration_manifest", "input_manifest", "output_manifest"):
+        """Test that, if datasets are given as a list in the manifest strands, a deprecation warning is issued and the
+        list (the old form) is converted to a dictionary (the new form).
+        """
+        for manifest_strand in MANIFEST_STRANDS:
             with self.subTest(manifest_strand=manifest_strand):
                 invalid_twine = (
                     """
@@ -82,5 +84,15 @@ class TestTwine(BaseTestCase):
                     % manifest_strand
                 )
 
-                with self.assertRaises(exceptions.InvalidTwineContents):
-                    Twine(source=invalid_twine)
+                with self.assertWarns(DeprecationWarning):
+                    twine = Twine(source=invalid_twine)
+
+                self.assertEqual(
+                    getattr(twine, manifest_strand)["datasets"],
+                    {
+                        "met_mast_data": {
+                            "key": "met_mast_data",
+                            "purpose": "A dataset containing meteorological mast data",
+                        }
+                    },
+                )
