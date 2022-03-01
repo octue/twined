@@ -31,7 +31,7 @@
               "type": "string"
             },
             "name": {
-              "description": "Name of the dataset",
+              "description": "Name of the dataset (the same as its key in the 'datasets' field).",
               "type": "string"
             },
             "tags": {
