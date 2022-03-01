@@ -1,6 +1,5 @@
 import copy
 import os
-import unittest
 from unittest.mock import patch
 from jsonschema.validators import RefResolver
 
@@ -598,6 +597,24 @@ class TestManifestStrands(BaseTestCase):
         with self.assertRaises(KeyError):
             twine.validate_input_manifest(source=input_manifest)
 
+    def test_error_raised_if_datasets_not_given_as_dictionary(self):
+        """Test that an error is raised if datasets are not given as a dictionary."""
+        input_manifest = """
+            {
+                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
+                "datasets": [
+                    {
+                        "id": "7ead7669-8162-4f64-8cd5-4abe92509e19",
+                        "name": "met_mast_data",
+                        "tags": {},
+                        "labels": [],
+                        "files": []
+                    }
+                ]
+            }
+        """
 
-if __name__ == "__main__":
-    unittest.main()
+        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
+
+        with self.assertRaises(exceptions.InvalidManifestContents):
+            twine.validate_input_manifest(source=input_manifest)
