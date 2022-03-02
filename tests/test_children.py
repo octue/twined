@@ -72,12 +72,12 @@ class TestChildrenValidation(BaseTestCase):
         Twine().validate_children(source=[])
 
     def test_missing_children(self):
-        """Test that a twine with children will not validate on an empty children input"""
+        """Test that a twine with children will not validate on an empty children input."""
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine(source=self.VALID_TWINE_WITH_CHILDREN).validate_children(source=[])
 
     def test_extra_children(self):
-        """Test that a twine with no children will not validate a non-empty children input"""
+        """Test that a twine with no children will not validate a non-empty children input."""
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine().validate_children(source=self.VALID_CHILD_VALUE)
 
@@ -87,6 +87,13 @@ class TestChildrenValidation(BaseTestCase):
 
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine().validate_children(source=single_child_missing_backend)
+
+    def test_backend_credentials_environment_variable_can_be_empty(self):
+        """Test that the backend credentials environment variable of a child can be empty."""
+        children = (
+            """[{"key": "gis", "id": "some-id", "backend": {"name": "GCPPubSubBackend", "project_name": "blah"}}]"""
+        )
+        Twine(source=self.VALID_TWINE_WITH_CHILDREN).validate_children(source=children)
 
     def test_extra_key_validation_on_empty_twine(self):
         """Test that children with extra data will not raise a validation error on an empty twine."""

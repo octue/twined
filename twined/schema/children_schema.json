@@ -33,7 +33,7 @@
                                 "type": "string"
                             }
                         },
-                        "required": ["name", "project_name", "credentials_environment_variable"]
+                        "required": ["name", "project_name"]
                     }
                 ]
             }

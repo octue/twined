@@ -187,7 +187,7 @@ class Twine:
             data["datasets"] = {dataset["name"]: dataset for dataset in data["datasets"]}
             warnings.warn(
                 message=(
-                    "Datasets belonging to a manifest should be provided as a dictionary mapping their name to"
+                    "Datasets belonging to a manifest should be provided as a dictionary mapping their name to "
                     "themselves. Support for providing a list of datasets will be phased out soon."
                 ),
                 category=DeprecationWarning,
