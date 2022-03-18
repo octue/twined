@@ -60,8 +60,7 @@ class TestChildrenValidation(BaseTestCase):
                 "id": "some-id",
                 "backend": {
                     "name": "GCPPubSubBackend",
-                    "project_name": "my-project",
-                    "credentials_environment_variable": "GCP_SERVICE_ACCOUNT"
+                    "project_name": "my-project"
                 }
             }
         ]
@@ -72,12 +71,12 @@ class TestChildrenValidation(BaseTestCase):
         Twine().validate_children(source=[])
 
     def test_missing_children(self):
-        """Test that a twine with children will not validate on an empty children input"""
+        """Test that a twine with children will not validate on an empty children input."""
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine(source=self.VALID_TWINE_WITH_CHILDREN).validate_children(source=[])
 
     def test_extra_children(self):
-        """Test that a twine with no children will not validate a non-empty children input"""
+        """Test that a twine with no children will not validate a non-empty children input."""
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine().validate_children(source=self.VALID_CHILD_VALUE)
 
@@ -111,8 +110,7 @@ class TestChildrenValidation(BaseTestCase):
                     "id": "some-id",
                     "backend": {
                         "name": "GCPPubSubBackend",
-                        "project_name": "my-project",
-                        "credentials_environment_variable": "GCP_SERVICE_ACCOUNT"
+                        "project_name": "my-project"
                     },
                     "some_extra_property": "should not be a problem if present"
                 }
