@@ -27,10 +27,6 @@
                             "project_name": {
                                 "description": "Name of the Google Cloud Platform (GCP) project the child exists in.",
                                 "type": "string"
-                            },
-                            "credentials_environment_variable": {
-                                "description": "Name of environment variable containing either the absolute path to a Google Cloud Platform credentials JSON file or the JSON itself as a string.",
-                                "type": "string"
                             }
                         },
                         "required": ["name", "project_name"]

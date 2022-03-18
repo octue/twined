@@ -60,8 +60,7 @@ class TestChildrenValidation(BaseTestCase):
                 "id": "some-id",
                 "backend": {
                     "name": "GCPPubSubBackend",
-                    "project_name": "my-project",
-                    "credentials_environment_variable": "GCP_SERVICE_ACCOUNT"
+                    "project_name": "my-project"
                 }
             }
         ]
@@ -88,13 +87,6 @@ class TestChildrenValidation(BaseTestCase):
         with self.assertRaises(exceptions.InvalidValuesContents):
             Twine().validate_children(source=single_child_missing_backend)
 
-    def test_backend_credentials_environment_variable_can_be_empty(self):
-        """Test that the backend credentials environment variable of a child can be empty."""
-        children = (
-            """[{"key": "gis", "id": "some-id", "backend": {"name": "GCPPubSubBackend", "project_name": "blah"}}]"""
-        )
-        Twine(source=self.VALID_TWINE_WITH_CHILDREN).validate_children(source=children)
-
     def test_extra_key_validation_on_empty_twine(self):
         """Test that children with extra data will not raise a validation error on an empty twine."""
         children_values_with_extra_data = """
@@ -118,8 +110,7 @@ class TestChildrenValidation(BaseTestCase):
                     "id": "some-id",
                     "backend": {
                         "name": "GCPPubSubBackend",
-                        "project_name": "my-project",
-                        "credentials_environment_variable": "GCP_SERVICE_ACCOUNT"
+                        "project_name": "my-project"
                     },
                     "some_extra_property": "should not be a problem if present"
                 }
