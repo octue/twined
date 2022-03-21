@@ -48,7 +48,7 @@ copied straight from the unit test cases, so you can always check there to see h
              "children": [
              ],
              "configuration_values_schema": {
-                 "$schema": "https://json-schema.org/draft/2019-09/schema",
+                 "$schema": "https://json-schema.org/draft/2020-12/schema",
                  "title": "Foundation cost twin configuration",
                  "description": "Set config parameters and constants at startup of the twin.",
                  "type": "object",
@@ -68,7 +68,7 @@ copied straight from the unit test cases, so you can always check there to see h
                  }
              },
              "input_values_schema": {
-                 "$schema": "https://json-schema.org/draft/2019-09/schema",
+                 "$schema": "https://json-schema.org/draft/2020-12/schema",
                  "title": "Input Values schema for the foundation cost twin",
                  "description": "These values are supplied to the twin asynchronously over a web socket. So as these values change, the twin can reply with an update.",
                  "type": "object",
@@ -135,7 +135,7 @@ copied straight from the unit test cases, so you can always check there to see h
                 ]
             },
          	"input_values_schema": {
-         		"$schema": "https://json-schema.org/draft/2019-09/schema",
+         		"$schema": "https://json-schema.org/draft/2020-12/schema",
          		"title": "Input Values for the weather service twin",
          		"description": "This is a simple example for getting metocean conditions at a single location",
          		"type": "object",
@@ -174,7 +174,7 @@ copied straight from the unit test cases, so you can always check there to see h
                 ]
             },
          	"output_values_schema": {
-         		"$schema": "https://json-schema.org/draft/2019-09/schema",
+         		"$schema": "https://json-schema.org/draft/2020-12/schema",
          		"title": "Output Values for the metocean service twin",
          		"description": "The output values strand of an example twine",
          		"type": "object",

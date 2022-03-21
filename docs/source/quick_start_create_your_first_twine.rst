@@ -24,7 +24,7 @@ Now, let's define an input values strand, to specify what values are required by
         "title": "My first digital twin",
         "description": "A simple example to build on..."
         "input_values_schema": {
-            "$schema": "https://json-schema.org/draft/2019-09/schema",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
             "title": "Input Values schema for my first digital twin",
             "description": "These values are supplied to the twin by another program (often over a websocket, depending on your integration provider). So as these values change, the twin can reply with an update.",
             "type": "object",
@@ -50,7 +50,7 @@ Finally, let's define an output values strand, to define what kind of data is re
 .. code-block:: javascript
 
         "output_values_schema": {
-            "$schema": "https://json-schema.org/draft/2019-09/schema",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
             "title": "Output Values schema for my first digital twin",
             "description": "The twin will output data that matches this schema",
             "type": "object",
