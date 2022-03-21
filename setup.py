@@ -18,7 +18,7 @@ setup(
     name="twined",
     version="0.2.2",
     py_modules=[],
-    install_requires=["jsonschema ~= 3.2.0", "python-dotenv"],
+    install_requires=["jsonschema ~= 4.4.0", "python-dotenv"],
     url="https://www.github.com/octue/twined",
     license="MIT",
     author="Octue (github: octue)",
