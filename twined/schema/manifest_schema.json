@@ -7,11 +7,9 @@
     "labels": {
       "description": "Textual labels associated with the object",
       "type": "array",
-      "items": [
-        {
-          "type": "string"
-        }
-      ]
+      "items": {
+        "type": "string"
+      }
     }
   },
   "type": "object",
