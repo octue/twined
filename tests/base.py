@@ -6,7 +6,7 @@ import unittest
 VALID_SCHEMA_TWINE = """
     {
         "configuration_values_schema": {
-            "$schema": "http://json-schema.org/2019-09/schema#",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
             "title": "The example configuration form",
             "description": "The configuration strand of an example twine",
             "type": "object",
@@ -21,7 +21,7 @@ VALID_SCHEMA_TWINE = """
             }
         },
         "input_values_schema": {
-            "$schema": "http://json-schema.org/2019-09/schema#",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
             "title": "Input Values",
             "description": "The input values strand of an example twine, with a required height value",
             "type": "object",
