@@ -22,7 +22,84 @@
       "type": "object",
       "patternProperties": {
         ".+": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "ID of the dataset, typically a uuid",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the dataset (the same as its key in the 'datasets' field).",
+                  "type": "string"
+                },
+                "tags": {
+                  "$ref": "#/$defs/tags"
+                },
+                "labels": {
+                  "$ref": "#/$defs/labels"
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "A file id",
+                        "type": "string"
+                      },
+                      "path": {
+                        "description": "Path at which the file can be found",
+                        "type": "string"
+                      },
+                      "extension": {
+                        "description": "The file extension (not including a '.')",
+                        "type": "string"
+                      },
+                      "sequence": {
+                        "description": "The ordering on the file, if any, within its group/cluster",
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "cluster": {
+                        "description": "The group, or cluster, to which the file belongs",
+                        "type": "integer"
+                      },
+                      "posix_timestamp": {
+                        "description": "A posix based timestamp associated with the file. This may, but need not be, the created or modified time. ",
+                        "type": "number"
+                      },
+                      "tags": {
+                        "$ref": "#/$defs/tags"
+                      },
+                      "labels": {
+                        "$ref": "#/$defs/labels"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "path",
+                      "tags",
+                      "labels"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "tags",
+                "labels",
+                "files"
+              ]
+            }
+          ]
         }
       }
     }
