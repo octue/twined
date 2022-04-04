@@ -49,6 +49,7 @@ class Twine:
             setattr(self, name, strand)
 
         self._available_strands = tuple(trim_suffix(name, "_schema") for name in vars(self))
+        self._available_manifest_strands = tuple(set(self._available_strands) & set(MANIFEST_STRANDS))
 
     def _load_twine(self, source=None):
         """Load twine from a *.json filename, file-like or a json string and validates twine contents."""
@@ -211,8 +212,19 @@ class Twine:
 
     @property
     def available_strands(self):
-        """Tuple of strand names that are found in this twine"""
+        """Get the names of strands that are found in this twine.
+
+        :return tuple:
+        """
         return self._available_strands
+
+    @property
+    def available_manifest_strands(self):
+        """Get the names of the manifest strands that are found in this twine.
+
+        :return tuple:
+        """
+        return self._available_manifest_strands
 
     def validate_children(self, source, **kwargs):
         """Validate that the children values, passed as either a file or a json string, are correct."""
