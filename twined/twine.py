@@ -183,7 +183,6 @@ class Twine:
 
         self._validate_against_schema(kind, data)
         self._validate_all_expected_datasets_are_present_in_manifest(manifest_kind=kind, manifest=data)
-        self._validate_dataset_file_tags(manifest_kind=kind, manifest=data)
 
         if cls and inbound:
             return cls(**data)
@@ -209,34 +208,6 @@ class Twine:
             raise exceptions.invalid_contents_map[manifest_kind](
                 f"A dataset named {expected_dataset!r} is expected in the {manifest_kind} but is missing."
             )
-
-    def _validate_dataset_file_tags(self, manifest_kind, manifest):
-        """Validate the tags of the files of each dataset in the manifest against the file tags template in the
-        corresponding dataset field in the given manifest field of the twine.
-
-        :param str manifest_kind: the kind of manifest that's being validated (so the correct schema can be accessed)
-        :param dict manifest: the manifest whose datasets' files are to be validated
-        :return None:
-        """
-        # This is the manifest schema included in the twine.json file, not the schema for `manifest.json` files.
-        manifest_schema = getattr(self, manifest_kind)
-
-        for dataset_name, dataset_schema in manifest_schema["datasets"].items():
-            dataset = manifest["datasets"].get(dataset_name)
-
-            if not dataset or isinstance(dataset, str):
-                continue
-
-            file_tags_template = dataset_schema.get("file_tags_template")
-
-            if not file_tags_template:
-                continue
-
-            for file in dataset["files"]:
-                try:
-                    jsonschema_validate(instance=file["tags"], schema=file_tags_template)
-                except ValidationError as e:
-                    raise exceptions.invalid_contents_map[manifest_kind](str(e))
 
     @property
     def available_strands(self):
