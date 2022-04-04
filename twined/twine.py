@@ -200,17 +200,17 @@ class Twine:
         """Validate the tags of the files of each dataset in the manifest against the file tags template in the
         corresponding dataset field in the given manifest field of the twine.
 
-        :param str manifest_kind:
-        :param dict manifest:
+        :param str manifest_kind: the kind of manifest that's being validated (so the correct schema can be accessed)
+        :param dict manifest: the manifest whose datasets' files are to be validated
         :return None:
         """
-        # This is the manifest schema included in the twine.json file, not the schema for manifest.json files.
+        # This is the manifest schema included in the twine.json file, not the schema for `manifest.json` files.
         manifest_schema = getattr(self, manifest_kind)
 
         for dataset_name, dataset_schema in manifest_schema["datasets"].items():
             dataset = manifest["datasets"].get(dataset_name)
 
-            if not dataset:
+            if not dataset or isinstance(dataset, str):
                 continue
 
             file_tags_template = dataset_schema.get("file_tags_template")
