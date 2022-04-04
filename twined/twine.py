@@ -182,13 +182,33 @@ class Twine:
             data["datasets"] = manifest_migrations.convert_dataset_list_to_dictionary(data["datasets"])
 
         self._validate_against_schema(kind, data)
+        self._validate_all_expected_datasets_are_present_in_manifest(manifest_kind=kind, manifest=data)
         self._validate_dataset_file_tags(manifest_kind=kind, manifest=data)
 
         if cls and inbound:
-            # TODO verify that all the required keys etc are there
             return cls(**data)
 
         return data
+
+    def _validate_all_expected_datasets_are_present_in_manifest(self, manifest_kind, manifest):
+        """Check that all datasets specified in the corresponding manifest strand in the twine are present in the given
+        manifest.
+
+        :param str manifest_kind: the kind of manifest that's being validated (so the correct schema can be accessed)
+        :param dict manifest: the manifest whose datasets are to be validated
+        :raise twined.exceptions.InvalidManifestContents: if one or more of the expected datasets is missing
+        :return None:
+        """
+        # This is the manifest schema included in the twine.json file, not the schema for `manifest.json` files.
+        manifest_schema = getattr(self, manifest_kind)
+
+        for expected_dataset in manifest_schema["datasets"]:
+            if expected_dataset in manifest["datasets"]:
+                continue
+
+            raise exceptions.invalid_contents_map[manifest_kind](
+                f"A dataset named {expected_dataset!r} is expected in the {manifest_kind} but is missing."
+            )
 
     def _validate_dataset_file_tags(self, manifest_kind, manifest):
         """Validate the tags of the files of each dataset in the manifest against the file tags template in the

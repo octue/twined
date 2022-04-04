@@ -134,6 +134,38 @@ class TestManifestStrands(BaseTestCase):
         with self.assertRaises(exceptions.OutputManifestFileNotFound):
             twine.validate_output_manifest(source=file)
 
+    def test_error_raised_if_datasets_are_missing_from_manifest(self):
+        """Test that an error is raised if a dataset is missing from a manifest."""
+        twine = """
+            {
+                "input_manifest": {
+                    "datasets": {
+                        "cat": {
+                            "purpose": "blah"
+                        },
+                        "dog": {
+                            "purpose": "blah"
+                        }
+                    }
+                }
+            }
+        """
+
+        input_manifest = {
+            "id": "30d2c75c-a7b9-4f16-8627-9c8d5cc04bf4",
+            "datasets": {"my-dataset": "gs://my-bucket/my_dataset", "dog": "gs://dog-house/dog"},
+        }
+
+        twine = Twine(source=twine)
+
+        with self.assertRaises(exceptions.InvalidManifestContents) as context:
+            twine.validate_input_manifest(source=input_manifest)
+
+        self.assertEqual(
+            context.exception.message,
+            "A dataset named 'cat' is expected in the input_manifest but is missing.",
+        )
+
     def test_valid_manifest_files(self):
         """Ensures that a manifest file will validate."""
         valid_configuration_manifest = """
@@ -219,7 +251,8 @@ class TestManifestStrands(BaseTestCase):
                                 "sha-512/256": "someothersha"
                             }
                         ]
-                    }
+                    },
+                    "scada_data": "gs://my-bucket/scada-data"
                 }
             }
         """
