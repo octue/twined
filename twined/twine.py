@@ -1,12 +1,12 @@
 import json as jsonlib
 import logging
 import os
-import warnings
 import pkg_resources
 from dotenv import load_dotenv
 from jsonschema import ValidationError, validate as jsonschema_validate
 
-from twined.migrations.manifest import convert_dataset_list_to_dictionary
+import twined.migrations.manifest as manifest_migrations
+import twined.migrations.twine as twine_migrations
 from . import exceptions
 from .utils import load_json, trim_suffix
 
@@ -61,15 +61,9 @@ class Twine:
 
         for strand in set(MANIFEST_STRANDS) & raw_twine.keys():
             if isinstance(raw_twine[strand]["datasets"], list):
-                raw_twine[strand]["datasets"] = {dataset["key"]: dataset for dataset in raw_twine[strand]["datasets"]}
-
-                warnings.warn(
-                    message=(
-                        f"Datasets in the {strand!r} strand of the `twine.json` file should be provided as a "
-                        "dictionary mapping their name to themselves. Support for providing a list of datasets will be "
-                        "phased out soon."
-                    ),
-                    category=DeprecationWarning,
+                raw_twine[strand]["datasets"] = twine_migrations.convert_manifest_datasets_from_list_to_dictionary(
+                    datasets=raw_twine[strand]["datasets"],
+                    strand=strand,
                 )
 
         self._validate_against_schema("twine", raw_twine)
@@ -185,7 +179,7 @@ class Twine:
             data = data.to_primitive()
 
         if isinstance(data["datasets"], list):
-            data["datasets"] = convert_dataset_list_to_dictionary(data["datasets"])
+            data["datasets"] = manifest_migrations.convert_dataset_list_to_dictionary(data["datasets"])
 
         self._validate_against_schema(kind, data)
         self._validate_dataset_file_tags(manifest_kind=kind, manifest=data)
