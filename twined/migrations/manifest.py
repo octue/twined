@@ -10,10 +10,6 @@ def convert_dataset_list_to_dictionary(datasets):
     converted_datasets = {}
 
     for i, dataset in enumerate(datasets):
-        if isinstance(dataset, str):
-            converted_datasets[f"dataset_{i}"] = dataset
-            continue
-
         converted_datasets[dataset.get("name", f"dataset_{i}")] = dataset
 
     warnings.warn(

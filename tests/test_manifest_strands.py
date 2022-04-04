@@ -658,27 +658,3 @@ class TestManifestStrands(BaseTestCase):
                 }
             },
         )
-
-    def test_deprecation_warning_issued_and_datasets_format_translated_if_datasets_given_as_list_of_paths(self):
-        """Test that, if datasets are given as a list (the old format) of paths, a deprecation warning is issued and the
-        list is translated to a dictionary (the new format).
-        """
-        input_manifest = """
-            {
-                "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-                "datasets": [
-                    "path/to/met_mast_data",
-                    "gs://blah/my_dataset"
-                ]
-            }
-        """
-
-        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
-
-        with self.assertWarns(DeprecationWarning):
-            manifest = twine.validate_input_manifest(source=input_manifest)
-
-        self.assertEqual(
-            manifest["datasets"],
-            {"dataset_0": "path/to/met_mast_data", "dataset_1": "gs://blah/my_dataset"},
-        )
