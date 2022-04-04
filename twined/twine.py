@@ -48,8 +48,8 @@ class Twine:
         for name, strand in self._load_twine(**kwargs).items():
             setattr(self, name, strand)
 
-        self._available_strands = tuple(trim_suffix(name, "_schema") for name in vars(self))
-        self._available_manifest_strands = tuple(set(self._available_strands) & set(MANIFEST_STRANDS))
+        self._available_strands = set(trim_suffix(name, "_schema") for name in vars(self))
+        self._available_manifest_strands = set(set(self._available_strands) & set(MANIFEST_STRANDS))
 
     def _load_twine(self, source=None):
         """Load twine from a *.json filename, file-like or a json string and validates twine contents."""
