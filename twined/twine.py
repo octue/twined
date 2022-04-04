@@ -6,6 +6,7 @@ import pkg_resources
 from dotenv import load_dotenv
 from jsonschema import ValidationError, validate as jsonschema_validate
 
+from twined.migrations.manifest import convert_dataset_list_to_dictionary
 from . import exceptions
 from .utils import load_json, trim_suffix
 
@@ -184,14 +185,7 @@ class Twine:
             data = data.to_primitive()
 
         if isinstance(data["datasets"], list):
-            data["datasets"] = {dataset["name"]: dataset for dataset in data["datasets"]}
-            warnings.warn(
-                message=(
-                    "Datasets belonging to a manifest should be provided as a dictionary mapping their name to "
-                    "themselves. Support for providing a list of datasets will be phased out soon."
-                ),
-                category=DeprecationWarning,
-            )
+            data["datasets"] = convert_dataset_list_to_dictionary(data["datasets"])
 
         self._validate_against_schema(kind, data)
         self._validate_dataset_file_tags(manifest_kind=kind, manifest=data)
