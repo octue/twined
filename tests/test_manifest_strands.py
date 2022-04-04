@@ -36,87 +36,6 @@ class TestManifestStrands(BaseTestCase):
         }
     """
 
-    TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE = """
-        {
-            "input_manifest": {
-                "datasets": {
-                    "met_mast_data": {
-                        "purpose": "A dataset containing meteorological mast data",
-                        "file_tags_template": {
-                            "type": "object",
-                            "properties": {
-                                "manufacturer": {
-                                    "type": "string"
-                                },
-                                "height": {
-                                    "type": "number"
-                                },
-                                "is_recycled": {
-                                    "type": "boolean"
-                                },
-                                "number_of_blades": {
-                                    "type": "number"
-                                }
-                            },
-                            "required": [
-                                "manufacturer",
-                                "height",
-                                "is_recycled",
-                                "number_of_blades"
-                            ]
-                        }
-                    }
-                }
-            }
-        }
-    """
-
-    INPUT_MANIFEST_WITH_CORRECT_FILE_TAGS = """
-        {
-            "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
-            "datasets": {
-                "met_mast_data": {
-                    "id": "7ead7669-8162-4f64-8cd5-4abe92509e17",
-                    "name": "met_mast_data",
-                    "tags": {},
-                    "labels": ["met", "mast", "wind"],
-                    "files": [
-                        {
-                            "path": "input/datasets/7ead7669/file_1.csv",
-                            "cluster": 0,
-                            "sequence": 0,
-                            "extension": "csv",
-                            "labels": ["mykeyword1", "mykeyword2"],
-                            "tags": {
-                                "manufacturer": "vestas",
-                                "height": 500,
-                                "is_recycled": true,
-                                "number_of_blades": 3
-                            },
-                            "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                            "name": "file_1.csv"
-                        },
-                        {
-                            "path": "input/datasets/7ead7669/file_1.csv",
-                            "cluster": 0,
-                            "sequence": 1,
-                            "extension": "csv",
-                            "labels": [],
-                            "tags": {
-                                "manufacturer": "vestas",
-                                "height": 500,
-                                "is_recycled": true,
-                                "number_of_blades": 3
-                            },
-                            "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                            "name": "file_1.csv"
-                        }
-                    ]
-                }
-            }
-        }
-    """
-
     def test_missing_manifest_files(self):
         """Ensures that if you try to read values from missing files, the right exceptions get raised"""
         twine = Twine(source=self.VALID_MANIFEST_STRAND)
@@ -367,6 +286,18 @@ class TestManifestStrands(BaseTestCase):
 
     def test_error_raised_if_multiple_datasets_have_same_name(self):
         """Test that an error is raised if the input manifest has more than one dataset with the same name."""
+        twine = """
+            {
+                "input_manifest": {
+                    "datasets": {
+                        "met_mast_data": {
+                            "purpose": "A dataset containing meteorological mast data"
+                        }
+                    }
+                }
+            }
+        """
+
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
@@ -389,7 +320,7 @@ class TestManifestStrands(BaseTestCase):
             }
         """
 
-        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
+        twine = Twine(source=twine)
 
         with self.assertRaises(KeyError):
             twine.validate_input_manifest(source=input_manifest)
@@ -398,6 +329,18 @@ class TestManifestStrands(BaseTestCase):
         """Test that, if datasets are given as a list (the old format), a deprecation warning is issued and the list
         is translated to a dictionary (the new format).
         """
+        twine = """
+            {
+                "input_manifest": {
+                    "datasets": {
+                        "met_mast_data": {
+                            "purpose": "A dataset containing meteorological mast data"
+                        }
+                    }
+                }
+            }
+        """
+
         input_manifest = """
             {
                 "id": "8ead7669-8162-4f64-8cd5-4abe92509e17",
@@ -413,7 +356,7 @@ class TestManifestStrands(BaseTestCase):
             }
         """
 
-        twine = Twine(source=self.TWINE_WITH_INPUT_MANIFEST_WITH_TAG_TEMPLATE)
+        twine = Twine(source=twine)
 
         with self.assertWarns(DeprecationWarning):
             manifest = twine.validate_input_manifest(source=input_manifest)
