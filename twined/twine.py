@@ -1,11 +1,12 @@
 import json as jsonlib
 import logging
 import os
-import warnings
 import pkg_resources
 from dotenv import load_dotenv
 from jsonschema import ValidationError, validate as jsonschema_validate
 
+import twined.migrations.manifest as manifest_migrations
+import twined.migrations.twine as twine_migrations
 from . import exceptions
 from .utils import load_json, trim_suffix
 
@@ -47,7 +48,8 @@ class Twine:
         for name, strand in self._load_twine(**kwargs).items():
             setattr(self, name, strand)
 
-        self._available_strands = tuple(trim_suffix(name, "_schema") for name in vars(self))
+        self._available_strands = set(trim_suffix(name, "_schema") for name in vars(self))
+        self._available_manifest_strands = self._available_strands & set(MANIFEST_STRANDS)
 
     def _load_twine(self, source=None):
         """Load twine from a *.json filename, file-like or a json string and validates twine contents."""
@@ -60,15 +62,9 @@ class Twine:
 
         for strand in set(MANIFEST_STRANDS) & raw_twine.keys():
             if isinstance(raw_twine[strand]["datasets"], list):
-                raw_twine[strand]["datasets"] = {dataset["key"]: dataset for dataset in raw_twine[strand]["datasets"]}
-
-                warnings.warn(
-                    message=(
-                        f"Datasets in the {strand!r} strand of the `twine.json` file should be provided as a "
-                        "dictionary mapping their name to themselves. Support for providing a list of datasets will be "
-                        "phased out soon."
-                    ),
-                    category=DeprecationWarning,
+                raw_twine[strand]["datasets"] = twine_migrations.convert_manifest_datasets_from_list_to_dictionary(
+                    datasets=raw_twine[strand]["datasets"],
+                    strand=strand,
                 )
 
         self._validate_against_schema("twine", raw_twine)
@@ -184,56 +180,51 @@ class Twine:
             data = data.to_primitive()
 
         if isinstance(data["datasets"], list):
-            data["datasets"] = {dataset["name"]: dataset for dataset in data["datasets"]}
-            warnings.warn(
-                message=(
-                    "Datasets belonging to a manifest should be provided as a dictionary mapping their name to "
-                    "themselves. Support for providing a list of datasets will be phased out soon."
-                ),
-                category=DeprecationWarning,
-            )
+            data["datasets"] = manifest_migrations.convert_dataset_list_to_dictionary(data["datasets"])
 
         self._validate_against_schema(kind, data)
-        self._validate_dataset_file_tags(manifest_kind=kind, manifest=data)
+        self._validate_all_expected_datasets_are_present_in_manifest(manifest_kind=kind, manifest=data)
 
         if cls and inbound:
-            # TODO verify that all the required keys etc are there
             return cls(**data)
 
         return data
 
-    def _validate_dataset_file_tags(self, manifest_kind, manifest):
-        """Validate the tags of the files of each dataset in the manifest against the file tags template in the
-        corresponding dataset field in the given manifest field of the twine.
+    def _validate_all_expected_datasets_are_present_in_manifest(self, manifest_kind, manifest):
+        """Check that all datasets specified in the corresponding manifest strand in the twine are present in the given
+        manifest.
 
-        :param str manifest_kind:
-        :param dict manifest:
+        :param str manifest_kind: the kind of manifest that's being validated (so the correct schema can be accessed)
+        :param dict manifest: the manifest whose datasets are to be validated
+        :raise twined.exceptions.InvalidManifestContents: if one or more of the expected datasets is missing
         :return None:
         """
-        # This is the manifest schema included in the twine.json file, not the schema for manifest.json files.
+        # This is the manifest schema included in the twine.json file, not the schema for `manifest.json` files.
         manifest_schema = getattr(self, manifest_kind)
 
-        for dataset_name, dataset_schema in manifest_schema["datasets"].items():
-            dataset = manifest["datasets"].get(dataset_name)
-
-            if not dataset:
+        for expected_dataset in manifest_schema["datasets"]:
+            if expected_dataset in manifest["datasets"]:
                 continue
 
-            file_tags_template = dataset_schema.get("file_tags_template")
-
-            if not file_tags_template:
-                continue
-
-            for file in dataset["files"]:
-                try:
-                    jsonschema_validate(instance=file["tags"], schema=file_tags_template)
-                except ValidationError as e:
-                    raise exceptions.invalid_contents_map[manifest_kind](str(e))
+            raise exceptions.invalid_contents_map[manifest_kind](
+                f"A dataset named {expected_dataset!r} is expected in the {manifest_kind} but is missing."
+            )
 
     @property
     def available_strands(self):
-        """Tuple of strand names that are found in this twine"""
+        """Get the names of strands that are found in this twine.
+
+        :return set:
+        """
         return self._available_strands
+
+    @property
+    def available_manifest_strands(self):
+        """Get the names of the manifest strands that are found in this twine.
+
+        :return set:
+        """
+        return self._available_manifest_strands
 
     def validate_children(self, source, **kwargs):
         """Validate that the children values, passed as either a file or a json string, are correct."""
