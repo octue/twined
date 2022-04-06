@@ -82,6 +82,31 @@ class TestManifestStrands(BaseTestCase):
             "A dataset named 'cat' is expected in the input_manifest but is missing.",
         )
 
+    def test_missing_optional_datasets_do_not_raise_error(self):
+        """Test that optional datasets specified in the twine missing from the manifest don't raise an error."""
+        twine = """
+            {
+                "input_manifest": {
+                    "datasets": {
+                        "cat": {
+                            "purpose": "blah",
+                            "optional": true
+                        },
+                        "dog": {
+                            "purpose": "blah"
+                        }
+                    }
+                }
+            }
+        """
+
+        input_manifest = {
+            "id": "30d2c75c-a7b9-4f16-8627-9c8d5cc04bf4",
+            "datasets": {"dog": "gs://dog-house/dog"},
+        }
+
+        Twine(source=twine).validate_input_manifest(source=input_manifest)
+
     def test_valid_manifest_files(self):
         """Ensures that a manifest file will validate."""
         valid_configuration_manifest = """
