@@ -52,6 +52,9 @@
                 },
                 "file_tags_template": {
                   "$ref": "#/$defs/file_tags_template"
+                },
+                "optional": {
+                  "type": "boolean"
                 }
               }
             }
