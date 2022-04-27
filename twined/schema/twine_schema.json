@@ -125,6 +125,11 @@
     "output_manifest": {"$ref": "#/$defs/manifest"},
     "output_values_schema": {
       "type": "object"
+    },
+    "output_location": {
+      "description": "The path to a Google Cloud Storage directory to upload output datasets into. The way these datasets are organised within this directory is controlled in the app code.",
+      "type": "string",
+      "pattern": "^gs:\/\/[a-z\\d][a-z\\d_.\/-]*$"
     }
   }
 }
