@@ -1,4 +1,3 @@
-import json
 import os
 
 from twined import MANIFEST_STRANDS, Twine, exceptions
@@ -159,19 +158,3 @@ class TestTwine(BaseTestCase):
                         }
                     },
                 )
-
-    def test_twine_with_invalid_output_location(self):
-        """Test that an error is raised if an invalid output location is given in the twine."""
-        for invalid_output_location in (
-            "https://my-bucket/output_datasets",
-            "dgs://my-bucket/output_datasets",
-            "not/a/cloud/path",
-        ):
-            with self.subTest(output_location=invalid_output_location):
-                with self.assertRaises(exceptions.InvalidTwineContents):
-                    Twine(source=json.dumps({"output_location": invalid_output_location}))
-
-    def test_twine_with_valid_output_location(self):
-        """Test that a valid output location passes validation."""
-        twine = Twine(source=json.dumps({"output_location": "gs://my-bucket/output_datasets"}))
-        self.assertEqual(twine.output_location, "gs://my-bucket/output_datasets")
