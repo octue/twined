@@ -5,8 +5,6 @@ import pkg_resources
 from dotenv import load_dotenv
 from jsonschema import ValidationError, validate as jsonschema_validate
 
-import twined.migrations.manifest as manifest_migrations
-import twined.migrations.twine as twine_migrations
 from . import exceptions
 from .utils import load_json, trim_suffix
 
@@ -59,13 +57,6 @@ class Twine:
             logger.warning("No twine source specified. Loading empty twine.")
         else:
             raw_twine = self._load_json("twine", source, allowed_kinds=("file-like", "filename", "string", "object"))
-
-        for strand in set(MANIFEST_STRANDS) & raw_twine.keys():
-            if isinstance(raw_twine[strand]["datasets"], list):
-                raw_twine[strand]["datasets"] = twine_migrations.convert_manifest_datasets_from_list_to_dictionary(
-                    datasets=raw_twine[strand]["datasets"],
-                    strand=strand,
-                )
 
         self._validate_against_schema("twine", raw_twine)
         self._validate_twine_version(twine_file_twined_version=raw_twine.get("twined_version", None))
@@ -178,9 +169,6 @@ class Twine:
         if hasattr(data, "to_primitive"):
             inbound = False
             data = data.to_primitive()
-
-        if isinstance(data["datasets"], list):
-            data["datasets"] = manifest_migrations.convert_dataset_list_to_dictionary(data["datasets"])
 
         self._validate_against_schema(kind, data)
         self._validate_all_expected_datasets_are_present_in_manifest(manifest_kind=kind, manifest=data)
