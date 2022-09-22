@@ -13,14 +13,25 @@ Each of these strands is a *json schema* which describes that data.
 
    .. group-tab:: Configuration Values Strand
 
-      This strand is a ``configuration_values_schema``, that is used to check validity of any
-      ``configuration_values`` data supplied to the twin at startup.
+      This strand is a ``configuration_values_schema``, that is used to check validity of any ``configuration_values``
+      data supplied to the twin at startup.
 
       The Configuration Values Strand is generally used to define control parameters relating to what the twin should
-      do, or how it should operate.
+      do, or how it should operate. For example:
 
-      For example, should it produce output images as low resolution PNGs or as SVGs? How many iterations of a fluid
-      flow solver should be used? What is the acceptable error level on an classifier algorithm?
+       - In a simulation the user may want to specify the number of iterations or timesteps.
+       - In a LiDAR analysis app, the user may want to know the deployment `lat/long` coordinates.
+       - In a signal processing app, the user may want to turn on or off a particular step (e.g. smoothing of data).
+       - In a Meteorological Mast analysis, the user may want to run analysis only for a specified date range.
+       - In an app that produces an image, should the image be a low resolution PNG or an SVG?
+       - In a classifier algorithm, what is the acceptable error level?
+
+      It's the job of the application developer (that's you, probably) to **tell the end user what options are
+      available**. The way this is done is via an **application schema**.
+
+      A **schema** describes precisely what inputs the application needs.
+
+      A **config** contains those inputs, and should match the schema.
 
    .. group-tab:: Input Values Strand
 
