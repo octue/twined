@@ -121,31 +121,17 @@ class TestManifestStrands(BaseTestCase):
                         "files": [
                             {
                                 "path": "configuration/datasets/7ead7669/file_1.csv",
-                                "cluster": 0,
-                                "sequence": 0,
-                                "extension": "csv",
                                 "tags": {},
                                 "labels": [],
-                                "posix_timestamp": 0,
-                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                                "last_modified": "2019-02-28T22:40:30.533005Z",
-                                "name": "file_1.csv",
-                                "size_bytes": 59684813,
-                                "sha-512/256": "somesha"
+                                "timestamp": 0,
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86"
                             },
                             {
                                 "path": "configuration/datasets/7ead7669/file_2.csv",
-                                "cluster": 0,
-                                "sequence": 1,
-                                "extension": "csv",
                                 "tags": {},
                                 "labels": [],
-                                "posix_timestamp": 0,
-                                "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
-                                "last_modified": "2019-02-28T22:40:40.633001Z",
-                                "name": "file_2.csv",
-                                "size_bytes": 59684813,
-                                "sha-512/256": "someothersha"
+                                "timestamp": 0,
+                                "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45"
                             }
                         ]
                     }
@@ -165,31 +151,17 @@ class TestManifestStrands(BaseTestCase):
                         "files": [
                             {
                                 "path": "input/datasets/7ead7669/file_1.csv",
-                                "cluster": 0,
-                                "sequence": 0,
-                                "extension": "csv",
                                 "tags": {},
                                 "labels": [],
-                                "posix_timestamp": 0,
-                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                                "last_modified": "2019-02-28T22:40:30.533005Z",
-                                "name": "file_1.csv",
-                                "size_bytes": 59684813,
-                                "sha-512/256": "somesha"
+                                "timestamp": 0,
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86"
                             },
                             {
                                 "path": "input/datasets/7ead7669/file_2.csv",
-                                "cluster": 0,
-                                "sequence": 1,
-                                "extension": "csv",
                                 "tags": {},
                                 "labels": [],
-                                "posix_timestamp": 0,
-                                "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
-                                "last_modified": "2019-02-28T22:40:40.633001Z",
-                                "name": "file_2.csv",
-                                "size_bytes": 59684813,
-                                "sha-512/256": "someothersha"
+                                "timestamp": 0,
+                                "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45"
                             }
                         ]
                     },
@@ -210,31 +182,17 @@ class TestManifestStrands(BaseTestCase):
                         "files": [
                             {
                                 "path": "input/datasets/7ead7669/file_1.csv",
-                                "cluster": 0,
-                                "sequence": 0,
-                                "extension": "csv",
                                 "tags": {},
                                 "labels": [],
-                                "posix_timestamp": 0,
-                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86",
-                                "last_modified": "2019-02-28T22:40:30.533005Z",
-                                "name": "file_1.csv",
-                                "size_bytes": 59684813,
-                                "sha-512/256": "somesha"
+                                "timestamp": 0,
+                                "id": "abff07bc-7c19-4ed5-be6d-a6546eae8e86"
                             },
                             {
                                 "path": "input/datasets/7ead7669/file_2.csv",
-                                "cluster": 0,
-                                "sequence": 1,
-                                "extension": "csv",
                                 "tags": {},
                                 "labels": [],
-                                "posix_timestamp": 0,
-                                "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45",
-                                "last_modified": "2019-02-28T22:40:40.633001Z",
-                                "name": "file_2.csv",
-                                "size_bytes": 59684813,
-                                "sha-512/256": "someothersha"
+                                "timestamp": 0,
+                                "id": "bbff07bc-7c19-4ed5-be6d-a6546eae8e45"
                             }
                         ]
                     }
