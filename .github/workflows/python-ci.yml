@@ -9,25 +9,17 @@ name: python-ci
 on: [push]
 
 jobs:
-
   check-semantic-version:
     if: "!contains(github.event.head_commit.message, 'skipci')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          # Set fetch-depth to 0 to fetch all tags (necessary for git-mkver to determine the correct semantic version).
           fetch-depth: 0
-      - uses: actions/setup-python@v2
-      - name: Install git-mkver
-        run: |
-          curl -L https://github.com/idc101/git-mkver/releases/download/v1.2.1/git-mkver-linux-amd64-1.2.1.tar.gz \
-          | tar xvz \
-          && sudo mv git-mkver /usr/local/bin
-      - name: Install semantic version checker
-        run: pip install git+https://github.com/octue/conventional-commits
-      - name: Check version
-        run: check-semantic-version setup.py
+      - uses: octue/check-semantic-version@1.0.0.beta-9
+        with:
+          path: setup.py
+          breaking_change_indicated_by: minor
 
   run-tests:
     if: "!contains(github.event.head_commit.message, 'skipci')"
@@ -39,21 +31,24 @@ jobs:
         python: [3.8]
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
+
       - name: Install tox
         run: pip install tox
+
       - name: Run tests
         run: tox
+
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: coverage.xml
+          files: coverage.xml
           fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
     if: "!contains(github.event.head_commit.message, 'skipci')"
@@ -61,15 +56,18 @@ jobs:
     needs: [check-semantic-version, run-tests]
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+
       - name: Make package
         run: |
           python3 -m pip install --upgrade setuptools wheel
           python3 setup.py sdist bdist_wheel
+
       - name: Test package is publishable with PyPI test server
         uses: pypa/gh-action-pypi-publish@master
         with:
@@ -77,6 +75,7 @@ jobs:
           password: ${{ secrets.TEST_PYPI_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
           skip_existing: true
+
       - name: Publish latest package to PyPI
         if: contains(github.ref, 'main')
         uses: pypa/gh-action-pypi-publish@master
