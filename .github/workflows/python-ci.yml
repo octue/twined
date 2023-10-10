@@ -1,12 +1,12 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions.
-#
-# On successful test, the package will be published. For candidate releases, the package will be
-#  published to test.pypi.org server (to ensure the process works). For merges to master, the
-#  package will be published live.
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions. On successful
+# test, the package will be published to the test PyPi server.
 
 name: python-ci
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - main
 
 jobs:
   check-semantic-version:
@@ -68,18 +68,11 @@ jobs:
           python3 -m pip install --upgrade setuptools wheel
           python3 setup.py sdist bdist_wheel
 
-      - name: Test package is publishable with PyPI test server
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
+
           skip_existing: true
 
-      - name: Publish latest package to PyPI
-        if: contains(github.ref, 'main')
-        uses: pypa/gh-action-pypi-publish@master
+      - name: Test package is publishable with PyPI test server
+        uses: pypa/gh-action-pypi-publish@v1.8.10
         with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN }}
+          repository-url: https://test.pypi.org/legacy/
           verbose: true
