@@ -68,9 +68,6 @@ jobs:
           python3 -m pip install --upgrade setuptools wheel
           python3 setup.py sdist bdist_wheel
 
-
-          skip_existing: true
-
       - name: Test package is publishable with PyPI test server
         uses: pypa/gh-action-pypi-publish@v1.8.10
         with:
