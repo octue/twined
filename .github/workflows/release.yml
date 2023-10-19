@@ -1,6 +1,6 @@
 name: Release the package on merge into main
 
-# Only trigger when a pull request into main branch is closed.
+# This workflow will only be triggered when a pull request into main branch is merged (and not closed without merging).
 on:
   pull_request:
     types: [closed]
@@ -8,23 +8,76 @@ on:
       - main
 
 jobs:
+  run-tests:
+    if: "github.event.pull_request.merged == true"
+    runs-on: ubuntu-latest
+    env:
+      USING_COVERAGE: '3.8'
+    strategy:
+      matrix:
+        python: [ 3.8 ]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install tox
+        run: pip install tox
+
+      - name: Run tests
+        run: tox
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: coverage.xml
+          fail_ci_if_error: true
+
   release:
-    # This job will only run if the PR has been merged (and not closed without merging).
-    if: "github.event.pull_request.merged == true && !contains(github.event.pull_request.head.message, 'skipci')"
+    needs: run-tests
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Get package version
-      run: echo "PACKAGE_VERSION=$(python setup.py --version)" >> $GITHUB_ENV
+      - name: Get package version
+        run: echo "PACKAGE_VERSION=$(python setup.py --version)" >> $GITHUB_ENV
 
-    - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, no need to create your own.
-      with:
-        tag_name: ${{ env.PACKAGE_VERSION }}
-        release_name: ${{ github.event.pull_request.title }}
-        body: ${{ github.event.pull_request.body }}
-        draft: false
-        prerelease: false
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, no need to create your own.
+        with:
+          tag_name: ${{ env.PACKAGE_VERSION }}
+          release_name: ${{ github.event.pull_request.title }}
+          body: ${{ github.event.pull_request.body }}
+          draft: false
+          prerelease: false
+
+  publish:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Make package
+        run: |
+          python3 -m pip install --upgrade setuptools wheel
+          python3 setup.py sdist bdist_wheel
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.8.10
+        with:
+          verbose: true
