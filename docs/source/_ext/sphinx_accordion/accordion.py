@@ -245,6 +245,8 @@ def setup(app):
         if path.endswith('.js'):
             if 'add_script_file' in dir(app):
                 app.add_script_file(path)
+            else:
+                app.add_js_file(path)
 
     app.connect('html-page-context', update_context)
     app.connect('build-finished', copy_assets)
