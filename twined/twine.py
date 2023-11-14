@@ -33,6 +33,7 @@ ALL_STRANDS = (
 
 
 CHILDREN_SCHEMA = "https://jsonschema.registry.octue.com/octue/children/0.1.0.json"
+MANIFEST_SCHEMA = "https://jsonschema.registry.octue.com/octue/manifest/0.1.0.json"
 
 
 class Twine:
@@ -107,7 +108,7 @@ class Twine:
             # The data is a manifest of files. The "*_manifest" strands of the twine describe matching criteria used to
             # filter files appropriate for consumption by the digital twin, not the schema of the manifest data, which
             # is distributed with this package to ensure version consistency...
-            schema = "schema/manifest_schema.json"
+            schema = {"$ref": MANIFEST_SCHEMA}
 
         else:
             if strand not in SCHEMA_STRANDS:
