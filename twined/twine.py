@@ -32,6 +32,9 @@ ALL_STRANDS = (
 )
 
 
+CHILDREN_SCHEMA = "https://jsonschema.registry.octue.com/octue/children/0.1.0.json"
+
+
 class Twine:
     """Twine class manages validation of inputs and outputs to/from a data service, based on spec in a 'twine' file.
 
@@ -92,19 +95,19 @@ class Twine:
         if strand == "twine":
             # The data is a twine. A twine *contains* schema, but we also need to verify that it matches a certain
             # schema itself. The twine schema is distributed with this packaged to ensure version consistency...
-            schema_path = "schema/twine_schema.json"
+            schema = "schema/twine_schema.json"
 
         elif strand in CHILDREN_STRANDS:
             # The data is a list of children. The "children" strand of the twine describes matching criteria for
             # the children, not the schema of the "children" data, which is distributed with this package to ensure
             # version consistency...
-            schema_path = "schema/children_schema.json"
+            schema = {"$ref": CHILDREN_SCHEMA}
 
         elif strand in MANIFEST_STRANDS:
             # The data is a manifest of files. The "*_manifest" strands of the twine describe matching criteria used to
             # filter files appropriate for consumption by the digital twin, not the schema of the manifest data, which
             # is distributed with this package to ensure version consistency...
-            schema_path = "schema/manifest_schema.json"
+            schema = "schema/manifest_schema.json"
 
         else:
             if strand not in SCHEMA_STRANDS:
@@ -118,7 +121,10 @@ class Twine:
             except AttributeError:
                 raise exceptions.StrandNotFound(f"Cannot validate - no {schema_key} strand in the twine")
 
-        return jsonlib.loads(pkg_resources.resource_string("twined", schema_path))
+        if isinstance(schema, dict):
+            return schema
+
+        return jsonlib.loads(pkg_resources.resource_string("twined", schema))
 
     def _validate_against_schema(self, strand, data):
         """Validate data against a schema, raises exceptions of type Invalid<strand>Json if not compliant.
