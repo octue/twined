@@ -5,24 +5,22 @@ from .base import BaseTestCase
 
 
 class TestChildrenTwine(BaseTestCase):
-    """Tests related to the twine itself - ensuring that valid and invalid
-    `children` entries in a twine file work as expected
-    """
+    """Tests ensuring that valid and invalid `children` entries in a twine file work as expected."""
 
     def test_invalid_children_dict_not_array(self):
-        """Ensures InvalidTwine exceptions are raised when instantiating twines where `children` entry is incorrectly
-        specified as a dict, not an array
+        """Ensure that `InvalidTwine` exceptions are raised when instantiating twines where `children` entry is
+        incorrectly specified as a dict, not an array.
         """
         with self.assertRaises(exceptions.InvalidTwine):
             Twine(source="""{"children": {}}""")
 
     def test_invalid_children_no_key(self):
-        """Ensures InvalidTwine exceptions are raised when instantiating twines where a child
-        is specified without the required `key` field
+        """Ensure that `InvalidTwine` exceptions are raised when instantiating twines where a child is specified without
+        the required `key` field.
         """
         source = """
             {
-                "children": [{"purpose": "The purpose.", "notes": "Here are some notes.", "filters": "tags:gis"}]
+                "children": [{"purpose": "The purpose.", "notes": "Here are some notes."}]
             }
         """
 
@@ -33,7 +31,7 @@ class TestChildrenTwine(BaseTestCase):
         """Ensures that a twine with one child can be instantiated correctly."""
         source = """
             {
-                "children": [{"key": "gis", "purpose": "The purpose.", "notes": "Some notes.", "filters": "tags:gis"}]
+                "children": [{"key": "gis", "purpose": "The purpose.", "notes": "Some notes."}]
             }
         """
         self.assertEqual(len(Twine(source=source).children), 1)
@@ -49,7 +47,7 @@ class TestChildrenValidation(BaseTestCase):
 
     VALID_TWINE_WITH_CHILDREN = """
         {
-            "children": [{"key": "gis", "purpose": "The purpose", "notes": "Some notes.", "filters": "tags:gis"}]
+            "children": [{"key": "gis", "purpose": "The purpose", "notes": "Some notes."}]
         }
     """
 

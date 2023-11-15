@@ -41,17 +41,16 @@ repos:
     - id: pydocstyle
 
   - repo: https://github.com/thclark/pre-commit-sphinx
-    rev: 0.0.1
+    rev: 0.0.3
     hooks:
       - id: build-docs
         language_version: python3
         additional_dependencies:
-          - 'Sphinx>=2,<3'
-          - 'sphinx-rtd-theme==0.5.0'
-          - 'sphinx-tabs==1.2.1'
-          - 'sphinx-charts==0.0.4'
-          - 'scipy~=1.5.2'
-          - 'jsonschema~=3.2.0'
+          - 'Sphinx'
+          - 'sphinx-rtd-theme'
+          - 'sphinx-tabs'
+          - 'sphinx-charts'
+          - 'jsonschema'
 
   - repo: https://github.com/windpioneers/pre-commit-hooks
     rev: 0.0.5
