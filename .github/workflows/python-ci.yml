@@ -20,10 +20,10 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skipci')"
     runs-on: ubuntu-latest
     env:
-      USING_COVERAGE: '3.8'
+      USING_COVERAGE: '3.9'
     strategy:
       matrix:
-        python: [3.8]
+        python: [3.8, 3.9]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
