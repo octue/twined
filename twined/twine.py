@@ -1,9 +1,17 @@
+import importlib.metadata
 import json as jsonlib
 import logging
 import os
-import pkg_resources
 from dotenv import load_dotenv
 from jsonschema import ValidationError, validate as jsonschema_validate
+
+
+try:
+    # python < 3.9
+    import importlib_resources
+except ModuleNotFoundError:
+    # python >= 3.9
+    import importlib.resources as importlib_resources
 
 from . import exceptions
 from .utils import load_json, trim_suffix
@@ -30,6 +38,10 @@ ALL_STRANDS = (
     *CREDENTIAL_STRANDS,
     *CHILDREN_STRANDS,
 )
+
+
+CHILDREN_SCHEMA = "https://jsonschema.registry.octue.com/octue/children/0.1.0.json"
+MANIFEST_SCHEMA = "https://jsonschema.registry.octue.com/octue/manifest/0.1.0.json"
 
 
 class Twine:
@@ -92,33 +104,32 @@ class Twine:
         if strand == "twine":
             # The data is a twine. A twine *contains* schema, but we also need to verify that it matches a certain
             # schema itself. The twine schema is distributed with this packaged to ensure version consistency...
-            schema_path = "schema/twine_schema.json"
+            return jsonlib.loads(
+                importlib_resources.files("twined.schema").joinpath("twine_schema.json").read_text(encoding="utf-8")
+            )
 
-        elif strand in CHILDREN_STRANDS:
+        if strand in CHILDREN_STRANDS:
             # The data is a list of children. The "children" strand of the twine describes matching criteria for
             # the children, not the schema of the "children" data, which is distributed with this package to ensure
             # version consistency...
-            schema_path = "schema/children_schema.json"
+            return {"$ref": CHILDREN_SCHEMA}
 
-        elif strand in MANIFEST_STRANDS:
+        if strand in MANIFEST_STRANDS:
             # The data is a manifest of files. The "*_manifest" strands of the twine describe matching criteria used to
             # filter files appropriate for consumption by the digital twin, not the schema of the manifest data, which
             # is distributed with this package to ensure version consistency...
-            schema_path = "schema/manifest_schema.json"
+            return {"$ref": MANIFEST_SCHEMA}
 
-        else:
-            if strand not in SCHEMA_STRANDS:
-                raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
+        if strand not in SCHEMA_STRANDS:
+            raise exceptions.UnknownStrand(f"Unknown strand {strand}. Try one of {ALL_STRANDS}.")
 
-            # Get schema from twine.json file.
-            schema_key = strand + "_schema"
+        # Get schema from twine.json file.
+        schema_key = strand + "_schema"
 
-            try:
-                return getattr(self, schema_key)
-            except AttributeError:
-                raise exceptions.StrandNotFound(f"Cannot validate - no {schema_key} strand in the twine")
-
-        return jsonlib.loads(pkg_resources.resource_string("twined", schema_path))
+        try:
+            return getattr(self, schema_key)
+        except AttributeError:
+            raise exceptions.StrandNotFound(f"Cannot validate - no {schema_key} strand in the twine")
 
     def _validate_against_schema(self, strand, data):
         """Validate data against a schema, raises exceptions of type Invalid<strand>Json if not compliant.
@@ -143,7 +154,7 @@ class Twine:
 
     def _validate_twine_version(self, twine_file_twined_version):
         """Validate that the installed version is consistent with an optional version specification in the twine file."""
-        installed_twined_version = pkg_resources.get_distribution("twined").version
+        installed_twined_version = importlib.metadata.version("twined")
         logger.debug(
             "Twine versions... %s installed, %s specified in twine", installed_twined_version, twine_file_twined_version
         )
