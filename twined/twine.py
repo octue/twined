@@ -7,11 +7,11 @@ from jsonschema import ValidationError, validate as jsonschema_validate
 
 
 try:
-    # python >= 3.9
-    import importlib.resources as importlib_resources
-except ModuleNotFoundError:
     # python < 3.9
     import importlib_resources
+except ModuleNotFoundError:
+    # python >= 3.9
+    import importlib.resources as importlib_resources
 
 from . import exceptions
 from .utils import load_json, trim_suffix
