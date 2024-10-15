@@ -13,7 +13,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skipci')"
     uses: octue/workflows/.github/workflows/check-semantic-version.yml@main
     with:
-      path: setup.py
+      path: pyproject.toml
       breaking_change_indicated_by: minor
 
   run-tests:
@@ -46,8 +46,7 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
-  publish:
-    if: "!contains(github.event.head_commit.message, 'skipci')"
+  test-publish:
     runs-on: ubuntu-latest
     needs: [check-semantic-version, run-tests]
     permissions:
@@ -57,15 +56,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.9"
+      - name: Install Poetry
+        uses: snok/install-poetry@v1.4.1
 
-      - name: Make package
-        run: |
-          python3 -m pip install --upgrade setuptools wheel
-          python3 setup.py sdist bdist_wheel
+      - name: Build a binary wheel and a source tarball
+        run: poetry build
 
       - name: Test package is publishable with PyPI test server
         uses: pypa/gh-action-pypi-publish@v1.8.10
