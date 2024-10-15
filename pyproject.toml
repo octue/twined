@@ -27,7 +27,6 @@ jsonschema = "^4"
 python-dotenv = ">=0,<=2"
 
 [tool.poetry.group.dev.dependencies]
-tox = ">=3"
 flake8 = "3.8.3"
 black = "19.10.b0"
 pre-commit = ">=2.6.0"

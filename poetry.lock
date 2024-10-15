@@ -54,17 +54,6 @@ typed-ast = ">=1.4.0"
 d = ["aiohttp (>=3.3.2)", "aiohttp-cors"]
 
 [[package]]
-name = "cachetools"
-version = "5.5.0"
-description = "Extensible memoizing collections and decorators"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "cachetools-5.5.0-py3-none-any.whl", hash = "sha256:02134e8439cdc2ffb62023ce1debca2944c3f289d66bb17ead3ab3dede74b292"},
-    {file = "cachetools-5.5.0.tar.gz", hash = "sha256:2cc24fb4cbe39633fb7badd9db9ca6295d766d9c2995f245725a46715d050f2a"},
-]
-
-[[package]]
 name = "cfgv"
 version = "3.4.0"
 description = "Validate configuration and produce human readable error messages."
@@ -73,17 +62,6 @@ python-versions = ">=3.8"
 files = [
     {file = "cfgv-3.4.0-py2.py3-none-any.whl", hash = "sha256:b7265b1f29fd3316bfcd2b330d63d024f2bfd8bcb8b0272f8e19a504856c48f9"},
     {file = "cfgv-3.4.0.tar.gz", hash = "sha256:e52591d4c5f5dead8e0f673fb16db7949d2cfb3f7da4582893288f0ded8fe560"},
-]
-
-[[package]]
-name = "chardet"
-version = "5.2.0"
-description = "Universal encoding detector for Python 3"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "chardet-5.2.0-py3-none-any.whl", hash = "sha256:e1cf59446890a00105fe7b7912492ea04b6e6f06d4b742b2c788469e34c82970"},
-    {file = "chardet-5.2.0.tar.gz", hash = "sha256:1b3b6ff479a8c414bc3fa2c0852995695c4a026dcd6d0633b2dd092ca39c1cf7"},
 ]
 
 [[package]]
@@ -372,17 +350,6 @@ files = [
 ]
 
 [[package]]
-name = "packaging"
-version = "24.1"
-description = "Core utilities for Python packages"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "packaging-24.1-py3-none-any.whl", hash = "sha256:5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124"},
-    {file = "packaging-24.1.tar.gz", hash = "sha256:026ed72c8ed3fcce5bf8950572258698927fd1dbda10a5e981cdf0ac37f4f002"},
-]
-
-[[package]]
 name = "pathspec"
 version = "0.12.1"
 description = "Utility library for gitignore style pattern matching of file paths."
@@ -419,21 +386,6 @@ files = [
 docs = ["furo (>=2024.8.6)", "proselint (>=0.14)", "sphinx (>=8.0.2)", "sphinx-autodoc-typehints (>=2.4)"]
 test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=8.3.2)", "pytest-cov (>=5)", "pytest-mock (>=3.14)"]
 type = ["mypy (>=1.11.2)"]
-
-[[package]]
-name = "pluggy"
-version = "1.5.0"
-description = "plugin and hook calling mechanisms for python"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pluggy-1.5.0-py3-none-any.whl", hash = "sha256:44e1ad92c8ca002de6377e165f3e0f1be63266ab4d554740532335b9d75ea669"},
-    {file = "pluggy-1.5.0.tar.gz", hash = "sha256:2cffa88e94fdc978c4c574f15f9e59b7f4201d439195c3715ca9e2486f1d0cf1"},
-]
-
-[package.extras]
-dev = ["pre-commit", "tox"]
-testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pre-commit"
@@ -474,25 +426,6 @@ files = [
     {file = "pyflakes-2.2.0-py2.py3-none-any.whl", hash = "sha256:0d94e0e05a19e57a99444b6ddcf9a6eb2e5c68d3ca1e98e90707af8152c90a92"},
     {file = "pyflakes-2.2.0.tar.gz", hash = "sha256:35b2d75ee967ea93b55750aa9edbbf72813e06a66ba54438df2cfac9e3c27fc8"},
 ]
-
-[[package]]
-name = "pyproject-api"
-version = "1.8.0"
-description = "API to interact with the python pyproject.toml based projects"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pyproject_api-1.8.0-py3-none-any.whl", hash = "sha256:3d7d347a047afe796fd5d1885b1e391ba29be7169bd2f102fcd378f04273d228"},
-    {file = "pyproject_api-1.8.0.tar.gz", hash = "sha256:77b8049f2feb5d33eefcc21b57f1e279636277a8ac8ad6b5871037b243778496"},
-]
-
-[package.dependencies]
-packaging = ">=24.1"
-tomli = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
-
-[package.extras]
-docs = ["furo (>=2024.8.6)", "sphinx-autodoc-typehints (>=2.4.1)"]
-testing = ["covdefaults (>=2.3)", "pytest (>=8.3.3)", "pytest-cov (>=5)", "pytest-mock (>=3.14)", "setuptools (>=75.1)"]
 
 [[package]]
 name = "python-dotenv"
@@ -839,45 +772,6 @@ files = [
 ]
 
 [[package]]
-name = "tomli"
-version = "2.0.2"
-description = "A lil' TOML parser"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "tomli-2.0.2-py3-none-any.whl", hash = "sha256:2ebe24485c53d303f690b0ec092806a085f07af5a5aa1464f3931eec36caaa38"},
-    {file = "tomli-2.0.2.tar.gz", hash = "sha256:d46d457a85337051c36524bc5349dd91b1877838e2979ac5ced3e710ed8a60ed"},
-]
-
-[[package]]
-name = "tox"
-version = "4.21.2"
-description = "tox is a generic virtualenv management and test command line tool"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "tox-4.21.2-py3-none-any.whl", hash = "sha256:13d996adcd792e7c82994b0e116d85efd84f0c6d185254d83d156f73f86b2038"},
-    {file = "tox-4.21.2.tar.gz", hash = "sha256:49381ff102296753e378fa5ff30e42a35e695f149b4dbf8a2c49d15fdb5797b2"},
-]
-
-[package.dependencies]
-cachetools = ">=5.5"
-chardet = ">=5.2"
-colorama = ">=0.4.6"
-filelock = ">=3.16.1"
-packaging = ">=24.1"
-platformdirs = ">=4.3.6"
-pluggy = ">=1.5"
-pyproject-api = ">=1.8"
-tomli = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
-typing-extensions = {version = ">=4.12.2", markers = "python_version < \"3.11\""}
-virtualenv = ">=20.26.6"
-
-[package.extras]
-docs = ["furo (>=2024.8.6)", "sphinx (>=8.0.2)", "sphinx-argparse-cli (>=1.18.2)", "sphinx-autodoc-typehints (>=2.4.4)", "sphinx-copybutton (>=0.5.2)", "sphinx-inline-tabs (>=2023.4.21)", "sphinxcontrib-towncrier (>=0.2.1a0)", "towncrier (>=24.8)"]
-testing = ["build[virtualenv] (>=1.2.2)", "covdefaults (>=2.3)", "detect-test-pollution (>=1.2)", "devpi-process (>=1.0.2)", "diff-cover (>=9.2)", "distlib (>=0.3.8)", "flaky (>=3.8.1)", "hatch-vcs (>=0.4)", "hatchling (>=1.25)", "psutil (>=6)", "pytest (>=8.3.3)", "pytest-cov (>=5)", "pytest-mock (>=3.14)", "pytest-xdist (>=3.6.1)", "re-assert (>=1.1)", "setuptools (>=75.1)", "time-machine (>=2.15)", "wheel (>=0.44)"]
-
-[[package]]
 name = "typed-ast"
 version = "1.5.5"
 description = "a fork of Python 2 and 3 ast modules with type comment support"
@@ -928,17 +822,6 @@ files = [
 ]
 
 [[package]]
-name = "typing-extensions"
-version = "4.12.2"
-description = "Backported and Experimental Type Hints for Python 3.8+"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d"},
-    {file = "typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8"},
-]
-
-[[package]]
 name = "virtualenv"
 version = "20.26.6"
 description = "Virtual Python Environment builder"
@@ -980,4 +863,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "c368b380430069289eb97425f8f524dee35546a467d939f054ba69326909ac76"
+content-hash = "63a41dc4b5ba505280fc7535047f493179bec549b6b4998fc2f5421acf5457bb"

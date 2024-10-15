@@ -33,11 +33,14 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Install tox
-        run: pip install tox
+      - name: Install package
+        run: poetry install -v
 
       - name: Run tests
-        run: tox
+        run: |
+          poetry run coverage run --source octue -m unittest discover
+          poetry run coverage report --show-missing
+          poetry run coverage xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
