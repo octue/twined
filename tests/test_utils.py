@@ -1,11 +1,13 @@
 import json
-import unittest
 from tempfile import TemporaryDirectory
+import unittest
 from unittest import mock
+
 import numpy as np
 
 from twined import exceptions
 from twined.utils import TwinedEncoder, load_json
+
 from .base import VALID_SCHEMA_TWINE, BaseTestCase
 
 

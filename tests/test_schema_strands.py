@@ -1,8 +1,9 @@
 import os
-import unittest
 from tempfile import TemporaryDirectory
+import unittest
 
 from twined import Twine, exceptions
+
 from .base import VALID_SCHEMA_TWINE, BaseTestCase
 
 

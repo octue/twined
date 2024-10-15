@@ -2,9 +2,10 @@ import importlib.metadata
 import json as jsonlib
 import logging
 import os
-from dotenv import load_dotenv
-from jsonschema import ValidationError, validate as jsonschema_validate
 
+from dotenv import load_dotenv
+from jsonschema import ValidationError
+from jsonschema import validate as jsonschema_validate
 
 try:
     # python < 3.9
@@ -15,7 +16,6 @@ except ModuleNotFoundError:
 
 from . import exceptions
 from .utils import load_json, trim_suffix
-
 
 logger = logging.getLogger(__name__)
 
@@ -364,7 +364,6 @@ class Twine:
         source_kwargs = tuple(name for name in kwargs.keys() if name in ALL_STRANDS)
         sources = dict((name, kwargs.pop(name)) for name in source_kwargs)
         for strand_name, strand_data in sources.items():
-
             if not allow_extra:
                 if (strand_data is not None) and (strand_name not in self.available_strands):
                     raise exceptions.StrandNotFound(

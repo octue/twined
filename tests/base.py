@@ -2,7 +2,6 @@ import json
 import os
 import unittest
 
-
 VALID_SCHEMA_TWINE = """
     {
         "configuration_values_schema": {

@@ -126,6 +126,7 @@ class InvalidManifestContents(InvalidManifest, ValidationError):
 
 # --------------------- Exceptions relating to access of data using the Twine instance ------------------------
 
+
 # TODO This is related to filtering files from a manifest. Determine whether this belongs here,
 #  or whether we should port the filtering code across from the SDK.
 class UnexpectedNumberOfResults(TwineException):
