@@ -4,7 +4,6 @@ import logging
 
 from twined.exceptions import InvalidSourceKindException
 
-
 logger = logging.getLogger(__file__)
 
 

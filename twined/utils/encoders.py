@@ -1,7 +1,6 @@
 import importlib.util
 import json
 
-
 # Determines whether numpy is available
 _numpy_spec = importlib.util.find_spec("numpy")
 

@@ -44,8 +44,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install Poetry
+        uses: snok/install-poetry@v1.4.1
+
       - name: Get package version
-        run: echo "PACKAGE_VERSION=$(python setup.py --version)" >> $GITHUB_ENV
+        run: echo "PACKAGE_VERSION=$(poetry version -s)" >> $GITHUB_ENV
 
       - name: Create Release
         uses: actions/create-release@v1
@@ -64,21 +67,18 @@ jobs:
     permissions:
       id-token: write
       contents: read
+
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/checkout@v4
         with:
-          python-version: 3.8
+          ref: ${{ inputs.tag }}
 
-      - name: Make package
-        run: |
-          python3 -m pip install --upgrade setuptools wheel
-          python3 setup.py sdist bdist_wheel
+      - name: Install Poetry
+        uses: snok/install-poetry@v1.4.1
+
+      - name: Build a binary wheel and a source tarball
+        run: poetry build
 
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@v1.8.10
-        with:
-          verbose: true
