@@ -64,7 +64,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "twined"
-copyright = "2013-2019 Octue Ltd"
+copyright = "2013-2024 Octue Ltd"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
