@@ -22,7 +22,7 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.7"
+python = "^3.8"
 jsonschema = "^4"
 python-dotenv = ">=0,<=2"
 
