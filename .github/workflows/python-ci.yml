@@ -41,7 +41,7 @@ jobs:
 
       - name: Run tests
         run: |
-          poetry run coverage run --source octue -m unittest discover
+          poetry run coverage run --source twined -m unittest discover
           poetry run coverage report --show-missing
           poetry run coverage xml
 
