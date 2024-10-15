@@ -25,17 +25,23 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Install tox
-        run: pip install tox
+      - name: Install Poetry
+        uses: snok/install-poetry@v1.4.1
+
+      - name: Install package
+        run: poetry install -v
 
       - name: Run tests
-        run: tox
+        run: |
+          poetry run coverage run --source twined -m unittest discover
+          poetry run coverage report --show-missing
+          poetry run coverage xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           files: coverage.xml
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
 
   release:
