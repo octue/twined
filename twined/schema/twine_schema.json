@@ -37,6 +37,10 @@
     "manifest": {
       "type": "object",
       "properties": {
+        "optional": {
+          "type": "boolean",
+          "description": "This should be `true` if the manifest is optional."
+        },
         "datasets": {
           "type": "object",
           "description": "A list of entries, each describing a dataset that should be attached to / made available to the digital twin",

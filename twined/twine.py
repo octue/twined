@@ -58,8 +58,9 @@ class Twine:
         for name, strand in self._load_twine(**kwargs).items():
             setattr(self, name, strand)
 
-        self._available_strands = set(trim_suffix(name, "_schema") for name in vars(self))
+        self._available_strands = {trim_suffix(name, "_schema") for name in vars(self)}
         self._available_manifest_strands = self._available_strands & set(MANIFEST_STRANDS)
+        self._required_strands = {strand for strand in self._available_strands if not strand.get("optional", False)}
 
     def _load_twine(self, source=None):
         """Load twine from a *.json filename, file-like or a json string and validates twine contents."""
@@ -216,7 +217,7 @@ class Twine:
     def available_strands(self):
         """Get the names of strands that are found in this twine.
 
-        :return set:
+        :return set(str):
         """
         return self._available_strands
 
@@ -224,9 +225,17 @@ class Twine:
     def available_manifest_strands(self):
         """Get the names of the manifest strands that are found in this twine.
 
-        :return set:
+        :return set(str):
         """
         return self._available_manifest_strands
+
+    @property
+    def required_strands(self):
+        """Get the names of strands that are required in this twine.
+
+        :return set(str):
+        """
+        return self._required_strands
 
     def validate_children(self, source, **kwargs):
         """Validate that the children values, passed as either a file or a json string, are correct."""
@@ -371,7 +380,7 @@ class Twine:
                     )
 
             if not allow_missing:
-                if (strand_name in self.available_strands) and (strand_data is None):
+                if (strand_name in self.required_strands) and (strand_data is None):
                     raise exceptions.TwineValueException(
                         f"The '{strand_name}' strand is defined in the twine, but no data is provided in sources"
                     )
