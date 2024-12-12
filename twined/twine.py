@@ -55,12 +55,17 @@ class Twine:
     """
 
     def __init__(self, **kwargs):
+        self._available_strands = set()
+        self._required_strands = set()
+
         for name, strand in self._load_twine(**kwargs).items():
             setattr(self, name, strand)
+            self._available_strands.add(trim_suffix(name, "_schema"))
 
-        self._available_strands = {trim_suffix(name, "_schema") for name in vars(self)}
+            if isinstance(strand, dict) and not strand.get("optional", False):
+                self._required_strands.add(name)
+
         self._available_manifest_strands = self._available_strands & set(MANIFEST_STRANDS)
-        self._required_strands = {strand for strand in self._available_strands if not strand.get("optional", False)}
 
     def _load_twine(self, source=None):
         """Load twine from a *.json filename, file-like or a json string and validates twine contents."""
