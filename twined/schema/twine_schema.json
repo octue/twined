@@ -109,10 +109,7 @@
           "type": "boolean",
           "description": "This should be `true` if the configuration values are optional."
         }
-      },
-      "required": [
-        "properties"
-      ]
+      }
     },
     "credentials": {
       "type": "array",
@@ -148,10 +145,7 @@
           "type": "boolean",
           "description": "This should be `true` if the input values are optional."
         }
-      },
-      "required": [
-        "properties"
-      ]
+      }
     },
     "output_manifest": {
       "$ref": "#/$defs/manifest"
@@ -166,10 +160,7 @@
           "type": "boolean",
           "description": "This should be `true` if the output values are optional."
         }
-      },
-      "required": [
-        "properties"
-      ]
+      }
     }
   }
 }
