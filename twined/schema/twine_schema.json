@@ -96,10 +96,23 @@
         ]
       }
     },
-    "configuration_manifest": {"$ref": "#/$defs/manifest"},
+    "configuration_manifest": {
+      "$ref": "#/$defs/manifest"
+    },
     "configuration_values_schema": {
       "type": "object",
-      "required": ["properties"]
+      "properties": {
+        "properties": {
+          "type": "object"
+        },
+        "optional": {
+          "type": "boolean",
+          "description": "This should be `true` if the configuration values are optional."
+        }
+      },
+      "required": [
+        "properties"
+      ]
     },
     "credentials": {
       "type": "array",
@@ -122,13 +135,41 @@
         "additionalProperties": false
       }
     },
-    "input_manifest": {"$ref": "#/$defs/manifest"},
-    "input_values_schema": {
-      "type": "object"
+    "input_manifest": {
+      "$ref": "#/$defs/manifest"
     },
-    "output_manifest": {"$ref": "#/$defs/manifest"},
+    "input_values_schema": {
+      "type": "object",
+      "properties": {
+        "properties": {
+          "type": "object"
+        },
+        "optional": {
+          "type": "boolean",
+          "description": "This should be `true` if the input values are optional."
+        }
+      },
+      "required": [
+        "properties"
+      ]
+    },
+    "output_manifest": {
+      "$ref": "#/$defs/manifest"
+    },
     "output_values_schema": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "properties": {
+          "type": "object"
+        },
+        "optional": {
+          "type": "boolean",
+          "description": "This should be `true` if the output values are optional."
+        }
+      },
+      "required": [
+        "properties"
+      ]
     }
   }
 }
