@@ -124,3 +124,37 @@ class TestTwine(BaseTestCase):
         )
 
         self.assertEqual(twine.available_manifest_strands, {"output_manifest"})
+
+    def test_required_strands_property(self):
+        """Test that the required strands property is correct."""
+        twines = [
+            {
+                "configuration_values_schema": {},
+                "input_values_schema": {},
+                "output_values_schema": {},
+                "output_manifest": {"datasets": {}},
+            },
+            {
+                "configuration_values_schema": {"optional": True},
+                "input_values_schema": {},
+                "output_values_schema": {},
+                "output_manifest": {"datasets": {}, "optional": True},
+            },
+            {
+                "configuration_values_schema": {"optional": False},
+                "input_values_schema": {},
+                "output_values_schema": {},
+                "output_manifest": {"datasets": {}, "optional": False},
+            },
+        ]
+
+        expected_required_strands = [
+            {"configuration_values", "input_values", "output_values", "output_manifest"},
+            {"input_values", "output_values"},
+            {"configuration_values", "input_values", "output_values", "output_manifest"},
+        ]
+
+        for twine, expected in zip(twines, expected_required_strands):
+            with self.subTest(twine=twine):
+                twine = Twine(source=twine)
+                self.assertEqual(twine.required_strands, expected)
