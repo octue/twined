@@ -63,7 +63,7 @@ class Twine:
             self._available_strands.add(trim_suffix(name, "_schema"))
 
             if isinstance(strand, dict) and not strand.get("optional", False):
-                self._required_strands.add(name)
+                self._required_strands.add(trim_suffix(name, "_schema"))
 
         self._available_manifest_strands = self._available_strands & set(MANIFEST_STRANDS)
 
