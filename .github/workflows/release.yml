@@ -12,10 +12,10 @@ jobs:
     if: "github.event.pull_request.merged == true"
     runs-on: ubuntu-latest
     env:
-      USING_COVERAGE: '3.9'
+      USING_COVERAGE: '3.11'
     strategy:
       matrix:
-        python: ['3.8', '3.9']
+        python: ['3.8', '3.9', '3.10', '3.11']
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

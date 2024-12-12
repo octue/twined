@@ -20,7 +20,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skipci')"
     runs-on: ubuntu-latest
     env:
-      USING_COVERAGE: '3.9'
+      USING_COVERAGE: '3.11'
     strategy:
       matrix:
         python: ['3.8', '3.9', '3.10', '3.11']
