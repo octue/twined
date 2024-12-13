@@ -111,6 +111,11 @@ class TestSchemaStrands(BaseTestCase):
 
         Twine(source=VALID_SCHEMA_TWINE).validate_configuration_values(source=configuration_valid_with_extra_field)
 
+    def test_missing_optional_values_do_not_raise_error(self):
+        """Test that not providing an optional strand doesn't result in a validation error."""
+        twine = Twine(source={"configuration_values_schema": {"optional": True}})
+        twine.validate(configuration_values=None)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -308,3 +308,8 @@ class TestManifestStrands(BaseTestCase):
 
         with self.assertRaises(KeyError):
             twine.validate_input_manifest(source=input_manifest)
+
+    def test_missing_optional_manifest_does_not_raise_error(self):
+        """Test that not providing an optional strand doesn't result in a validation error."""
+        twine = Twine(source={"output_manifest": {"datasets": {}, "optional": True}})
+        twine.validate(output_manifest=None)

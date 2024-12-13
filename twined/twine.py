@@ -55,10 +55,16 @@ class Twine:
     """
 
     def __init__(self, **kwargs):
+        self._available_strands = set()
+        self._required_strands = set()
+
         for name, strand in self._load_twine(**kwargs).items():
             setattr(self, name, strand)
+            self._available_strands.add(trim_suffix(name, "_schema"))
 
-        self._available_strands = set(trim_suffix(name, "_schema") for name in vars(self))
+            if isinstance(strand, dict) and not strand.get("optional", False):
+                self._required_strands.add(trim_suffix(name, "_schema"))
+
         self._available_manifest_strands = self._available_strands & set(MANIFEST_STRANDS)
 
     def _load_twine(self, source=None):
@@ -216,7 +222,7 @@ class Twine:
     def available_strands(self):
         """Get the names of strands that are found in this twine.
 
-        :return set:
+        :return set(str):
         """
         return self._available_strands
 
@@ -224,9 +230,17 @@ class Twine:
     def available_manifest_strands(self):
         """Get the names of the manifest strands that are found in this twine.
 
-        :return set:
+        :return set(str):
         """
         return self._available_manifest_strands
+
+    @property
+    def required_strands(self):
+        """Get the names of strands that are required in this twine.
+
+        :return set(str):
+        """
+        return self._required_strands
 
     def validate_children(self, source, **kwargs):
         """Validate that the children values, passed as either a file or a json string, are correct."""
@@ -339,7 +353,7 @@ class Twine:
         """Getter that will return cls[name] if cls is a dict or cls otherwise"""
         return cls.get(name, None) if isinstance(cls, dict) else cls
 
-    def validate(self, allow_missing=False, allow_extra=False, cls=None, **kwargs):
+    def validate(self, allow_extra=False, cls=None, **kwargs):
         """Validate strands from sources provided as keyword arguments
 
         Usage:
@@ -350,12 +364,10 @@ class Twine:
                 credentials=credentials,
                 children=children,
                 cls=CLASS_MAP,
-                allow_missing=False,
                 allow_extra=False,
             )
         ```
 
-        :param bool allow_missing: If strand is present in the twine, but the source is equal to None, allow validation to continue.
         :param bool allow_extra: If strand is present in the sources, but not in the twine, allow validation to continue (only strands in the twine will be validated and converted, others will be returned as-is)
         :param any cls: optional dict of classes keyed on strand name (alternatively, one single class which will be applied to strands) which will be instantiated with the validated source data.
         :return dict: dict of validated and initialised sources
@@ -363,6 +375,7 @@ class Twine:
         # pop any strand name:data pairs out of kwargs and into their own dict
         source_kwargs = tuple(name for name in kwargs.keys() if name in ALL_STRANDS)
         sources = dict((name, kwargs.pop(name)) for name in source_kwargs)
+
         for strand_name, strand_data in sources.items():
             if not allow_extra:
                 if (strand_data is not None) and (strand_name not in self.available_strands):
@@ -370,11 +383,10 @@ class Twine:
                         f"Source data is provided for '{strand_name}' but no such strand is defined in the twine"
                     )
 
-            if not allow_missing:
-                if (strand_name in self.available_strands) and (strand_data is None):
-                    raise exceptions.TwineValueException(
-                        f"The '{strand_name}' strand is defined in the twine, but no data is provided in sources"
-                    )
+            if (strand_name in self.required_strands) and (strand_data is None):
+                raise exceptions.TwineValueException(
+                    f"The '{strand_name}' strand is defined in the twine, but no data is provided in sources"
+                )
 
             if strand_data is not None:
                 # TODO Consider reintroducing a skip based on whether cls is already instantiated. For now, leave it the
