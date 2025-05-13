@@ -36,7 +36,7 @@ repos:
           - 'sphinx-tabs'
           - 'sphinx-charts'
           - 'jsonschema'
-          - 'setuptools'
+          - 'setuptools'  # Added to avoid missing `distutils` module error in python >= 3.12
 
   - repo: https://github.com/windpioneers/pre-commit-hooks
     rev: 0.0.5
