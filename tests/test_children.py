@@ -59,7 +59,7 @@ class TestChildrenValidation(BaseTestCase):
                 "id": "some-id",
                 "backend": {
                     "name": "GCPPubSubBackend",
-                    "project_name": "my-project"
+                    "project_id": "my-project"
                 }
             }
         ]
@@ -109,7 +109,7 @@ class TestChildrenValidation(BaseTestCase):
                     "id": "some-id",
                     "backend": {
                         "name": "GCPPubSubBackend",
-                        "project_name": "my-project"
+                        "project_id": "my-project"
                     },
                     "some_extra_property": "should not be a problem if present"
                 }

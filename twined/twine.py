@@ -40,7 +40,7 @@ ALL_STRANDS = (
 )
 
 
-CHILDREN_SCHEMA = "https://jsonschema.registry.octue.com/octue/children/0.1.0.json"
+CHILDREN_SCHEMA = "https://jsonschema.registry.octue.com/octue/children/0.2.0.json"
 MANIFEST_SCHEMA = "https://jsonschema.registry.octue.com/octue/manifest/0.1.0.json"
 
 
