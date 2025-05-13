@@ -36,6 +36,7 @@ repos:
           - 'sphinx-tabs'
           - 'sphinx-charts'
           - 'jsonschema'
+          - 'setuptools'
 
   - repo: https://github.com/windpioneers/pre-commit-hooks
     rev: 0.0.5
