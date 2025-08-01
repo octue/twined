@@ -1,3 +1,7 @@
+> [!NOTE]
+> The `twined` library has been deprecated. It now exists in the [Octue SDK](https://github.com/octue/octue-sdk-python)
+> in the [`octue.twined`](https://github.com/octue/octue-sdk-python/tree/main/octue/twined) subpackage.
+
 # twined
 
 A library to help digital twins and data services talk to one another. Read more at [twined.readthedocs.io](https://twined.readthedocs.io)
